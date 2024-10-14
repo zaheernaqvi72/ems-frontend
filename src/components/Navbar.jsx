@@ -10,11 +10,8 @@ const Navbar = () => {
           component={Link}
           to="/"
         >
-          <img
-            className="h-10 rounded-lg"
-            src="../assets/logo.png"
-            alt=""
-          />
+          <img className="h-10 rounded-lg" src="/logo.png" alt="Logo" />
+
           <span className="text-2xl p-2">Employee Management</span>
         </Typography>
         <div>
