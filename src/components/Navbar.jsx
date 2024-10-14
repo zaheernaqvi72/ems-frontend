@@ -12,7 +12,7 @@ const Navbar = () => {
         >
           <img
             className="h-10 rounded-lg"
-            src="../../assets/database-blue.png"
+            src="../assets/logo.png"
             alt=""
           />
           <span className="text-2xl p-2">Employee Management</span>
