@@ -9,6 +9,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { HighlightOff, Create } from "@mui/icons-material";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -191,7 +192,8 @@ const EmployeeList = () => {
             <TableCell>Job Role</TableCell>
             <TableCell>Salary</TableCell>
             <TableCell>Hire Date</TableCell>
-            <TableCell>Actions</TableCell> {/* Added Actions column */}
+            <TableCell>Update</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -205,23 +207,20 @@ const EmployeeList = () => {
               <TableCell>{employee.salary}</TableCell>
               <TableCell>{employee.hire_date}</TableCell>
               <TableCell>
-                {/* Edit and Delete buttons */}
-                <div className="flex w-40 justify-between">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEdit(employee.employee_id)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(employee.employee_id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                <Button
+                  color="primary"
+                  onClick={() => handleEdit(employee.employee_id)}
+                >
+                  <Create />
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  color="error"
+                  onClick={() => handleDelete(employee.employee_id)}
+                >
+                  <HighlightOff />
+                </Button>
               </TableCell>
             </TableRow>
           ))}

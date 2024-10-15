@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { createReview } from "../services/reviewService";
+import { HighlightOff, Create, StarBorder } from "@mui/icons-material";
 
 const PerformanceReview = () => {
   const [formData, setFormData] = useState({
@@ -154,7 +155,8 @@ const PerformanceReview = () => {
             <TableCell>Review Date</TableCell>
             <TableCell>Comments</TableCell>
             <TableCell>Rating</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell>Update</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -163,23 +165,18 @@ const PerformanceReview = () => {
               <TableCell>{review.employee_id}</TableCell>
               <TableCell>{review.review_date}</TableCell>
               <TableCell>{review.comments}</TableCell>
-              <TableCell>{review.rating}</TableCell>
+              <TableCell><StarBorder/> {review.rating}</TableCell>
               <TableCell>
-                {/* Separate buttons for Edit and Delete */}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleEdit(review)}
-                  style={{ marginRight: "8px" }}
-                >
-                  Edit
+                <Button color="primary" onClick={() => handleEdit(review)}>
+                  <Create />
                 </Button>
+              </TableCell>
+              <TableCell>
                 <Button
-                  variant="contained"
                   color="error"
                   onClick={() => handleDelete(review.review_id)}
                 >
-                  Delete
+                  <HighlightOff />
                 </Button>
               </TableCell>
             </TableRow>

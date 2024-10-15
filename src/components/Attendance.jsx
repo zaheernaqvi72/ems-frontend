@@ -16,6 +16,7 @@ import {
   deleteAttendance,
   editAttendance,
 } from "../services/attendanceService";
+import { HighlightOff, Create } from "@mui/icons-material";
 
 const Attendance = () => {
   const [formData, setFormData] = useState({
@@ -172,7 +173,8 @@ const Attendance = () => {
             <TableCell>Last Name</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell style={{ marginLeft: '5px'}}>Actions</TableCell> {/* Added Actions column */}
+            <TableCell>Update</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -184,23 +186,17 @@ const Attendance = () => {
               <TableCell>{record.date}</TableCell>
               <TableCell>{record.status}</TableCell>
               <TableCell>
-                {/* Edit and Delete buttons */}
-                <div className="ml-10 flex w-40 justify-between">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEdit(record)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(record.attendance_id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                <Button color="primary" onClick={() => handleEdit(record)}>
+                  <Create />
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  color="error"
+                  onClick={() => handleDelete(record.attendance_id)}
+                >
+                  <HighlightOff />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
@@ -218,7 +214,7 @@ const Attendance = () => {
           className="modal-box"
           sx={{
             width: "50rem",
-            height: "13rem",
+            height: "18rem",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -232,38 +228,52 @@ const Attendance = () => {
           <h2 className="text-xl font-bold mb-4 text-center">
             Edit Attendance Record
           </h2>
-          <TextField
-            fullWidth
-            label="Status"
-            name="status"
-            select
-            variant="outlined"
-            value={editRecord ? editRecord.status : ""}
-            onChange={(e) =>
-              setEditRecord({ ...editRecord, status: e.target.value })
-            }
-          >
-            <MenuItem value="present">Present</MenuItem>
-            <MenuItem value="absent">Absent</MenuItem>
-          </TextField>
-          <div className="mt-4">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleEditSubmit}
-              style={{ marginRight: "8px" }}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <TextField
+              fullWidth
+              label="Date"
+              name="date"
+              type="date"
+              variant="outlined"
+              value={formData.date}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Status"
+              name="status"
+              select
+              variant="outlined"
+              value={editRecord ? editRecord.status : ""}
+              onChange={(e) =>
+                setEditRecord({ ...editRecord, status: e.target.value })
+              }
             >
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => setEditModalOpen(false)}
-              className="ml-2"
-            >
-              Cancel
-            </Button>
-          </div>
+              <MenuItem value="present">Present</MenuItem>
+              <MenuItem value="absent">Absent</MenuItem>
+            </TextField>
+            <div className="mt-4">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleEditSubmit}
+                style={{ marginRight: "8px" }}
+              >
+                Save
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setEditModalOpen(false)}
+                className="ml-2"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
         </Box>
       </Modal>
     </div>

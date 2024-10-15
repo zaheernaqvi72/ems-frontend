@@ -15,6 +15,7 @@ import {
   updateLeaveStatus,
   deleteLeave,
 } from "../services/leaveService";
+import {HighlightOff} from '@mui/icons-material';
 
 const LeaveManagement = () => {
   const [formData, setFormData] = useState({
@@ -174,6 +175,7 @@ const LeaveManagement = () => {
             <TableCell>Reason</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Actions</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -197,13 +199,14 @@ const LeaveManagement = () => {
                   <MenuItem value="Approved">Approve</MenuItem>
                   <MenuItem value="Rejected">Reject</MenuItem>
                 </Select>
+              </TableCell>
+              <TableCell>
                 <Button
-                  variant="contained"
                   color="error"
                   onClick={() => handleDelete(leave.leave_id)}
                   style={{ marginLeft: "10px" }}
                 >
-                  Delete
+                  <HighlightOff />
                 </Button>
               </TableCell>
             </TableRow>
