@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { register } from "../services/authService";
 import { TextField, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { PersonAdd } from "@mui/icons-material";
 
 const Register = () => {
@@ -92,6 +92,12 @@ const Register = () => {
         >
           Register
         </Button>
+        <h4 className="text-lg font-semibold">
+          Already have an account?
+          <Link to="/login" className="text-blue-500 hover:underline ml-3">
+            Please login
+          </Link>
+        </h4>
       </form>
     </div>
   );

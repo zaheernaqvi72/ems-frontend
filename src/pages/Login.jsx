@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import { TextField, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AccountCircle } from "@mui/icons-material";
 
 const Login = () => {
@@ -79,6 +79,12 @@ const Login = () => {
         >
           Login
         </Button>
+        <h4 className="text-lg font-semibold">
+          Don&apos;t have an account?
+          <Link to="/register" className="text-blue-500 hover:underline ml-3">
+            Please register
+          </Link>
+        </h4>
       </form>
     </div>
   );
