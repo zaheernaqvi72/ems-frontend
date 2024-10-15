@@ -57,7 +57,7 @@ const Attendance = () => {
         last_name: "Doe",
         employee_id: "1",
         date: "2024-10-15",
-        status: "present",
+        status: "Present",
       },
       {
         attendance_id: 2,
@@ -65,7 +65,7 @@ const Attendance = () => {
         last_name: "Smith",
         employee_id: "2",
         date: "2024-10-15",
-        status: "absent",
+        status: "Absent",
       },
       {
         attendance_id: 3,
@@ -73,7 +73,7 @@ const Attendance = () => {
         last_name: "Alice",
         employee_id: "3",
         date: "2024-10-15",
-        status: "present",
+        status: "Present",
       },
       {
         attendance_id: 4,
@@ -81,7 +81,7 @@ const Attendance = () => {
         last_name: "Jane",
         employee_id: "4",
         date: "2024-10-15",
-        status: "absent",
+        status: "Absent",
       },
       {
         attendance_id: 5,
@@ -89,7 +89,7 @@ const Attendance = () => {
         last_name: "Sam",
         employee_id: "5",
         date: "2024-10-15",
-        status: "present",
+        status: "Present",
       },
     ];
     setAttendance(dummyData); // Set the dummy data
@@ -153,8 +153,8 @@ const Attendance = () => {
             value={formData.status}
             onChange={handleChange}
           >
-            <MenuItem value="present">Present</MenuItem>
-            <MenuItem value="absent">Absent</MenuItem>
+            <MenuItem value="Present">Present</MenuItem>
+            <MenuItem value="Absent">Absent</MenuItem>
           </TextField>
           <Button variant="contained" color="primary" type="submit">
             Submit
@@ -168,19 +168,21 @@ const Attendance = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Employee ID</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Update</TableCell>
-            <TableCell>Delete</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {attendance.map((record) => (
             <TableRow key={record.attendance_id}>
-              <TableCell>{record.employee_id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                {record.employee_id}
+              </TableCell>
               <TableCell>{record.first_name}</TableCell>
               <TableCell>{record.last_name}</TableCell>
               <TableCell>{record.date}</TableCell>
@@ -213,8 +215,8 @@ const Attendance = () => {
         <Box
           className="modal-box"
           sx={{
-            width: "50rem",
-            height: "18rem",
+            width: "60%",
+            height: "45%",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -235,8 +237,10 @@ const Attendance = () => {
               name="date"
               type="date"
               variant="outlined"
-              value={formData.date}
-              onChange={handleChange}
+              value={editRecord ? editRecord.date : ""}
+              onChange={(e) =>
+                setEditRecord({ ...editRecord, date: e.target.value })
+              }
               InputLabelProps={{
                 shrink: true,
               }}
@@ -252,8 +256,8 @@ const Attendance = () => {
                 setEditRecord({ ...editRecord, status: e.target.value })
               }
             >
-              <MenuItem value="present">Present</MenuItem>
-              <MenuItem value="absent">Absent</MenuItem>
+              <MenuItem value="Present">Present</MenuItem>
+              <MenuItem value="Absent">Absent</MenuItem>
             </TextField>
             <div className="mt-4">
               <Button

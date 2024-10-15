@@ -151,21 +151,25 @@ const PerformanceReview = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Employee ID</TableCell>
-            <TableCell>Review Date</TableCell>
-            <TableCell>Comments</TableCell>
-            <TableCell>Rating</TableCell>
-            <TableCell>Update</TableCell>
-            <TableCell>Delete</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {reviews.map((review) => (
             <TableRow key={review.review_id}>
-              <TableCell>{review.employee_id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                {review.employee_id}
+              </TableCell>
               <TableCell>{review.review_date}</TableCell>
               <TableCell>{review.comments}</TableCell>
-              <TableCell><StarBorder/> {review.rating}</TableCell>
+              <TableCell>
+                <StarBorder /> {review.rating}
+              </TableCell>
               <TableCell>
                 <Button color="primary" onClick={() => handleEdit(review)}>
                   <Create />

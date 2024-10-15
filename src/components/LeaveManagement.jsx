@@ -14,8 +14,9 @@ import {
   applyLeave,
   updateLeaveStatus,
   deleteLeave,
+  editLeave,
 } from "../services/leaveService";
-import {HighlightOff} from '@mui/icons-material';
+import { HighlightOff, Create } from "@mui/icons-material";
 
 const LeaveManagement = () => {
   const [formData, setFormData] = useState({
@@ -113,6 +114,15 @@ const LeaveManagement = () => {
     }
   };
 
+  const handleEdit = async (leaveId) => {
+    try {
+      await editLeave(leaveId);
+      fetchLeaves();
+    } catch (error) {
+      alert("Error editing leave", error);
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-4xl font-bold mb-4 text-center">Leave Management</h2>
@@ -169,19 +179,22 @@ const LeaveManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Employee ID</TableCell>
-            <TableCell>Start Date</TableCell>
-            <TableCell>End Date</TableCell>
-            <TableCell>Reason</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Actions</TableCell>
-            <TableCell>Delete</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Start Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>End Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Reason</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {leaves.map((leave) => (
             <TableRow key={leave.leave_id}>
-              <TableCell>{leave.employee_id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                {leave.employee_id}
+              </TableCell>
               <TableCell>{leave.start_date}</TableCell>
               <TableCell>{leave.end_date}</TableCell>
               <TableCell>{leave.reason}</TableCell>
@@ -202,9 +215,16 @@ const LeaveManagement = () => {
               </TableCell>
               <TableCell>
                 <Button
+                  color="primary"
+                  onClick={() => handleEdit(leave.leave_id)}
+                >
+                  <Create />
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button
                   color="error"
                   onClick={() => handleDelete(leave.leave_id)}
-                  style={{ marginLeft: "10px" }}
                 >
                   <HighlightOff />
                 </Button>

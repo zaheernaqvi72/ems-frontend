@@ -27,3 +27,10 @@ export const deleteLeave = (leaveData) => {
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
   });
 };
+
+export const editLeave = (leaveData) => {
+  return axios.post(API_URL, leaveData, {
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+  });
+};
+

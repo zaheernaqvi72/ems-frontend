@@ -185,21 +185,23 @@ const EmployeeList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Employee ID</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Job Role</TableCell>
-            <TableCell>Salary</TableCell>
-            <TableCell>Hire Date</TableCell>
-            <TableCell>Update</TableCell>
-            <TableCell>Delete</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Job Role</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Salary</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Hire Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {employees.map((employee) => (
             <TableRow key={employee.employee_id}>
-              <TableCell>{employee.employee_id}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                {employee.employee_id}
+              </TableCell>
               <TableCell>{employee.first_name}</TableCell>
               <TableCell>{employee.last_name}</TableCell>
               <TableCell>{employee.email}</TableCell>
