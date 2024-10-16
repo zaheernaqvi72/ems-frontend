@@ -28,16 +28,16 @@ const Navbar = () => {
             Dashboard
           </Button>
 
-          <Button color="inherit" component={Link} to="/employees/list">
+          <Button color="inherit" component={Link} to="/employees">
             Employees
           </Button>
           <Button color="inherit" component={Link} to="/attendance">
             Attendance
           </Button>
-          <Button color="inherit" component={Link} to="/leave-management">
+          <Button color="inherit" component={Link} to="/leaves">
             Leave
           </Button>
-          <Button color="inherit" component={Link} to="/performance-review">
+          <Button color="inherit" component={Link} to="/reviews">
             Review
           </Button>
         </div>
