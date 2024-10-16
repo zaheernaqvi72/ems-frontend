@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { login } from "../services/authService";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, FormControl, InputAdornment, InputLabel, OutlinedInput, IconButton } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
-import { AccountCircle } from "@mui/icons-material";
+import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+
     username: "",
     email: "",
     password: "",
@@ -29,6 +31,12 @@ const Login = () => {
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <form
@@ -38,38 +46,50 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-center mb-4">
           Login <AccountCircle className="mr-2 text-blue-500" />
         </h2>
-        <div className="flex items-center mb-4">
-          <TextField
-            fullWidth
-            name="username"
-            label="username"
-            variant="outlined"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex items-center mb-4">
-          <TextField
-            fullWidth
-            type="email"
-            name="email"
-            label="Email"
-            variant="outlined"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex items-center">
-          <TextField
-            fullWidth
-            type="password"
+
+        <TextField
+          fullWidth
+          name="username"
+          label="username"
+          variant="outlined"
+          value={formData.username}
+          onChange={handleChange}
+        />
+
+        <TextField
+          fullWidth
+          type="email"
+          name="email"
+          label="Email"
+          variant="outlined"
+          value={formData.email}
+          onChange={handleChange}
+        />
+
+        <FormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
             name="password"
-            label="Password"
-            variant="outlined"
+            type={showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
           />
-        </div>
+        </FormControl>
         <Button
           fullWidth
           variant="contained"

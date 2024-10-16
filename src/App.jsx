@@ -3,10 +3,10 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import EmployeeList from './components/Employees';
-import Attendance from './components/Attendance';
-import LeaveManagement from './components/LeaveManagement';
-import PerformanceReview from './components/PerformanceReview';
+import EmployeeList from './components/EmployeesList';
+import AttendanceList from './components/AttendanceList';
+import LeaveList from './components/LeaveList';
+import ReviewList from './components/ReviewList';
 import Dashboard from './pages/Dashboard'; // Import the Dashboard component
 
 function App() {
@@ -19,9 +19,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/employees/list" element={<EmployeeList />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/leave-management" element={<LeaveManagement />} />
-          <Route path="/performance-review" element={<PerformanceReview />} />
+          <Route path="/attendance" element={<AttendanceList />} />
+          <Route path="/leave-management" element={<LeaveList />} />
+          <Route path="/performance-review" element={<ReviewList />} />
           <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

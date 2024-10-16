@@ -32,7 +32,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <DashboardIcon fontSize="large" className="text-blue-500 mb-2" />
               <Typography
@@ -72,7 +72,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <PersonAdd fontSize="large" className="text-green-500 mb-2" />
               <Typography
@@ -111,7 +111,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <Assignment fontSize="large" className="text-yellow-500 mb-2" />
               <Typography
@@ -151,7 +151,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <ListAlt fontSize="large" className="text-red-500 mb-2" />
               <Typography
@@ -190,7 +190,7 @@ const Home = () => {
           }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <BarChart fontSize="large" className="text-purple-500 mb-2" />
               <Typography
