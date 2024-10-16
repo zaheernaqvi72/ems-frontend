@@ -18,10 +18,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/employees/list" element={<EmployeeList />} />
+          <Route path="/employees" element={<EmployeeList />} />
           <Route path="/attendance" element={<AttendanceList />} />
-          <Route path="/leave-management" element={<LeaveList />} />
-          <Route path="/performance-review" element={<ReviewList />} />
+          <Route path="/leaves" element={<LeaveList />} />
+          <Route path="/reviews" element={<ReviewList />} />
           <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
