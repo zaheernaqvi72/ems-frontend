@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { login } from "../services/authService";
-import { TextField, Button, FormControl, InputAdornment, InputLabel, OutlinedInput, IconButton } from "@mui/material";
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-
+    user_type: "",
     username: "",
     email: "",
     password: "",
@@ -38,15 +47,28 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-200 rounded-md">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full bg-white p-6 rounded-md shadow-md space-y-4"
+        className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
         <h2 className="text-2xl font-bold text-center mb-4">
           Login <AccountCircle className="mr-2 text-blue-500" />
         </h2>
-
+        <TextField
+          fullWidth
+          select
+          label="User Type"
+          name="user_type"
+          variant="outlined"
+          value={formData.user_type}
+          onChange={handleChange}
+        >
+          <MenuItem value="Manager/Principal/Head">
+            Manager/Principal/Head
+          </MenuItem>
+          <MenuItem value="Employee">Employee</MenuItem>
+        </TextField>
         <TextField
           fullWidth
           name="username"

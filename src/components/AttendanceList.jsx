@@ -26,179 +26,276 @@ const AttendanceList = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [editRecord, setEditRecord] = useState(null);
+  const [sortedAttendance, setSortedAttendance] = useState([]);
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const dummyData = [
+    {
+      attendance_id: 1,
+      first_name: "Jane",
+      last_name: "Doe",
+      employee_id: "1012",
+      date: "2024-10-01",
+      status: "Present",
+    },
+    {
+      attendance_id: 2,
+      first_name: "John",
+      last_name: "Smith",
+      employee_id: "2012",
+      date: "2024-10-15",
+      status: "Absent",
+    },
+    {
+      attendance_id: 3,
+      first_name: "Alice",
+      last_name: "Johnson",
+      employee_id: "3014",
+      date: "2023-11-02",
+      status: "Present",
+    },
+    {
+      attendance_id: 4,
+      first_name: "Bob",
+      last_name: "Brown",
+      employee_id: "4016",
+      date: "2025-12-07",
+      status: "Late",
+    },
+    {
+      attendance_id: 5,
+      first_name: "Charlie",
+      last_name: "Wilson",
+      employee_id: "5020",
+      date: today,
+      status: "Absent",
+    },
+    {
+      attendance_id: 6,
+      first_name: "David",
+      last_name: "Davis",
+      employee_id: "6025",
+      date: "2027-11-13",
+      status: "Present",
+    },
+    {
+      attendance_id: 7,
+      first_name: "Eva",
+      last_name: "Moore",
+      employee_id: "7018",
+      date: "2024-10-22",
+      status: "Present",
+    },
+    {
+      attendance_id: 8,
+      first_name: "Frank",
+      last_name: "Taylor",
+      employee_id: "8022",
+      date: "2027-12-03",
+      status: "Late",
+    },
+    {
+      attendance_id: 9,
+      first_name: "Grace",
+      last_name: "Anderson",
+      employee_id: "9030",
+      date: today,
+      status: "Present",
+    },
+    {
+      attendance_id: 10,
+      first_name: "Henry",
+      last_name: "Thomas",
+      employee_id: "10028",
+      date: "2025-12-15",
+      status: "Absent",
+    },
+    {
+      attendance_id: 11,
+      first_name: "Isabella",
+      last_name: "Martinez",
+      employee_id: "11034",
+      date: "2026-10-15",
+      status: "Present",
+    },
+    {
+      attendance_id: 12,
+      first_name: "Jack",
+      last_name: "Garcia",
+      employee_id: "12036",
+      date: today,
+      status: "Late",
+    },
+    {
+      attendance_id: 13,
+      first_name: "Karen",
+      last_name: "Harris",
+      employee_id: "13040",
+      date: "2024-12-01",
+      status: "Present",
+    },
+    {
+      attendance_id: 14,
+      first_name: "Liam",
+      last_name: "Clark",
+      employee_id: "14050",
+      date: "2023-10-12",
+      status: "Absent",
+    },
+    {
+      attendance_id: 15,
+      first_name: "Mia",
+      last_name: "Lewis",
+      employee_id: "15055",
+      date: today,
+      status: "Present",
+    },
+    {
+      attendance_id: 16,
+      first_name: "Noah",
+      last_name: "Walker",
+      employee_id: "16060",
+      date: "2027-12-10",
+      status: "Present",
+    },
+    {
+      attendance_id: 17,
+      first_name: "Olivia",
+      last_name: "Hall",
+      employee_id: "17070",
+      date: "2024-10-29",
+      status: "Late",
+    },
+    {
+      attendance_id: 18,
+      first_name: "Paul",
+      last_name: "Young",
+      employee_id: "18075",
+      date: "2026-11-11",
+      status: "Absent",
+    },
+    {
+      attendance_id: 19,
+      first_name: "Quinn",
+      last_name: "King",
+      employee_id: "19080",
+      date: "2025-12-22",
+      status: "Present",
+    },
+    {
+      attendance_id: 20,
+      first_name: "Rachel",
+      last_name: "Scott",
+      employee_id: "20085",
+      date: "2024-10-17",
+      status: "Absent",
+    },
+    {
+      attendance_id: 21,
+      first_name: "Sam",
+      last_name: "Evans",
+      employee_id: "21090",
+      date: today,
+      status: "Present",
+    },
+    {
+      attendance_id: 22,
+      first_name: "Tina",
+      last_name: "Ward",
+      employee_id: "22095",
+      date: "2027-10-06",
+      status: "Late",
+    },
+    {
+      attendance_id: 23,
+      first_name: "Ursula",
+      last_name: "Wright",
+      employee_id: "23100",
+      date: "2026-12-18",
+      status: "Present",
+    },
+    {
+      attendance_id: 24,
+      first_name: "Victor",
+      last_name: "Hughes",
+      employee_id: "24105",
+      date: "2025-10-09",
+      status: "Absent",
+    },
+    {
+      attendance_id: 25,
+      first_name: "Wendy",
+      last_name: "Adams",
+      employee_id: "25110",
+      date: "2023-11-05",
+      status: "Present",
+    },
+    {
+      attendance_id: 26,
+      first_name: "Xander",
+      last_name: "Morris",
+      employee_id: "26115",
+      date: today,
+      status: "Late",
+    },
+    {
+      attendance_id: 27,
+      first_name: "Yasmin",
+      last_name: "Brooks",
+      employee_id: "27120",
+      date: "2027-10-20",
+      status: "Absent",
+    },
+    {
+      attendance_id: 28,
+      first_name: "Zach",
+      last_name: "Carter",
+      employee_id: "28125",
+      date: "2024-12-25",
+      status: "Present",
+    },
+    {
+      attendance_id: 29,
+      first_name: "Aaron",
+      last_name: "James",
+      employee_id: "29130",
+      date: today,
+      status: "Present",
+    },
+    {
+      attendance_id: 30,
+      first_name: "Bella",
+      last_name: "Ford",
+      employee_id: "30135",
+      date: "2027-12-27",
+      status: "Late",
+    },
+  ];
+
+  const fetchAttendance = async () => {
+    setAttendance(dummyData);
+  };
 
   useEffect(() => {
     fetchAttendance();
-  }, []);
+    const sorted = [...attendance].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+    setSortedAttendance(sorted);
+  }, [attendance]);
 
-  const fetchAttendance = async () => {
-    // Dummy data for now, to simulate API response
-    const dummyData = [
-      {
-        attendance_id: 1,
-        first_name: "Jane",
-        last_name: "Doe",
-        employee_id: "1012",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 2,
-        first_name: "John",
-        last_name: "Smith",
-        employee_id: "2012",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      {
-        attendance_id: 3,
-        first_name: "Alice",
-        last_name: "Johnson",
-        employee_id: "3014",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 4,
-        first_name: "Bob",
-        last_name: "Brown",
-        employee_id: "4016",
-        date: "2024-10-15",
-        status: "Late",
-      },
-      {
-        attendance_id: 5,
-        first_name: "Charlie",
-        last_name: "Wilson",
-        employee_id: "5020",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      {
-        attendance_id: 6,
-        first_name: "David",
-        last_name: "Davis",
-        employee_id: "6025",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 7,
-        first_name: "Eva",
-        last_name: "Moore",
-        employee_id: "7018",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 8,
-        first_name: "Frank",
-        last_name: "Taylor",
-        employee_id: "8022",
-        date: "2024-10-15",
-        status: "Late",
-      },
-      {
-        attendance_id: 9,
-        first_name: "Grace",
-        last_name: "Anderson",
-        employee_id: "9030",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 10,
-        first_name: "Henry",
-        last_name: "Thomas",
-        employee_id: "10028",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      {
-        attendance_id: 11,
-        first_name: "Isabella",
-        last_name: "Martinez",
-        employee_id: "11034",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 12,
-        first_name: "Jack",
-        last_name: "Garcia",
-        employee_id: "12036",
-        date: "2024-10-15",
-        status: "Late",
-      },
-      {
-        attendance_id: 13,
-        first_name: "Karen",
-        last_name: "Harris",
-        employee_id: "13040",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 14,
-        first_name: "Liam",
-        last_name: "Clark",
-        employee_id: "14050",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      {
-        attendance_id: 15,
-        first_name: "Mia",
-        last_name: "Lewis",
-        employee_id: "15055",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 16,
-        first_name: "Noah",
-        last_name: "Walker",
-        employee_id: "16060",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 17,
-        first_name: "Olivia",
-        last_name: "Hall",
-        employee_id: "17070",
-        date: "2024-10-15",
-        status: "Late",
-      },
-      {
-        attendance_id: 18,
-        first_name: "Paul",
-        last_name: "Young",
-        employee_id: "18075",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      {
-        attendance_id: 19,
-        first_name: "Quinn",
-        last_name: "King",
-        employee_id: "19080",
-        date: "2024-10-15",
-        status: "Present",
-      },
-      {
-        attendance_id: 20,
-        first_name: "Rachel",
-        last_name: "Scott",
-        employee_id: "20085",
-        date: "2024-10-15",
-        status: "Absent",
-      },
-      // Add more records as needed...
-    ];
-    setAttendance(dummyData);
-    setFilteredAttendance(dummyData);
-  };
+  useEffect(() => {
+    const filteredData = sortedAttendance.filter(
+      (record) =>
+        record.employee_id.includes(searchQuery) ||
+        record.first_name.toLowerCase().includes(searchQuery) ||
+        record.last_name.toLowerCase().includes(searchQuery) ||
+        record.date.includes(searchQuery) ||
+        record.status.toLowerCase().includes(searchQuery)
+    );
+    setFilteredAttendance(filteredData);
+  }, [searchQuery, sortedAttendance]);
 
   const handleDelete = async (attendanceId) => {
     try {
@@ -212,20 +309,6 @@ const AttendanceList = () => {
   const handleEdit = (record) => {
     setEditRecord(record);
     setEditModalOpen(true);
-  };
-
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    const filteredData = attendance.filter(
-      (record) =>
-        record.employee_id.includes(query) ||
-        record.first_name.toLowerCase().includes(query) ||
-        record.last_name.toLowerCase().includes(query) ||
-        record.date.includes(query) ||
-        record.status.toLowerCase().includes(query)
-    );
-    setFilteredAttendance(filteredData);
   };
 
   const handleFormModal = () => {
@@ -299,7 +382,7 @@ const AttendanceList = () => {
           variant="outlined"
           color="primary"
           value={searchQuery}
-          onChange={handleSearch}
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
           placeholder="Search by employee-id, name, date, or status"
           sx={{
             width: "70%",
@@ -362,8 +445,7 @@ const AttendanceList = () => {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
@@ -376,12 +458,17 @@ const AttendanceList = () => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 {record.employee_id}
               </TableCell>
-              <TableCell>{record.first_name}</TableCell>
-              <TableCell>{record.last_name}</TableCell>
+              <TableCell>
+                {record.first_name} {record.last_name}
+              </TableCell>
               <TableCell>{record.date}</TableCell>
               <TableCell>{record.status}</TableCell>
               <TableCell>
-                <Button color="primary" onClick={() => handleEdit(record)}>
+                <Button
+                  color="primary"
+                  disabled={record.date != today}
+                  onClick={() => handleEdit(record)}
+                >
                   <Create />
                 </Button>
               </TableCell>
@@ -389,6 +476,7 @@ const AttendanceList = () => {
                 <Button
                   color="error"
                   onClick={() => handleDelete(record.attendance_id)}
+                  disabled={record.date != today}
                 >
                   <HighlightOff />
                 </Button>
@@ -408,8 +496,8 @@ const AttendanceList = () => {
         <Box
           className="modal-box"
           sx={{
-            width: "60%",
-            height: "45%",
+            width: "40%",
+            height: "40%",
             position: "absolute",
             top: "50%",
             left: "50%",

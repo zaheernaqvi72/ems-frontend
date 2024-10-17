@@ -8,12 +8,14 @@ import {
   InputLabel,
   InputAdornment,
   FormControl,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { PersonAdd, Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    user_type: "",
     first_name: "",
     last_name: "",
     username: "",
@@ -48,14 +50,26 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-200 rounded-md">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full bg-white p-6 rounded-md shadow-md space-y-4"
+        className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
         <h2 className="text-2xl font-bold text-center mb-4">
           Register <PersonAdd className="mr-2 text-green-500" />
         </h2>
+        <TextField
+          fullWidth
+          select
+          label="User Type"
+          name="user_type"
+          variant="outlined"
+          value={formData.user_type}
+          onChange={handleChange}
+        >
+          <MenuItem value="Manager/Principal/Head">Manager/Principal/Head</MenuItem>
+          <MenuItem value="Employee">Employee</MenuItem>
+        </TextField>
         <TextField
           fullWidth
           name="first_name"

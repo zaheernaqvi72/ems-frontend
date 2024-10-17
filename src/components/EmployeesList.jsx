@@ -12,7 +12,7 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import { HighlightOff, Create, Add, Search, Close, } from "@mui/icons-material";
+import { HighlightOff, Create, Add, Search, Close } from "@mui/icons-material";
 import EmployeeForm from "./EmployeeForm";
 
 const EmployeeList = () => {
@@ -20,218 +20,306 @@ const EmployeeList = () => {
   const [filteredEmployee, setFilteredEmployee] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [formModalOpen, setFormModalOpen] = useState(false);
+  const [sortedEmployees, setSortedEmployees] = useState([]);
 
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
+  const dummyData = [
+    {
+      employee_id: 1012,
+      first_name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
+      job_role: "Developer",
+      salary: 70000,
+      hire_date: "2022-01-15",
+    },
+    {
+      employee_id: 2012,
+      first_name: "Jane",
+      last_name: "Smith",
+      email: "jane.smith@example.com",
+      job_role: "Manager",
+      salary: 90000,
+      hire_date: "2021-05-20",
+    },
+    {
+      employee_id: 1023,
+      first_name: "Robert",
+      last_name: "Brown",
+      email: "robert.brown@example.com",
+      job_role: "Designer",
+      salary: 75000,
+      hire_date: "2020-07-11",
+    },
+    {
+      employee_id: 2023,
+      first_name: "Emily",
+      last_name: "Davis",
+      email: "emily.davis@example.com",
+      job_role: "QA Engineer",
+      salary: 68000,
+      hire_date: "2019-09-02",
+    },
+    {
+      employee_id: 1034,
+      first_name: "Michael",
+      last_name: "Johnson",
+      email: "michael.johnson@example.com",
+      job_role: "DevOps Engineer",
+      salary: 85000,
+      hire_date: "2018-04-14",
+    },
+    {
+      employee_id: 2034,
+      first_name: "Sarah",
+      last_name: "Williams",
+      email: "sarah.williams@example.com",
+      job_role: "HR Manager",
+      salary: 95000,
+      hire_date: "2017-10-01",
+    },
+    {
+      employee_id: 1045,
+      first_name: "David",
+      last_name: "Martinez",
+      email: "david.martinez@example.com",
+      job_role: "Data Scientist",
+      salary: 120000,
+      hire_date: "2021-01-30",
+    },
+    {
+      employee_id: 2045,
+      first_name: "Sophia",
+      last_name: "Garcia",
+      email: "sophia.garcia@example.com",
+      job_role: "Project Manager",
+      salary: 80000,
+      hire_date: "2019-11-07",
+    },
+    {
+      employee_id: 1056,
+      first_name: "James",
+      last_name: "Hernandez",
+      email: "james.hernandez@example.com",
+      job_role: "Full Stack Developer",
+      salary: 95000,
+      hire_date: "2022-03-19",
+    },
+    {
+      employee_id: 2056,
+      first_name: "Olivia",
+      last_name: "Taylor",
+      email: "olivia.taylor@example.com",
+      job_role: "Product Manager",
+      salary: 110000,
+      hire_date: "2019-06-15",
+    },
+    {
+      employee_id: 1067,
+      first_name: "Daniel",
+      last_name: "Moore",
+      email: "daniel.moore@example.com",
+      job_role: "Backend Developer",
+      salary: 72000,
+      hire_date: "2021-05-05",
+    },
+    {
+      employee_id: 2067,
+      first_name: "Mia",
+      last_name: "Wilson",
+      email: "mia.wilson@example.com",
+      job_role: "Front-end Developer",
+      salary: 85000,
+      hire_date: "2018-11-28",
+    },
+    {
+      employee_id: 1078,
+      first_name: "Joshua",
+      last_name: "Anderson",
+      email: "joshua.anderson@example.com",
+      job_role: "UI/UX Designer",
+      salary: 68000,
+      hire_date: "2022-02-20",
+    },
+    {
+      employee_id: 2078,
+      first_name: "Isabella",
+      last_name: "Thomas",
+      email: "isabella.thomas@example.com",
+      job_role: "Marketing Specialist",
+      salary: 78000,
+      hire_date: "2017-08-09",
+    },
+    {
+      employee_id: 1089,
+      first_name: "Ethan",
+      last_name: "Jackson",
+      email: "ethan.jackson@example.com",
+      job_role: "Backend Developer",
+      salary: 82000,
+      hire_date: "2018-12-25",
+    },
+    {
+      employee_id: 2089,
+      first_name: "Ava",
+      last_name: "White",
+      email: "ava.white@example.com",
+      job_role: "SEO Specialist",
+      salary: 71000,
+      hire_date: "2019-02-05",
+    },
+    {
+      employee_id: 1100,
+      first_name: "Benjamin",
+      last_name: "Martinez",
+      email: "benjamin.martinez@example.com",
+      job_role: "Lead Developer",
+      salary: 100000,
+      hire_date: "2016-03-17",
+    },
+    {
+      employee_id: 2100,
+      first_name: "Charlotte",
+      last_name: "King",
+      email: "charlotte.king@example.com",
+      job_role: "HR Specialist",
+      salary: 72000,
+      hire_date: "2021-08-03",
+    },
+    {
+      employee_id: 1111,
+      first_name: "William",
+      last_name: "Lee",
+      email: "william.lee@example.com",
+      job_role: "Cloud Engineer",
+      salary: 95000,
+      hire_date: "2017-07-25",
+    },
+    {
+      employee_id: 2111,
+      first_name: "Amelia",
+      last_name: "Martinez",
+      email: "amelia.martinez@example.com",
+      job_role: "Business Analyst",
+      salary: 84000,
+      hire_date: "2018-11-11",
+    },
+    {
+      employee_id: 1122,
+      first_name: "Alexander",
+      last_name: "Roberts",
+      email: "alexander.roberts@example.com",
+      job_role: "Software Engineer",
+      salary: 98000,
+      hire_date: "2022-01-18",
+    },
+    {
+      employee_id: 2122,
+      first_name: "Lily",
+      last_name: "Scott",
+      email: "lily.scott@example.com",
+      job_role: "Accountant",
+      salary: 65000,
+      hire_date: "2019-04-29",
+    },
+    {
+      employee_id: 1133,
+      first_name: "Lucas",
+      last_name: "Perez",
+      email: "lucas.perez@example.com",
+      job_role: "Data Engineer",
+      salary: 92000,
+      hire_date: "2015-09-23",
+    },
+    {
+      employee_id: 2133,
+      first_name: "Chloe",
+      last_name: "Ramirez",
+      email: "chloe.ramirez@example.com",
+      job_role: "IT Support",
+      salary: 62000,
+      hire_date: "2017-05-14",
+    },
+    {
+      employee_id: 1144,
+      first_name: "Andrew",
+      last_name: "Gonzalez",
+      email: "andrew.gonzalez@example.com",
+      job_role: "Network Engineer",
+      salary: 86000,
+      hire_date: "2016-11-30",
+    },
+    {
+      employee_id: 2144,
+      first_name: "Zoe",
+      last_name: "Green",
+      email: "zoe.green@example.com",
+      job_role: "Consultant",
+      salary: 79000,
+      hire_date: "2018-06-19",
+    },
+    {
+      employee_id: 1155,
+      first_name: "Ryan",
+      last_name: "Lopez",
+      email: "ryan.lopez@example.com",
+      job_role: "Security Analyst",
+      salary: 88000,
+      hire_date: "2015-02-17",
+    },
+    {
+      employee_id: 2155,
+      first_name: "Ella",
+      last_name: "Martinez",
+      email: "ella.martinez@example.com",
+      job_role: "Sales Manager",
+      salary: 73000,
+      hire_date: "2020-12-21",
+    },
+    {
+      employee_id: 1166,
+      first_name: "Sebastian",
+      last_name: "Nelson",
+      email: "sebastian.nelson@example.com",
+      job_role: "Architect",
+      salary: 90000,
+      hire_date: "2019-08-03",
+    },
+    {
+      employee_id: 2166,
+      first_name: "Mason",
+      last_name: "Rodriguez",
+      email: "mason.rodriguez@example.com",
+      job_role: "Database Admin",
+      salary: 77000,
+      hire_date: "2023-03-27",
+    }
+  ];
+  
   // Fetch employees from API
   const fetchEmployees = async () => {
-    // Uncomment below when you have a working API
-    // const data = await getEmployees();
-    const dummyData = [
-      {
-    employee_id: 1012,
-    first_name: "John",
-    last_name: "Doe",
-    email: "john.doe@example.com",
-    job_role: "Developer",
-    salary: 70000,
-    hire_date: "2022-01-15",
-  },
-  {
-    employee_id: 2012,
-    first_name: "Jane",
-    last_name: "Smith",
-    email: "jane.smith@example.com",
-    job_role: "Manager",
-    salary: 90000,
-    hire_date: "2021-05-20",
-  },
-  {
-    employee_id: 1023,
-    first_name: "Robert",
-    last_name: "Brown",
-    email: "robert.brown@example.com",
-    job_role: "Designer",
-    salary: 75000,
-    hire_date: "2020-07-11",
-  },
-  {
-    employee_id: 2023,
-    first_name: "Emily",
-    last_name: "Davis",
-    email: "emily.davis@example.com",
-    job_role: "QA Engineer",
-    salary: 68000,
-    hire_date: "2019-09-02",
-  },
-  {
-    employee_id: 1034,
-    first_name: "Michael",
-    last_name: "Johnson",
-    email: "michael.johnson@example.com",
-    job_role: "DevOps Engineer",
-    salary: 85000,
-    hire_date: "2018-04-14",
-  },
-  {
-    employee_id: 2034,
-    first_name: "Sarah",
-    last_name: "Williams",
-    email: "sarah.williams@example.com",
-    job_role: "HR Manager",
-    salary: 95000,
-    hire_date: "2017-10-01",
-  },
-  {
-    employee_id: 1045,
-    first_name: "David",
-    last_name: "Martinez",
-    email: "david.martinez@example.com",
-    job_role: "Data Scientist",
-    salary: 120000,
-    hire_date: "2021-01-30",
-  },
-  {
-    employee_id: 2045,
-    first_name: "Sophia",
-    last_name: "Garcia",
-    email: "sophia.garcia@example.com",
-    job_role: "Project Manager",
-    salary: 80000,
-    hire_date: "2019-11-07",
-  },
-  {
-    employee_id: 1056,
-    first_name: "James",
-    last_name: "Hernandez",
-    email: "james.hernandez@example.com",
-    job_role: "Full Stack Developer",
-    salary: 95000,
-    hire_date: "2022-03-19",
-  },
-  {
-    employee_id: 2056,
-    first_name: "Olivia",
-    last_name: "Taylor",
-    email: "olivia.taylor@example.com",
-    job_role: "Product Manager",
-    salary: 110000,
-    hire_date: "2019-06-15",
-  },
-  {
-    employee_id: 1067,
-    first_name: "Daniel",
-    last_name: "Moore",
-    email: "daniel.moore@example.com",
-    job_role: "Backend Developer",
-    salary: 72000,
-    hire_date: "2021-05-05",
-  },
-  {
-    employee_id: 2067,
-    first_name: "Mia",
-    last_name: "Wilson",
-    email: "mia.wilson@example.com",
-    job_role: "Front-end Developer",
-    salary: 85000,
-    hire_date: "2018-11-28",
-  },
-  {
-    employee_id: 1078,
-    first_name: "Joshua",
-    last_name: "Anderson",
-    email: "joshua.anderson@example.com",
-    job_role: "UI/UX Designer",
-    salary: 68000,
-    hire_date: "2022-02-20",
-  },
-  {
-    employee_id: 2078,
-    first_name: "Isabella",
-    last_name: "Thomas",
-    email: "isabella.thomas@example.com",
-    job_role: "Marketing Specialist",
-    salary: 78000,
-    hire_date: "2017-08-09",
-  },
-  {
-    employee_id: 1089,
-    first_name: "Ethan",
-    last_name: "Jackson",
-    email: "ethan.jackson@example.com",
-    job_role: "Backend Developer",
-    salary: 82000,
-    hire_date: "2018-12-25",
-  },
-  {
-    employee_id: 2089,
-    first_name: "Ava",
-    last_name: "White",
-    email: "ava.white@example.com",
-    job_role: "SEO Specialist",
-    salary: 71000,
-    hire_date: "2019-02-05",
-  },
-  {
-    employee_id: 1100,
-    first_name: "Benjamin",
-    last_name: "Martinez",
-    email: "benjamin.martinez@example.com",
-    job_role: "Lead Developer",
-    salary: 100000,
-    hire_date: "2016-03-17",
-  },
-  {
-    employee_id: 2100,
-    first_name: "Charlotte",
-    last_name: "King",
-    email: "charlotte.king@example.com",
-    job_role: "HR Specialist",
-    salary: 72000,
-    hire_date: "2021-08-03",
-  },
-  {
-    employee_id: 1111,
-    first_name: "William",
-    last_name: "Lee",
-    email: "william.lee@example.com",
-    job_role: "Cloud Engineer",
-    salary: 95000,
-    hire_date: "2017-07-25",
-  },
-  {
-    employee_id: 2111,
-    first_name: "Amelia",
-    last_name: "Martinez",
-    email: "amelia.martinez@example.com",
-    job_role: "Business Analyst",
-    salary: 84000,
-    hire_date: "2018-11-11",
-  },
-  {
-    employee_id: 1122,
-    first_name: "Alexander",
-    last_name: "Roberts",
-    email: "alexander.roberts@example.com",
-    job_role: "Software Engineer",
-    salary: 98000,
-    hire_date: "2022-01-18",
-  },
-  {
-    employee_id: 2122,
-    first_name: "Lily",
-    last_name: "Scott",
-    email: "lily.scott@example.com",
-    job_role: "Accountant",
-    salary: 65000,
-    hire_date: "2019-04-29",
-  },
-];
     setEmployees(dummyData);
-    setFilteredEmployee(dummyData);
   };
+  useEffect(() => {
+    fetchEmployees();
+    const sorted = [...employees].sort(
+      (a, b) => new Date(b.hire_date) - new Date(a.hire_date)
+    );
+    setSortedEmployees(sorted);
+  }, [employees]);
+
+  useEffect(() => {
+    const filteredData = sortedEmployees.filter(
+      (record) =>
+        record.employee_id.toString().includes(searchQuery) ||
+        record.first_name.toLowerCase().includes(searchQuery) ||
+        record.last_name.toLowerCase().includes(searchQuery) ||
+        record.email.toLowerCase().includes(searchQuery) ||
+        record.job_role.toLowerCase().includes(searchQuery) ||
+        record.salary.toString().includes(searchQuery) ||
+        record.hire_date.includes(searchQuery)
+    );
+    setFilteredEmployee(filteredData);
+  }, [searchQuery, sortedEmployees]);
 
   const handleDelete = async (employeeId) => {
     try {
@@ -246,25 +334,7 @@ const EmployeeList = () => {
     console.log("Edit employee with ID:", employeeId);
     handleFormModal(true);
   };
-
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    // Filter employees based on the query
-    const filteredData = employees.filter(
-      (record) =>
-        record.employee_id.toString().includes(query) ||
-        record.first_name.toLowerCase().includes(query) ||
-        record.last_name.toLowerCase().includes(query) ||
-        record.email.toLowerCase().includes(query) ||
-        record.job_role.toLowerCase().includes(query) ||
-        record.salary.toString().includes(query) ||
-        record.hire_date.includes(query)
-    );
-    setFilteredEmployee(filteredData);
-  };
-
+ 
   const handleFormModal = () => {
     setFormModalOpen(true);
   };
@@ -325,7 +395,7 @@ const EmployeeList = () => {
           variant="outlined"
           color="primary"
           value={searchQuery}
-          onChange={handleSearch}
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
           placeholder="Search by employee-id, name, email, job role, salary, or hire date"
           sx={{
             width: "70%",
@@ -387,8 +457,7 @@ const EmployeeList = () => {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Job Role</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Salary</TableCell>
@@ -404,8 +473,9 @@ const EmployeeList = () => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 {record.employee_id}
               </TableCell>
-              <TableCell>{record.first_name}</TableCell>
-              <TableCell>{record.last_name}</TableCell>
+              <TableCell>
+                {record.first_name} {record.last_name}
+              </TableCell>
               <TableCell>{record.email}</TableCell>
               <TableCell>{record.job_role}</TableCell>
               <TableCell>{record.salary}</TableCell>

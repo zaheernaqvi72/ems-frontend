@@ -26,155 +26,243 @@ const ReviewList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [filteredReviews, setFilteredReviews] = useState([]);
+  const [sortedReviews, setSortedReviews] = useState([]);
+
+  const dummyReviews = [
+    {
+      review_id: 1,
+      employee_id: "1001",
+      review_date: "2015-05-12",
+      comments: "Excellent work!",
+      rating: 4,
+    },
+    {
+      review_id: 2,
+      employee_id: "2002",
+      review_date: "2016-07-22",
+      comments: "Good performance.",
+      rating: 3,
+    },
+    {
+      review_id: 3,
+      employee_id: "1003",
+      review_date: "2017-09-18",
+      comments: "Needs improvement in deadlines.",
+      rating: 2,
+    },
+    {
+      review_id: 4,
+      employee_id: "2004",
+      review_date: "2018-02-15",
+      comments: "Great collaboration with the team.",
+      rating: 5,
+    },
+    {
+      review_id: 5,
+      employee_id: "1005",
+      review_date: "2019-10-30",
+      comments: "Satisfactory performance.",
+      rating: 3,
+    },
+    {
+      review_id: 6,
+      employee_id: "2006",
+      review_date: "2020-03-11",
+      comments: "Outstanding in problem-solving.",
+      rating: 5,
+    },
+    {
+      review_id: 7,
+      employee_id: "1007",
+      review_date: "2021-08-29",
+      comments: "Could improve communication.",
+      rating: 3,
+    },
+    {
+      review_id: 8,
+      employee_id: "2008",
+      review_date: "2015-12-21",
+      comments: "Consistently meets deadlines.",
+      rating: 4,
+    },
+    {
+      review_id: 9,
+      employee_id: "1009",
+      review_date: "2016-06-03",
+      comments: "Not meeting expectations.",
+      rating: 2,
+    },
+    {
+      review_id: 10,
+      employee_id: "2010",
+      review_date: "2022-01-15",
+      comments: "Excellent leadership skills.",
+      rating: 5,
+    },
+    {
+      review_id: 11,
+      employee_id: "1011",
+      review_date: "2023-09-23",
+      comments: "Good but needs to be more proactive.",
+      rating: 4,
+    },
+    {
+      review_id: 12,
+      employee_id: "2012",
+      review_date: "2017-04-09",
+      comments: "Poor performance under pressure.",
+      rating: 1,
+    },
+    {
+      review_id: 13,
+      employee_id: "1013",
+      review_date: "2018-11-19",
+      comments: "Great teamwork and initiative.",
+      rating: 5,
+    },
+    {
+      review_id: 14,
+      employee_id: "2014",
+      review_date: "2019-05-27",
+      comments: "Needs better time management.",
+      rating: 3,
+    },
+    {
+      review_id: 15,
+      employee_id: "1015",
+      review_date: "2020-12-05",
+      comments: "Consistently produces high-quality work.",
+      rating: 5,
+    },
+    {
+      review_id: 16,
+      employee_id: "2016",
+      review_date: "2021-03-22",
+      comments: "Improved performance over time.",
+      rating: 4,
+    },
+    {
+      review_id: 17,
+      employee_id: "1017",
+      review_date: "2022-07-18",
+      comments: "Struggles with deadlines.",
+      rating: 2,
+    },
+    {
+      review_id: 18,
+      employee_id: "2018",
+      review_date: "2015-11-13",
+      comments: "Effective problem solver.",
+      rating: 4,
+    },
+    {
+      review_id: 19,
+      employee_id: "1019",
+      review_date: "2016-02-09",
+      comments: "Great innovation and creativity.",
+      rating: 5,
+    },
+    {
+      review_id: 20,
+      employee_id: "2020",
+      review_date: "2017-06-21",
+      comments: "Inconsistent performance.",
+      rating: 2,
+    },
+    {
+      review_id: 21,
+      employee_id: "1002",
+      review_date: "2018-08-10",
+      comments: "Good team player.",
+      rating: 4,
+    },
+    {
+      review_id: 22,
+      employee_id: "1012",
+      review_date: "2019-03-14",
+      comments: "Shows initiative.",
+      rating: 5,
+    },
+    {
+      review_id: 23,
+      employee_id: "2003",
+      review_date: "2020-09-16",
+      comments: "Struggles with new tasks.",
+      rating: 2,
+    },
+    {
+      review_id: 24,
+      employee_id: "1014",
+      review_date: "2021-05-02",
+      comments: "Good technical skills.",
+      rating: 4,
+    },
+    {
+      review_id: 25,
+      employee_id: "2005",
+      review_date: "2022-11-26",
+      comments: "Strong in leadership.",
+      rating: 5,
+    },
+    {
+      review_id: 26,
+      employee_id: "1016",
+      review_date: "2023-04-30",
+      comments: "Needs to work on punctuality.",
+      rating: 3,
+    },
+    {
+      review_id: 27,
+      employee_id: "2007",
+      review_date: "2016-09-08",
+      comments: "A good mentor for the team.",
+      rating: 4,
+    },
+    {
+      review_id: 28,
+      employee_id: "1018",
+      review_date: "2017-11-12",
+      comments: "Satisfactory, but can improve.",
+      rating: 3,
+    },
+    {
+      review_id: 29,
+      employee_id: "2009",
+      review_date: "2018-10-01",
+      comments: "Needs to improve attention to detail.",
+      rating: 2,
+    },
+    {
+      review_id: 30,
+      employee_id: "1020",
+      review_date: "2020-02-19",
+      comments: "Exceptional work ethic.",
+      rating: 5,
+    },
+  ];
 
   const fetchReviews = async () => {
-    // Adding 5 dummy reviews here for testing purposes
-    const dummyReviews = [
-      {
-        review_id: 1,
-        employee_id: "1001",
-        review_date: "2024-10-01",
-        comments: "Very Poor!",
-        rating: 0,
-      },
-      {
-        review_id: 2,
-        employee_id: "2002",
-        review_date: "2024-10-02",
-        comments: "Very Poor",
-        rating: 0,
-      },
-      {
-        review_id: 3,
-        employee_id: "1003",
-        review_date: "2024-10-03",
-        comments: "Needs improvement in deadlines.",
-        rating: 3,
-      },
-      {
-        review_id: 4,
-        employee_id: "2004",
-        review_date: "2024-10-04",
-        comments: "Great collaboration with the team.",
-        rating: 5,
-      },
-      {
-        review_id: 5,
-        employee_id: "1005",
-        review_date: "2024-10-05",
-        comments: "Satisfactory performance.",
-        rating: 3,
-      },
-      {
-        review_id: 6,
-        employee_id: "2006",
-        review_date: "2024-10-06",
-        comments: "Outstanding in problem-solving.",
-        rating: 5,
-      },
-      {
-        review_id: 7,
-        employee_id: "1007",
-        review_date: "2024-10-07",
-        comments: "Could improve communication.",
-        rating: 3,
-      },
-      {
-        review_id: 8,
-        employee_id: "2008",
-        review_date: "2024-10-08",
-        comments: "Consistently meets deadlines.",
-        rating: 4,
-      },
-      {
-        review_id: 9,
-        employee_id: "1009",
-        review_date: "2024-10-09",
-        comments: "Not meeting expectations.",
-        rating: 2,
-      },
-      {
-        review_id: 10,
-        employee_id: "2010",
-        review_date: "2024-10-10",
-        comments: "Excellent leadership skills.",
-        rating: 5,
-      },
-      {
-        review_id: 11,
-        employee_id: "1011",
-        review_date: "2024-10-11",
-        comments: "Good but needs to be more proactive.",
-        rating: 4,
-      },
-      {
-        review_id: 12,
-        employee_id: "2012",
-        review_date: "2024-10-12",
-        comments: "Poor performance under pressure.",
-        rating: 2,
-      },
-      {
-        review_id: 13,
-        employee_id: "1013",
-        review_date: "2024-10-13",
-        comments: "Great teamwork and initiative.",
-        rating: 5,
-      },
-      {
-        review_id: 14,
-        employee_id: "2014",
-        review_date: "2024-10-14",
-        comments: "Needs better time management.",
-        rating: 3,
-      },
-      {
-        review_id: 15,
-        employee_id: "1015",
-        review_date: "2024-10-15",
-        comments: "Consistently produces high-quality work.",
-        rating: 5,
-      },
-      {
-        review_id: 16,
-        employee_id: "2016",
-        review_date: "2024-10-16",
-        comments: "Improved performance over time.",
-        rating: 4,
-      },
-      {
-        review_id: 17,
-        employee_id: "1017",
-        review_date: "2024-10-17",
-        comments: "Struggles with deadlines.",
-        rating: 2,
-      },
-      {
-        review_id: 18,
-        employee_id: "2018",
-        review_date: "2024-10-18",
-        comments: "Effective problem solver.",
-        rating: 4,
-      },
-      {
-        review_id: 19,
-        employee_id: "1019",
-        review_date: "2024-10-19",
-        comments: "Great innovation and creativity.",
-        rating: 5,
-      },
-      {
-        review_id: 20,
-        employee_id: "2020",
-        review_date: "2024-10-20",
-        comments: "Inconsistent performance.",
-        rating: 3,
-      },
-    ];
-
     setReviews(dummyReviews);
-    setFilteredReviews(dummyReviews);
   };
+
+  useEffect(() => {
+    fetchReviews();
+    const sorted = [...reviews].sort(
+      (a, b) => new Date(b.review_date) - new Date(a.review_date)
+    );
+    setSortedReviews(sorted);
+  }, [reviews]);
+
+  useEffect(() => {
+    const filteredData = sortedReviews.filter(
+      (record) =>
+        record.employee_id.toString().includes(searchQuery) ||
+        record.review_date.includes(searchQuery) ||
+        record.comments.toLowerCase().includes(searchQuery) ||
+        record.rating.toString().includes(searchQuery)
+    );
+    setFilteredReviews(filteredData);
+  }, [searchQuery, sortedReviews]);
 
   const handleEdit = (review) => {
     alert(`Edit review with ID: ${review.review_id}`);
@@ -188,32 +276,17 @@ const ReviewList = () => {
     alert("Review deleted successfully!");
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, []);
-
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const filteredData = reviews.filter(
-      (record) =>
-        record.employee_id.toString().includes(query) ||
-        record.review_date.includes(query) ||
-        record.comments.toLowerCase().includes(query) ||
-        record.rating.toString().includes(query)
-    );
-    setFilteredReviews(filteredData);
-  };
   const handleFormModal = () => {
     setFormModalOpen(true);
   };
+
   const getStarColor = (rating) => {
+    if (rating === 0) return "red";
     if (rating <= 2) return "red";
-    if (rating <= 4) return "#fbc740";
-    if (rating == 0) return "red";
+    if (rating <= 4) return "gold";
     return "green";
   };
+
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
       <h2 className="text-3xl font-bold m-3 text-center">Reviews</h2>
@@ -269,7 +342,7 @@ const ReviewList = () => {
           variant="outlined"
           color="primary"
           value={searchQuery}
-          onChange={handleSearch}
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
           placeholder="Search by employee-id, review date, comments, or rating"
           sx={{
             width: "70%",
@@ -330,7 +403,7 @@ const ReviewList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>

@@ -1,0 +1,302 @@
+[
+    {
+      "leave_id": 1,
+      "employee_id": "1011",
+      "start_date": "2018-08-15",
+      "end_date": "2018-08-17",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 2,
+      "employee_id": "1020",
+      "start_date": "2019-04-10",
+      "end_date": "2019-04-15",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 3,
+      "employee_id": "1031",
+      "start_date": "2020-06-20",
+      "end_date": "2020-06-24",
+      "reason": "Family Emergency",
+      "status": "Rejected",
+      "leave_type": "Casual leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 4,
+      "employee_id": "1042",
+      "start_date": "2021-01-15",
+      "end_date": "2021-01-17",
+      "reason": "Medical",
+      "status": "Approved",
+      "leave_type": "Sick leave",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 5,
+      "employee_id": "1053",
+      "start_date": "2024-10-20",
+      "end_date": "2024-10-23",
+      "reason": "Sick",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 6,
+      "employee_id": "1064",
+      "start_date": "2018-12-02",
+      "end_date": "2018-12-05",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 7,
+      "employee_id": "1075",
+      "start_date": "2019-05-10",
+      "end_date": "2019-05-15",
+      "reason": "Medical",
+      "status": "Rejected",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 8,
+      "employee_id": "1086",
+      "start_date": "2020-03-07",
+      "end_date": "2020-03-10",
+      "reason": "Personal",
+      "status": "Approved",
+      "leave_type": "Leave without pay",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 9,
+      "employee_id": "1097",
+      "start_date": "2021-08-05",
+      "end_date": "2021-08-10",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 10,
+      "employee_id": "1108",
+      "start_date": "2022-09-12",
+      "end_date": "2022-09-15",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 11,
+      "employee_id": "1119",
+      "start_date": "2023-07-20",
+      "end_date": "2023-07-22",
+      "reason": "Personal",
+      "status": "Rejected",
+      "leave_type": "Leave without pay",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 12,
+      "employee_id": "1120",
+      "start_date": "2024-05-11",
+      "end_date": "2024-05-14",
+      "reason": "Family Emergency",
+      "status": "Pending",
+      "leave_type": "Casual leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 13,
+      "employee_id": "1131",
+      "start_date": "2019-11-12",
+      "end_date": "2019-11-15",
+      "reason": "Sick",
+      "status": "Approved",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 14,
+      "employee_id": "1142",
+      "start_date": "2020-02-05",
+      "end_date": "2020-02-08",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 15,
+      "employee_id": "1153",
+      "start_date": "2021-09-01",
+      "end_date": "2021-09-04",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 16,
+      "employee_id": "1164",
+      "start_date": "2022-10-12",
+      "end_date": "2022-10-15",
+      "reason": "Sick",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 17,
+      "employee_id": "1175",
+      "start_date": "2023-06-17",
+      "end_date": "2023-06-19",
+      "reason": "Personal",
+      "status": "Approved",
+      "leave_type": "Leave without pay",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 18,
+      "employee_id": "1186",
+      "start_date": "2024-04-03",
+      "end_date": "2024-04-07",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 19,
+      "employee_id": "1197",
+      "start_date": "2018-07-13",
+      "end_date": "2018-07-15",
+      "reason": "Family Emergency",
+      "status": "Rejected",
+      "leave_type": "Casual leave",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 20,
+      "employee_id": "1208",
+      "start_date": "2021-12-22",
+      "end_date": "2021-12-25",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 21,
+      "employee_id": "1219",
+      "start_date": "2024-06-10",
+      "end_date": "2024-06-12",
+      "reason": "Medical",
+      "status": "Rejected",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 22,
+      "employee_id": "1220",
+      "start_date": "2022-11-15",
+      "end_date": "2022-11-18",
+      "reason": "Family Emergency",
+      "status": "Pending",
+      "leave_type": "Casual leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 23,
+      "employee_id": "1231",
+      "start_date": "2021-05-12",
+      "end_date": "2021-05-15",
+      "reason": "Sick",
+      "status": "Approved",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 24,
+      "employee_id": "1242",
+      "start_date": "2023-08-07",
+      "end_date": "2023-08-10",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 25,
+      "employee_id": "1253",
+      "start_date": "2020-04-01",
+      "end_date": "2020-04-04",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 26,
+      "employee_id": "1264",
+      "start_date": "2022-09-12",
+      "end_date": "2022-09-15",
+      "reason": "Sick",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 27,
+      "employee_id": "1275",
+      "start_date": "2021-07-22",
+      "end_date": "2021-07-25",
+      "reason": "Personal",
+      "status": "Approved",
+      "leave_type": "Leave without pay",
+      "day_type": "Half"
+    },
+    {
+      "leave_id": 28,
+      "employee_id": "1286",
+      "start_date": "2023-10-01",
+      "end_date": "2023-10-05",
+      "reason": "Medical",
+      "status": "Pending",
+      "leave_type": "Sick leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 29,
+      "employee_id": "1297",
+      "start_date": "2024-03-17",
+      "end_date": "2024-03-20",
+      "reason": "Vacation",
+      "status": "Approved",
+      "leave_type": "Earned leave",
+      "day_type": "Full"
+    },
+    {
+      "leave_id": 30,
+      "employee_id": "1308",
+      "start_date": "2021-11-05",
+      "end_date": "2021-11-07",
+      "reason": "Sick",
+      "status": "Rejected",
+      "leave_type": "Sick leave",
+      "day_type": "Half"
+    }
+]
