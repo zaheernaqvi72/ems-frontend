@@ -34,6 +34,8 @@ const LeaveList = () => {
       end_date: "2024-10-12",
       reason: "Medical",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Full"  // Added field
     },
     {
       leave_id: 2,
@@ -42,6 +44,8 @@ const LeaveList = () => {
       end_date: "2024-10-17",
       reason: "Vacation",
       status: "Pending",
+      leave_type: "Earned leave",
+      day_type: "Full"
     },
     {
       leave_id: 3,
@@ -50,6 +54,8 @@ const LeaveList = () => {
       end_date: "2024-11-05",
       reason: "Family Emergency",
       status: "Approved",
+      leave_type: "Casual leave",
+      day_type: "Full"
     },
     {
       leave_id: 4,
@@ -58,6 +64,8 @@ const LeaveList = () => {
       end_date: "2024-11-14",
       reason: "Personal",
       status: "Rejected",
+      leave_type: "Leave without pay",
+      day_type: "Half"  // Example of half-day leave
     },
     {
       leave_id: 5,
@@ -66,6 +74,8 @@ const LeaveList = () => {
       end_date: "2024-10-23",
       reason: "Sick",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Full"
     },
     {
       leave_id: 6,
@@ -74,6 +84,8 @@ const LeaveList = () => {
       end_date: "2024-10-25",
       reason: "Vacation",
       status: "Approved",
+      leave_type: "Earned leave",
+      day_type: "Half"
     },
     {
       leave_id: 7,
@@ -82,6 +94,8 @@ const LeaveList = () => {
       end_date: "2024-10-03",
       reason: "Medical",
       status: "Approved",
+      leave_type: "Sick leave",
+      day_type: "Full"
     },
     {
       leave_id: 8,
@@ -90,6 +104,8 @@ const LeaveList = () => {
       end_date: "2024-11-10",
       reason: "Personal",
       status: "Pending",
+      leave_type: "Leave without pay",
+      day_type: "Full"
     },
     {
       leave_id: 9,
@@ -98,6 +114,8 @@ const LeaveList = () => {
       end_date: "2024-10-27",
       reason: "Medical",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Half"
     },
     {
       leave_id: 10,
@@ -106,6 +124,8 @@ const LeaveList = () => {
       end_date: "2024-11-08",
       reason: "Vacation",
       status: "Approved",
+      leave_type: "Earned leave",
+      day_type: "Full"
     },
     {
       leave_id: 11,
@@ -114,6 +134,8 @@ const LeaveList = () => {
       end_date: "2024-10-05",
       reason: "Personal",
       status: "Rejected",
+      leave_type: "Leave without pay",
+      day_type: "Half"
     },
     {
       leave_id: 12,
@@ -122,6 +144,8 @@ const LeaveList = () => {
       end_date: "2024-10-22",
       reason: "Family Emergency",
       status: "Pending",
+      leave_type: "Casual leave",
+      day_type: "Full"
     },
     {
       leave_id: 13,
@@ -130,6 +154,8 @@ const LeaveList = () => {
       end_date: "2024-10-14",
       reason: "Sick",
       status: "Approved",
+      leave_type: "Sick leave",
+      day_type: "Full"
     },
     {
       leave_id: 14,
@@ -138,6 +164,8 @@ const LeaveList = () => {
       end_date: "2024-11-10",
       reason: "Medical",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Half"
     },
     {
       leave_id: 15,
@@ -146,6 +174,8 @@ const LeaveList = () => {
       end_date: "2024-11-04",
       reason: "Vacation",
       status: "Approved",
+      leave_type: "Earned leave",
+      day_type: "Full"
     },
     {
       leave_id: 16,
@@ -154,6 +184,8 @@ const LeaveList = () => {
       end_date: "2024-10-15",
       reason: "Sick",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Full"
     },
     {
       leave_id: 17,
@@ -162,6 +194,8 @@ const LeaveList = () => {
       end_date: "2024-10-30",
       reason: "Personal",
       status: "Approved",
+      leave_type: "Leave without pay",
+      day_type: "Half"
     },
     {
       leave_id: 18,
@@ -170,6 +204,8 @@ const LeaveList = () => {
       end_date: "2024-11-05",
       reason: "Medical",
       status: "Pending",
+      leave_type: "Sick leave",
+      day_type: "Full"
     },
     {
       leave_id: 19,
@@ -178,6 +214,8 @@ const LeaveList = () => {
       end_date: "2024-10-15",
       reason: "Family Emergency",
       status: "Rejected",
+      leave_type: "Casual leave",
+      day_type: "Half"
     },
     {
       leave_id: 20,
@@ -186,8 +224,11 @@ const LeaveList = () => {
       end_date: "2024-10-25",
       reason: "Vacation",
       status: "Approved",
+      leave_type: "Earned leave",
+      day_type: "Full"
     },
   ];
+  
 
   useEffect(() => {
     setLeaves(dummyLeaves);
@@ -230,9 +271,11 @@ const LeaveList = () => {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-  
+
     const filteredData = leaves.filter(
       (record) =>
+        record.leave_type.includes(query) ||
+        record.day_type.toLowerCase().includes(query) ||
         record.employee_id.includes(query) ||
         record.start_date.includes(query) ||
         record.end_date.includes(query) ||
@@ -241,7 +284,6 @@ const LeaveList = () => {
     );
     setFilteredLeaves(filteredData);
   };
-  
 
   const handleFormModal = () => {
     setFormModalOpen(true);
@@ -296,9 +338,7 @@ const LeaveList = () => {
         </Box>
       </Modal>
 
-      <h2 className="text-3xl font-bold m-3 text-center">
-        Leave Applications
-      </h2>
+      <h2 className="text-3xl font-bold m-3 text-center">Leave Applications</h2>
       <hr />
       <div className="flex justify-between items-center m-3">
         <TextField
@@ -367,7 +407,8 @@ const LeaveList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Leave / Day Type</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Start Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>End Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Reason</TableCell>
@@ -383,6 +424,7 @@ const LeaveList = () => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 {leave.employee_id}
               </TableCell>
+              <TableCell>{leave.leave_type} / {leave.day_type}</TableCell>
               <TableCell>{leave.start_date}</TableCell>
               <TableCell>{leave.end_date}</TableCell>
               <TableCell>{leave.reason}</TableCell>
@@ -394,7 +436,7 @@ const LeaveList = () => {
                     handleUpdateStatus(leave.leave_id, e.target.value)
                   }
                   displayEmpty
-                  style={{ height: "45px" }}
+                  style={{ height: "40px" }}
                 >
                   <MenuItem value="Pending">Pending</MenuItem>
                   <MenuItem value="Approved">Approve</MenuItem>

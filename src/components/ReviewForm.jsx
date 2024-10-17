@@ -20,7 +20,12 @@ const ReviewForm = ({ fetchReviews }) => {
       await createReview(formData);
       alert("Review submitted successfully!");
       fetchReviews(); // fetch updated reviews
-      setFormData({ employee_id: "", review_date: "", comments: "", rating: "" }); // Reset form
+      setFormData({
+        employee_id: "",
+        review_date: "",
+        comments: "",
+        rating: "",
+      }); // Reset form
     } catch (error) {
       alert("Error submitting review", error);
     }
@@ -58,12 +63,15 @@ const ReviewForm = ({ fetchReviews }) => {
         />
         <TextField
           fullWidth
-          label="Rating"
+          label="Rating (0-5)"
           name="rating"
           variant="outlined"
+          type="number"
           value={formData.rating}
           onChange={handleChange}
+          inputProps={{ min: 0, max: 5 }}
         />
+
         <Button variant="contained" color="primary" type="submit">
           Submit
         </Button>

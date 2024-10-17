@@ -361,7 +361,7 @@ const AttendanceList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>

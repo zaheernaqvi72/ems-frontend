@@ -7,7 +7,7 @@ import EmployeeList from './components/EmployeesList';
 import AttendanceList from './components/AttendanceList';
 import LeaveList from './components/LeaveList';
 import ReviewList from './components/ReviewList';
-import Dashboard from './pages/Dashboard'; // Import the Dashboard component
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route path="/attendance" element={<AttendanceList />} />
           <Route path="/leaves" element={<LeaveList />} />
           <Route path="/reviews" element={<ReviewList />} />
-          <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

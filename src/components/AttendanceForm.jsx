@@ -59,6 +59,7 @@ const AttendanceForm = ({ fetchAttendance }) => {
         >
           <MenuItem value="Present">Present</MenuItem>
           <MenuItem value="Absent">Absent</MenuItem>
+          <MenuItem value="Late">Late (Half Day)</MenuItem>
         </TextField>
         <Button variant="contained" color="primary" type="submit">
           Submit

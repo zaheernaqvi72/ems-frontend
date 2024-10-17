@@ -40,9 +40,10 @@ const Navbar = () => {
           <Button color="inherit" component={Link} to="/reviews">
             Review
           </Button>
+          
         </div>
         <div>
-          <Button color="inherit" component={Link} to="/register">
+        <Button color="inherit" component={Link} to="/register">
             Register
           </Button>
           <Button color="inherit" component={Link} to="/login">

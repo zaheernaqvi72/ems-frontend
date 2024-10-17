@@ -12,8 +12,8 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import { HighlightOff, Create, Add, Search, Close } from "@mui/icons-material";
-import EmployeeForm from "./EmployeeForm"; // Import the new EmployeeForm component
+import { HighlightOff, Create, Add, Search, Close, } from "@mui/icons-material";
+import EmployeeForm from "./EmployeeForm";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -244,6 +244,7 @@ const EmployeeList = () => {
 
   const handleEdit = (employeeId) => {
     console.log("Edit employee with ID:", employeeId);
+    handleFormModal(true);
   };
 
   const handleSearch = (e) => {
@@ -385,7 +386,7 @@ const EmployeeList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>First Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Last Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>

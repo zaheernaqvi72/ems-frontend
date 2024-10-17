@@ -14,7 +14,7 @@ import {
 import {
   HighlightOff,
   Create,
-  StarBorder,
+  Star,
   Search,
   Add,
   Close,
@@ -34,15 +34,15 @@ const ReviewList = () => {
         review_id: 1,
         employee_id: "1001",
         review_date: "2024-10-01",
-        comments: "Excellent work!",
-        rating: 5,
+        comments: "Very Poor!",
+        rating: 0,
       },
       {
         review_id: 2,
         employee_id: "2002",
         review_date: "2024-10-02",
-        comments: "Good performance.",
-        rating: 4,
+        comments: "Very Poor",
+        rating: 0,
       },
       {
         review_id: 3,
@@ -208,7 +208,12 @@ const ReviewList = () => {
   const handleFormModal = () => {
     setFormModalOpen(true);
   };
-
+  const getStarColor = (rating) => {
+    if (rating <= 2) return "red";
+    if (rating <= 4) return "#fbc740";
+    if (rating == 0) return "red";
+    return "green";
+  };
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
       <h2 className="text-3xl font-bold m-3 text-center">Reviews</h2>
@@ -325,7 +330,7 @@ const ReviewList = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
@@ -342,7 +347,17 @@ const ReviewList = () => {
               <TableCell>{review.review_date}</TableCell>
               <TableCell>{review.comments}</TableCell>
               <TableCell>
-                <StarBorder /> {review.rating}
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Star
+                    key={i}
+                    style={{
+                      color:
+                        review.rating === 0 || i < review.rating
+                          ? getStarColor(review.rating)
+                          : "gray",
+                    }}
+                  />
+                ))}
               </TableCell>
               <TableCell>
                 <Button color="primary" onClick={() => handleEdit(review)}>
