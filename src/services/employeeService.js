@@ -16,7 +16,7 @@ export const getEmployees = () => {
     .then((response) => response.data);
 };
 
-export const getEmployeeById = (employeeId) => {
+export const getEmployee = (employeeId) => {
   return axios
     .get(`${API_URL}/${employeeId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
