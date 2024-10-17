@@ -64,6 +64,16 @@ const theme = createTheme({
           },
         },
       },
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            overflow: "hidden",
+          },
+          html: {
+            overflow: "hidden",
+          },
+        },
+      },
     },
   });
 

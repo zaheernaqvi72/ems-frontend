@@ -129,7 +129,7 @@ const Navbar = () => {
             </Drawer>
           </>
         ) : (
-          <div className="flex-grow flex justify-center">
+          <div className="flex justify-center">
             {/* Centered Navigation Links */}
             {navLinks.map((item) => (
               <Button
@@ -138,11 +138,11 @@ const Navbar = () => {
                 component={Link}
                 to={item.path}
                 sx={{
-                  mx: 2,
+                  mx: 1,
                   textDecoration: "none",
                   borderBottom:
                     location.pathname === item.path
-                      ? "2px solid white"
+                      ? "1px solid white"
                       : "none",
                 }}
               >

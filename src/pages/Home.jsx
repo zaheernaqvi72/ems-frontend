@@ -93,7 +93,7 @@ const Home = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to="/employees/list"
+                to="/employees"
                 className="transition duration-300 hover:bg-green-700"
               >
                 Manage Employees
@@ -133,7 +133,7 @@ const Home = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to="/leave-management"
+                to="/leaves"
                 className="transition duration-300 hover:bg-yellow-700"
               >
                 Manage Leaves
@@ -211,7 +211,7 @@ const Home = () => {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to="/performance-review"
+                to="/reviews"
                 className="transition duration-300 hover:bg-purple-700"
               >
                 Review Performance
