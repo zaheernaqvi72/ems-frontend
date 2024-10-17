@@ -3,15 +3,6 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
     typography: {
       fontFamily: "Roboto",
-      h1: {
-        fontSize: "3rem",
-      },
-      h2: {
-        fontSize: "2rem",
-      },
-      body1: {
-        fontSize: "1.1rem",
-      },
     },
     transitions: {
       duration: {
