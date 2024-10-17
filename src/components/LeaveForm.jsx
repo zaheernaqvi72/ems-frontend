@@ -77,8 +77,8 @@ const LeaveForm = ({ fetchLeaves }) => {
           value={formData.day_type}
           onChange={handleChange}
         >
-          <MenuItem value="Full">Full</MenuItem>
-          <MenuItem value="Half">Half</MenuItem>
+          <MenuItem value="Full">Full Day</MenuItem>
+          <MenuItem value="Half">Half Day</MenuItem>
         
         </TextField>
         <TextField
