@@ -10,10 +10,6 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
 } from "recharts";
 
 const Dashboard = () => {
@@ -77,17 +73,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 pt-0 bg-gray-100 min-h-screen rounded-xl">
-      <h2 className="text-4xl font-bold mt-6 mb-6">Employees Dashboard</h2>
+    <div className="flex flex-col items-center justify-center w-full p-8 bg-gray-100 bg-opacity-15 rounded-lg">
+      <h1 className=" text-3xl font-bold mb-6 text-center text-amber-600">
+        Employees Dashboard
+      </h1>
 
-      {/* KPIs Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-6">
-        <Card className="shadow-md bg-blue-100">
-          <CardContent>
+      <div className="flex flex-wrap items-end space-x-5 space-y-5 mb-6 w-full">
+        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full ">
+          <CardContent className=" flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
-              className="text-center text-blue-700 mb-4"
+              className="text-center text-blue-700"
             >
               Total Employees
             </Typography>
@@ -97,14 +94,14 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="shadow-md bg-green-100">
-          <CardContent>
+        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
+          <CardContent className=" flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
-              className="text-center text-green-700 mb-4"
+              className="text-center text-green-700"
             >
-              Total Approved Leaves
+              Present Employees
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
               240
@@ -112,14 +109,29 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="shadow-md bg-yellow-100">
-          <CardContent>
+        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
+          <CardContent className=" flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
-              className="text-center text-yellow-700 mb-4"
+              className="text-center text-yellow-700"
             >
-              Total Pending Leaves
+              Approved Leaves
+            </Typography>
+            <Typography variant="h4" className="text-center font-bold">
+              60
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
+          <CardContent className=" flex flex-col justify-between">
+            <Typography
+              variant="h6"
+              component="div"
+              className="text-center text-pink-600"
+            >
+              Pending Leaves
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
               60
@@ -128,7 +140,7 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Employee Distribution */}
         <Card className="shadow-md">
           <CardContent>
@@ -139,7 +151,7 @@ const Dashboard = () => {
             >
               Employee Distribution
             </Typography>
-            <PieChart width={300} height={300}>
+            <PieChart width={400} height={300}>
               <Pie
                 data={employeeData}
                 cx="50%"
@@ -213,58 +225,6 @@ const Dashboard = () => {
               </Pie>
               <Tooltip />
             </PieChart>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Trends Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {/* Line Chart for Employees Over Time */}
-        <Card className="shadow-md">
-          <CardContent>
-            <Typography
-              variant="h5"
-              component="div"
-              className="text-center mb-4"
-            >
-              Employee Growth Trend
-            </Typography>
-            <LineChart width={500} height={300} data={trendsData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="employees"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
-              />
-            </LineChart>
-          </CardContent>
-        </Card>
-
-        {/* Area Chart for Leave Applications Over Time */}
-        <Card className="shadow-md">
-          <CardContent>
-            <Typography
-              variant="h5"
-              component="div"
-              className="text-center mb-4"
-            >
-              Leave Applications Trend
-            </Typography>
-            <AreaChart width={500} height={300} data={trendsData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="leaves"
-                stroke="#ff7300"
-                fill="#ff7300"
-              />
-            </AreaChart>
           </CardContent>
         </Card>
       </div>

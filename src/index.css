@@ -6,3 +6,32 @@ body {
   font-family: 'Nunito', sans-serif;
   background-color: rgb(238, 236, 236);
 }
+/* Add this in your global CSS */
+.spline-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.spline-background > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+}
+
+
+.spline-scale {
+  width: 100%;
+  height: 100%;
+  transform: scale(1); 
+    transform-origin: center;
+}
+
+

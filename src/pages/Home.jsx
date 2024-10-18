@@ -12,27 +12,24 @@ import { motion } from "framer-motion";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-gray-100 p-4 rounded-lg">
-      <h1 className="text-4xl font-bold mb-6 text-center text-fuchsia-700">
+    <div className="flex flex-col items-center justify-center w-full p-6 bg-gray-100 bg-opacity-15 rounded-lg">
+      <h1 className=" text-4xl font-bold mb-6 text-center text-amber-600">
         <Heading />
       </h1>
-      <p className="text-lg text-center mb-6 text-gray-600">
+      <p className="text-lg text-center mb-6 text-slate-100">
         Manage your employees efficiently with our comprehensive system. From
         tracking attendance to managing performance reviews, our system is
         designed to streamline your HR processes.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Dashboard Card */}
         <motion.div
           className="w-full"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0px 10px 15px rgba(0,0,0,0.15)",
-          }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-white min-w-[250px] shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <DashboardIcon fontSize="large" className="text-blue-500 mb-2" />
               <Typography
@@ -56,6 +53,7 @@ const Home = () => {
                 component={Link}
                 to="/dashboard"
                 className="transition duration-300 hover:bg-blue-700"
+                sx={{ marginTop: "1rem" }}
               >
                 Go to Dashboard
               </Button>
@@ -66,13 +64,10 @@ const Home = () => {
         {/* Employee Management Card */}
         <motion.div
           className="w-full"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0px 10px 15px rgba(0,0,0,0.15)",
-          }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-white min-w-[250px] shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <PersonAdd fontSize="large" className="text-green-500 mb-2" />
               <Typography
@@ -95,6 +90,7 @@ const Home = () => {
                 component={Link}
                 to="/employees"
                 className="transition duration-300 hover:bg-green-700"
+                sx={{ marginTop: "1rem" }}
               >
                 Manage Employees
               </Button>
@@ -105,13 +101,10 @@ const Home = () => {
         {/* Leave Management Card */}
         <motion.div
           className="w-full"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0px 10px 15px rgba(0,0,0,0.15)",
-          }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-white min-w-[250px] shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <Assignment fontSize="large" className="text-yellow-500 mb-2" />
               <Typography
@@ -135,6 +128,7 @@ const Home = () => {
                 component={Link}
                 to="/leaves"
                 className="transition duration-300 hover:bg-yellow-700"
+                sx={{ marginTop: "1rem" }}
               >
                 Manage Leaves
               </Button>
@@ -145,13 +139,10 @@ const Home = () => {
         {/* Attendance Tracking Card */}
         <motion.div
           className="w-full"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0px 10px 15px rgba(0,0,0,0.15)",
-          }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-white min-w-[250px] shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <ListAlt fontSize="large" className="text-red-500 mb-2" />
               <Typography
@@ -174,6 +165,7 @@ const Home = () => {
                 component={Link}
                 to="/attendance"
                 className="transition duration-300 hover:bg-red-700"
+                sx={{ marginTop: "1rem" }}
               >
                 Track Attendance
               </Button>
@@ -184,13 +176,10 @@ const Home = () => {
         {/* Performance Reviews Card */}
         <motion.div
           className="w-full"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0px 10px 15px rgba(0,0,0,0.15)",
-          }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="bg-gray-100 shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
+          <Card className="bg-white min-w-[250px] shadow-md hover:shadow-2xl transition duration-300 ease-in-out transform">
             <CardContent className="flex flex-col items-center">
               <BarChart fontSize="large" className="text-purple-500 mb-2" />
               <Typography
@@ -205,7 +194,7 @@ const Home = () => {
                 color="text.secondary"
                 className="text-center mb-4"
               >
-                Conduct and review employee performance evaluations.
+                Employee performance evaluations.
               </Typography>
               <Button
                 variant="contained"
@@ -213,6 +202,7 @@ const Home = () => {
                 component={Link}
                 to="/reviews"
                 className="transition duration-300 hover:bg-purple-700"
+                sx={{ marginTop: "1rem" }}
               >
                 Review Performance
               </Button>
