@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full p-6 bg-gray-100 bg-opacity-15 rounded-lg">
-      <h1 className=" text-4xl font-bold mb-6 text-center text-amber-600">
+      <h1 className=" text-4xl font-bold mb-6 text-center text-sky-200">
         <Heading />
       </h1>
       <p className="text-lg text-center mb-6 text-slate-100">
