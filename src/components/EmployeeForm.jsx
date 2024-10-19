@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createEmployee } from "../services/employeeService";
 import { TextField, Button } from "@mui/material";
+import PropTypes from "prop-types";
 
 const EmployeeForm = ({ fetchEmployees }) => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const EmployeeForm = ({ fetchEmployees }) => {
     last_name: "",
     email: "",
     job_role: "",
+    hire_date: "",
     salary: "",
   });
 
@@ -27,6 +29,7 @@ const EmployeeForm = ({ fetchEmployees }) => {
         last_name: "",
         email: "",
         job_role: "",
+        hire_date: "",
         salary: "",
       });
       fetchEmployees(); // Refresh the employee list after adding new employee
@@ -81,6 +84,18 @@ const EmployeeForm = ({ fetchEmployees }) => {
         />
         <TextField
           fullWidth
+          label="Joining Date"
+          name="hire_date"
+          type="date"
+          variant="outlined"
+          value={formData.hire_date}
+          onChange={handleChange}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          fullWidth
           label="Salary"
           name="salary"
           variant="outlined"
@@ -93,6 +108,11 @@ const EmployeeForm = ({ fetchEmployees }) => {
       </form>
     </>
   );
+};
+
+// PropTypes validation
+EmployeeForm.propTypes = {
+  fetchEmployees: PropTypes.func.isRequired,
 };
 
 export default EmployeeForm;

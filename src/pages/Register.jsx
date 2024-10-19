@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { PersonAdd, Visibility, VisibilityOff } from "@mui/icons-material";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +26,8 @@ const Register = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState({ type: "", content: "" });
 
   const navigate = useNavigate();
 
@@ -33,31 +37,69 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setMessage({ type: "", content: "" }); // Clear previous messages
+
     try {
       await register(formData);
-      alert("Registration successful!");
-      navigate("/login");
+      setMessage({ type: "success", content: "Registration successful!" });
+
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      console.error("Registration failed:", error);
-      alert("Registration failed! Please try again.");
+      // Assuming `error.response.data.message` holds the message from API
+      const errorMessage = error.response ? error.response.data.message : error.message;
+
+      if (errorMessage.includes("username already exists")) {
+        setMessage({
+          type: "error",
+          content: "Username already exists. Please choose a different one.",
+        });
+      } else if (errorMessage.includes("email already exists")) {
+        setMessage({
+          type: "error",
+          content: "Email already exists. Please use a different email.",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          content: `Registration failed! ${errorMessage}`,
+        });
+      }
+
+      // Clear the error message after 2 seconds
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 2000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center flex-row">
       <form
         onSubmit={handleSubmit}
         className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
+        {message.content && (
+          <Stack sx={{ width: "100%", mt: 2 }} spacing={2}>
+            <Alert variant="filled" severity={message.type}>
+              {message.content}
+            </Alert>
+          </Stack>
+        )}
         <h2 className="text-2xl font-bold text-center mb-4">
           Register <PersonAdd className="mr-2 text-green-500" />
         </h2>
+
         <TextField
           fullWidth
           select
@@ -66,10 +108,14 @@ const Register = () => {
           variant="outlined"
           value={formData.user_type}
           onChange={handleChange}
+          required
         >
-          <MenuItem value="Manager/Principal/Head">Manager/Principal/Head</MenuItem>
+          <MenuItem value="Manager/Principal/Head">
+            Manager/Principal/Head
+          </MenuItem>
           <MenuItem value="Employee">Employee</MenuItem>
         </TextField>
+
         <TextField
           fullWidth
           name="first_name"
@@ -77,8 +123,10 @@ const Register = () => {
           variant="outlined"
           value={formData.first_name}
           onChange={handleChange}
+          required
           className="mb-4"
         />
+
         <TextField
           fullWidth
           name="last_name"
@@ -86,8 +134,10 @@ const Register = () => {
           variant="outlined"
           value={formData.last_name}
           onChange={handleChange}
+          required
           className="mb-4"
         />
+
         <TextField
           fullWidth
           name="username"
@@ -95,8 +145,10 @@ const Register = () => {
           variant="outlined"
           value={formData.username}
           onChange={handleChange}
+          required
           className="mb-4"
         />
+
         <TextField
           fullWidth
           type="email"
@@ -105,16 +157,21 @@ const Register = () => {
           variant="outlined"
           value={formData.email}
           onChange={handleChange}
+          required
           className="mb-4"
         />
+
         <FormControl fullWidth variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             name="password"
             type={showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
+            required
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -129,15 +186,26 @@ const Register = () => {
             label="Password"
           />
         </FormControl>
+
         <Button
           fullWidth
           variant="contained"
           color="primary"
           type="submit"
           className="mt-4"
+          disabled={
+            isSubmitting ||
+            !formData.user_type ||
+            !formData.first_name ||
+            !formData.last_name ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password
+          }
         >
-          Register
+          {isSubmitting ? "Registering..." : "Register"}
         </Button>
+
         <h4 className="text-lg font-semibold text-center mt-4">
           Already have an account?
           <Link to="/login" className="text-blue-500 hover:underline ml-2">

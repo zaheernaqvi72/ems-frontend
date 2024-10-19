@@ -12,8 +12,12 @@ import {
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 const Login = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState({ type: "", content: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     user_type: "",
@@ -30,13 +34,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setMessage({ type: "", content: "" }); // Clear previous message before submitting
+
     try {
       const token = await login(formData);
       localStorage.setItem("token", token);
-      alert("Login successful!");
-      navigate("/");
+      setMessage({ type: "success", content: "Login successful!" });
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+        navigate("/"); // Redirect to home page after login
+      }, 2000);
     } catch (error) {
-      alert("Login failed", error);
+      console.error("Login failed:", error);
+      setMessage({
+        type: "error",
+        content: "Login failed! Check your credentials or user type.",
+      });
+      // Optionally clear the message after a certain time
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 2000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -52,6 +72,13 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
+        {message.content && (
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            <Alert variant="filled" severity={message.type}>
+              {message.content}
+            </Alert>
+          </Stack>
+        )}
         <h2 className="text-2xl font-bold text-center mb-4">
           Login <AccountCircle className="mr-2 text-blue-500" />
         </h2>
@@ -63,6 +90,7 @@ const Login = () => {
           variant="outlined"
           value={formData.user_type}
           onChange={handleChange}
+          required
         >
           <MenuItem value="Manager/Principal/Head">
             Manager/Principal/Head
@@ -72,10 +100,11 @@ const Login = () => {
         <TextField
           fullWidth
           name="username"
-          label="username"
+          label="Username"
           variant="outlined"
           value={formData.username}
           onChange={handleChange}
+          required
         />
 
         <TextField
@@ -86,6 +115,7 @@ const Login = () => {
           variant="outlined"
           value={formData.email}
           onChange={handleChange}
+          required
         />
 
         <FormControl fullWidth variant="outlined">
@@ -98,6 +128,7 @@ const Login = () => {
             type={showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
+            required
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -118,8 +149,15 @@ const Login = () => {
           color="primary"
           type="submit"
           className="mt-4"
+          disabled={
+            isSubmitting ||
+            !formData.user_type ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password
+          }
         >
-          Login
+          {isSubmitting ? "Logging..." : "Login"}
         </Button>
         <h4 className="text-lg font-semibold">
           Don&apos;t have an account?

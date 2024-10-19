@@ -13,10 +13,13 @@ import {
   List,
   ListItem,
   ListItemText,
+  Box,
+  Tooltip,
+  Avatar,
+  Typography as MuiTypography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
-import { Person } from "@mui/icons-material";
 
 const Navbar = () => {
   const location = useLocation();
@@ -51,6 +54,12 @@ const Navbar = () => {
     { title: "Login", path: "/login" },
   ];
 
+  const settings = [
+    { title: "Profile", path: "/profile" },
+    { title: "Settings", path: "setting" },
+    { title: "Logout", path: "/logout" },
+  ];
+
   const drawerList = (
     <List>
       {navLinks.map((item) => (
@@ -65,35 +74,46 @@ const Navbar = () => {
           <ListItemText primary={item.title} />
         </ListItem>
       ))}
-      
-      <div className="flex justify-start">
-            <Button
-              color="inherit"
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleMenuClick}
-            >
-              <Person />
-            </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              {userLinks.map((item) => (
-                <MenuItem
-                  key={item.title}
-                  onClick={handleMenuClose}
-                  component={Link}
-                  to={item.path}
-                >
+
+      {/* Mobile Avatar and User Menu */}
+      <ListItem>
+        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleMenuClick} sx={{ p: 0 }}>
+              <Avatar alt="Remy Sharp" src="image.jpg" />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            {settings.map((item) => (
+              <MenuItem
+                onClick={handleMenuClose}
+                key={item.title}
+                component={Link}
+                to={item.path}
+              >
+                <MuiTypography sx={{ textAlign: "center" }}>
                   {item.title}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
+                </MuiTypography>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
+      </ListItem>
     </List>
   );
 
@@ -151,36 +171,45 @@ const Navbar = () => {
             ))}
           </div>
         )}
+
         {/* Right User Icon (Only for Desktop) */}
         {!isMobile && (
-          <div className="flex justify-end">
-            <Button
-              color="inherit"
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleMenuClick}
-            >
-              <Person />
-            </Button>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleMenuClick} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="image.jpg" />
+              </IconButton>
+            </Tooltip>
             <Menu
-              id="simple-menu"
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
               anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
               keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
             >
-              {userLinks.map((item) => (
+              {settings.map((item) => (
                 <MenuItem
                   key={item.title}
-                  onClick={handleMenuClose}
                   component={Link}
                   to={item.path}
+                  onClick={handleMenuClose}
                 >
-                  {item.title}
+                  <MuiTypography sx={{ textAlign: "center" }}>
+                    {item.title}
+                  </MuiTypography>
                 </MenuItem>
               ))}
             </Menu>
-          </div>
+          </Box>
         )}
       </Toolbar>
     </AppBar>

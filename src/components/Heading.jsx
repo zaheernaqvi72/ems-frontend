@@ -6,7 +6,7 @@ const Heading = () => {
       sequence={[
         "Welcome to Employee Management System",
         2000,
-        "Manage employees efficiently with our comprehensive system",
+        "Manage Employees Efficiently With Our Comprehensive System",
         2000,
       ]}
       wrapper="span"

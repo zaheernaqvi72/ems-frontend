@@ -30,7 +30,7 @@ const EmployeeList = () => {
       email: "john.doe@example.com",
       job_role: "Developer",
       salary: 70000,
-      hire_date: "2022-01-15",
+      join_date: "2022-01-15",
     },
     {
       employee_id: 2012,
@@ -39,7 +39,7 @@ const EmployeeList = () => {
       email: "jane.smith@example.com",
       job_role: "Manager",
       salary: 90000,
-      hire_date: "2021-05-20",
+      join_date: "2021-05-20",
     },
     {
       employee_id: 1023,
@@ -48,7 +48,7 @@ const EmployeeList = () => {
       email: "robert.brown@example.com",
       job_role: "Designer",
       salary: 75000,
-      hire_date: "2020-07-11",
+      join_date: "2020-07-11",
     },
     {
       employee_id: 2023,
@@ -57,7 +57,7 @@ const EmployeeList = () => {
       email: "emily.davis@example.com",
       job_role: "QA Engineer",
       salary: 68000,
-      hire_date: "2019-09-02",
+      join_date: "2019-09-02",
     },
     {
       employee_id: 1034,
@@ -66,7 +66,7 @@ const EmployeeList = () => {
       email: "michael.johnson@example.com",
       job_role: "DevOps Engineer",
       salary: 85000,
-      hire_date: "2018-04-14",
+      join_date: "2018-04-14",
     },
     {
       employee_id: 2034,
@@ -75,7 +75,7 @@ const EmployeeList = () => {
       email: "sarah.williams@example.com",
       job_role: "HR Manager",
       salary: 95000,
-      hire_date: "2017-10-01",
+      join_date: "2017-10-01",
     },
     {
       employee_id: 1045,
@@ -84,7 +84,7 @@ const EmployeeList = () => {
       email: "david.martinez@example.com",
       job_role: "Data Scientist",
       salary: 120000,
-      hire_date: "2021-01-30",
+      join_date: "2021-01-30",
     },
     {
       employee_id: 2045,
@@ -93,7 +93,7 @@ const EmployeeList = () => {
       email: "sophia.garcia@example.com",
       job_role: "Project Manager",
       salary: 80000,
-      hire_date: "2019-11-07",
+      join_date: "2019-11-07",
     },
     {
       employee_id: 1056,
@@ -102,7 +102,7 @@ const EmployeeList = () => {
       email: "james.hernandez@example.com",
       job_role: "Full Stack Developer",
       salary: 95000,
-      hire_date: "2022-03-19",
+      join_date: "2022-03-19",
     },
     {
       employee_id: 2056,
@@ -111,7 +111,7 @@ const EmployeeList = () => {
       email: "olivia.taylor@example.com",
       job_role: "Product Manager",
       salary: 110000,
-      hire_date: "2019-06-15",
+      join_date: "2019-06-15",
     },
     {
       employee_id: 1067,
@@ -120,7 +120,7 @@ const EmployeeList = () => {
       email: "daniel.moore@example.com",
       job_role: "Backend Developer",
       salary: 72000,
-      hire_date: "2021-05-05",
+      join_date: "2021-05-05",
     },
     {
       employee_id: 2067,
@@ -129,7 +129,7 @@ const EmployeeList = () => {
       email: "mia.wilson@example.com",
       job_role: "Front-end Developer",
       salary: 85000,
-      hire_date: "2018-11-28",
+      join_date: "2018-11-28",
     },
     {
       employee_id: 1078,
@@ -138,7 +138,7 @@ const EmployeeList = () => {
       email: "joshua.anderson@example.com",
       job_role: "UI/UX Designer",
       salary: 68000,
-      hire_date: "2022-02-20",
+      join_date: "2022-02-20",
     },
     {
       employee_id: 2078,
@@ -147,7 +147,7 @@ const EmployeeList = () => {
       email: "isabella.thomas@example.com",
       job_role: "Marketing Specialist",
       salary: 78000,
-      hire_date: "2017-08-09",
+      join_date: "2017-08-09",
     },
     {
       employee_id: 1089,
@@ -156,7 +156,7 @@ const EmployeeList = () => {
       email: "ethan.jackson@example.com",
       job_role: "Backend Developer",
       salary: 82000,
-      hire_date: "2018-12-25",
+      join_date: "2018-12-25",
     },
     {
       employee_id: 2089,
@@ -165,7 +165,7 @@ const EmployeeList = () => {
       email: "ava.white@example.com",
       job_role: "SEO Specialist",
       salary: 71000,
-      hire_date: "2019-02-05",
+      join_date: "2019-02-05",
     },
     {
       employee_id: 1100,
@@ -174,7 +174,7 @@ const EmployeeList = () => {
       email: "benjamin.martinez@example.com",
       job_role: "Lead Developer",
       salary: 100000,
-      hire_date: "2016-03-17",
+      join_date: "2016-03-17",
     },
     {
       employee_id: 2100,
@@ -183,7 +183,7 @@ const EmployeeList = () => {
       email: "charlotte.king@example.com",
       job_role: "HR Specialist",
       salary: 72000,
-      hire_date: "2021-08-03",
+      join_date: "2021-08-03",
     },
     {
       employee_id: 1111,
@@ -192,7 +192,7 @@ const EmployeeList = () => {
       email: "william.lee@example.com",
       job_role: "Cloud Engineer",
       salary: 95000,
-      hire_date: "2017-07-25",
+      join_date: "2017-07-25",
     },
     {
       employee_id: 2111,
@@ -201,7 +201,7 @@ const EmployeeList = () => {
       email: "amelia.martinez@example.com",
       job_role: "Business Analyst",
       salary: 84000,
-      hire_date: "2018-11-11",
+      join_date: "2018-11-11",
     },
     {
       employee_id: 1122,
@@ -210,7 +210,7 @@ const EmployeeList = () => {
       email: "alexander.roberts@example.com",
       job_role: "Software Engineer",
       salary: 98000,
-      hire_date: "2022-01-18",
+      join_date: "2022-01-18",
     },
     {
       employee_id: 2122,
@@ -219,7 +219,7 @@ const EmployeeList = () => {
       email: "lily.scott@example.com",
       job_role: "Accountant",
       salary: 65000,
-      hire_date: "2019-04-29",
+      join_date: "2019-04-29",
     },
     {
       employee_id: 1133,
@@ -228,7 +228,7 @@ const EmployeeList = () => {
       email: "lucas.perez@example.com",
       job_role: "Data Engineer",
       salary: 92000,
-      hire_date: "2015-09-23",
+      join_date: "2015-09-23",
     },
     {
       employee_id: 2133,
@@ -237,7 +237,7 @@ const EmployeeList = () => {
       email: "chloe.ramirez@example.com",
       job_role: "IT Support",
       salary: 62000,
-      hire_date: "2017-05-14",
+      join_date: "2017-05-14",
     },
     {
       employee_id: 1144,
@@ -246,7 +246,7 @@ const EmployeeList = () => {
       email: "andrew.gonzalez@example.com",
       job_role: "Network Engineer",
       salary: 86000,
-      hire_date: "2016-11-30",
+      join_date: "2016-11-30",
     },
     {
       employee_id: 2144,
@@ -255,7 +255,7 @@ const EmployeeList = () => {
       email: "zoe.green@example.com",
       job_role: "Consultant",
       salary: 79000,
-      hire_date: "2018-06-19",
+      join_date: "2018-06-19",
     },
     {
       employee_id: 1155,
@@ -264,7 +264,7 @@ const EmployeeList = () => {
       email: "ryan.lopez@example.com",
       job_role: "Security Analyst",
       salary: 88000,
-      hire_date: "2015-02-17",
+      join_date: "2015-02-17",
     },
     {
       employee_id: 2155,
@@ -273,7 +273,7 @@ const EmployeeList = () => {
       email: "ella.martinez@example.com",
       job_role: "Sales Manager",
       salary: 73000,
-      hire_date: "2020-12-21",
+      join_date: "2020-12-21",
     },
     {
       employee_id: 1166,
@@ -282,7 +282,7 @@ const EmployeeList = () => {
       email: "sebastian.nelson@example.com",
       job_role: "Architect",
       salary: 90000,
-      hire_date: "2019-08-03",
+      join_date: "2019-08-03",
     },
     {
       employee_id: 2166,
@@ -291,7 +291,7 @@ const EmployeeList = () => {
       email: "mason.rodriguez@example.com",
       job_role: "Database Admin",
       salary: 77000,
-      hire_date: "2023-03-27",
+      join_date: "2023-03-27",
     }
   ];
   
@@ -302,7 +302,7 @@ const EmployeeList = () => {
   useEffect(() => {
     fetchEmployees();
     const sorted = [...employees].sort(
-      (a, b) => new Date(b.hire_date) - new Date(a.hire_date)
+      (a, b) => new Date(b.join_date) - new Date(a.join_date)
     );
     setSortedEmployees(sorted);
   }, [employees]);
@@ -316,7 +316,7 @@ const EmployeeList = () => {
         record.email.toLowerCase().includes(searchQuery) ||
         record.job_role.toLowerCase().includes(searchQuery) ||
         record.salary.toString().includes(searchQuery) ||
-        record.hire_date.includes(searchQuery)
+        record.join_date.includes(searchQuery)
     );
     setFilteredEmployee(filteredData);
   }, [searchQuery, sortedEmployees]);
@@ -461,7 +461,7 @@ const EmployeeList = () => {
             <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Job Role</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Salary</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Hire Date</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Join Date</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
           </TableRow>
@@ -479,7 +479,7 @@ const EmployeeList = () => {
               <TableCell>{record.email}</TableCell>
               <TableCell>{record.job_role}</TableCell>
               <TableCell>{record.salary}</TableCell>
-              <TableCell>{record.hire_date}</TableCell>
+              <TableCell>{record.join_date}</TableCell>
               <TableCell>
                 <Button
                   color="primary"
