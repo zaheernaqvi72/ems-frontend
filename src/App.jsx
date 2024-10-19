@@ -159,9 +159,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="max-w-full max-h-full app-container relative">
+      <div className="app-container relative">
         {/* Particles Canvas as Background */}
-        <div id="tsparticles" className="absolute top-0 left-0 w-full h-full z-0"></div>
+        <div id="tsparticles" className="fixed top-0 left-0 w-full h-full z-0"></div>
 
         {/* Foreground Content */}
         <Router>
