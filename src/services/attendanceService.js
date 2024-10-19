@@ -1,42 +1,46 @@
 import axios from "axios";
+import handleError from "../utils/handleError.js";
 
-const API_URL = "http://localhost:5000/api/attendance";
+const API_URL = "http://localhost:3000/api/attendance";
 
-// Create attendance record
-export const recordAttendance = (attendanceData) => {
-  return axios.post(API_URL, attendanceData, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
+
+// Record new attendance
+export const recordAttendance = async (attendanceData) => {
+  try {
+    const response = await axios.post(API_URL, attendanceData);
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error recording attendance");
+  }
 };
 
-// Get attendance by employee ID (Read)
-export const getAttendanceByEmployeeId = (employeeId) => {
-  return axios
-    .get(`${API_URL}/employee/${employeeId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
-    .then((response) => response.data);
+
+
+// Get all attendance
+export const getAllAttendance = async () => {
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching attendance");
+  }
 };
 
-// Get attendance by date (Read)
-export const getAttendanceByDate = (date) => {
-  return axios
-    .get(`${API_URL}/date/${date}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    })
-    .then((response) => response.data);
+// Delete attendance by ID
+export const deleteAttendance = async (attendanceId) => {
+  try {
+    const response = await axios.delete(`${API_URL}/${attendanceId}`);
+    return response.data;
+  } catch (error) {
+    handleError(error, `Error deleting attendance with ID ${attendanceId}`);
+  }
 };
-
-// Update attendance record (Update)
-export const editAttendance = (attendanceId, attendanceData) => {
-  return axios.put(`${API_URL}/${attendanceId}`, attendanceData, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-};
-
-// Delete attendance record (Delete)
-export const deleteAttendance = (attendanceId) => {
-  return axios.delete(`${API_URL}/${attendanceId}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
+// Edit attendance by ID
+export const editAttendance = async (attendanceId, attendanceData) => {
+  try {
+    const response = await axios.put(`${API_URL}/attendance/${attendanceId}`, attendanceData);
+    return response.data;
+  } catch (error) {
+    handleError(error, `Error editing attendance with ID ${attendanceId}`);
+  }
 };
