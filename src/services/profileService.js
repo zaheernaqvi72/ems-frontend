@@ -48,3 +48,14 @@ export const updateAvatar = async (avatarData) => {
     throw error;
   }
 };
+
+// Delete user profile
+export const deleteUserProfile = async () => {
+  try {
+    const response = await axios.delete(`${API_URL}/delete`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting user profile", error);
+    throw error;
+  }
+};

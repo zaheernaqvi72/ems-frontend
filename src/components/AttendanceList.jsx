@@ -20,6 +20,8 @@ import {
   editAttendance,
   getAllAttendance,
 } from "../services/attendanceService";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 const AttendanceList = () => {
   const [attendance, setAttendance] = useState([]);
@@ -27,18 +29,29 @@ const AttendanceList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [formModalOpen, setFormModalOpen] = useState(false);
-  const [editRecord, setEditRecord] = useState({});
+  const [editRecord, setEditRecord] = useState({
+    attendance_id: "",
+    employee_id: "",
+    date: "",
+    status: "",
+  });
+  const [message, setMessage] = useState({ type: "", content: "" });
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [sortedAttendance, setSortedAttendance] = useState([]);
-  const today = new Date().toISOString().split("T")[0]; // Current date in "YYYY-MM-DD" format
 
   const fetchAttendance = async () => {
     try {
       const response = await getAllAttendance();
       setAttendance(response);
     } catch (error) {
-      console.error("Error fetching attendance records:", error);
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to fetch attendance",
+      });
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 3000);
     }
   };
 
@@ -69,8 +82,14 @@ const AttendanceList = () => {
     if (deleteRecord) {
       try {
         await deleteAttendance(deleteRecord.attendance_id);
-        fetchAttendance();
         setDeleteModalOpen(false);
+        setMessage({ type: "success", content: "Attendance record deleted!" });
+        fetchAttendance();
+        // Clear form and navigate after success
+        setTimeout(() => {
+          setMessage({ type: "", content: "" });
+          
+        }, 2000);
       } catch (error) {
         console.error("Error deleting attendance record:", error);
       }
@@ -78,20 +97,49 @@ const AttendanceList = () => {
   };
 
   const handleEdit = (attendanceId) => {
+    // Find the attendance record by ID
     const record = attendance.find((r) => r.attendance_id === attendanceId);
-    setEditRecord(record);
-    
-    setEditModalOpen(true);
+
+    if (record) {
+      setEditRecord(record);
+      setEditModalOpen(true);
+    } else {
+      setMessage({ type: "error", content: "Invalid attendance record." });
+    }
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+
+    if (!editRecord || !editRecord.attendance_id) {
+      setMessage({ type: "error", content: "Invalid attendance record." });
+      return;
+    }
+
     try {
       await editAttendance(editRecord.attendance_id, editRecord);
+      setMessage({
+        type: "success",
+        content: "Attendance Edited successfully!",
+      });
+
       setEditModalOpen(false);
       fetchAttendance();
+      // Clear form and navigate after success
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+
+        // Refresh the attendance data
+      }, 3000);
     } catch (error) {
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to edit attendance.",
+      });
       console.error("Error editing attendance record:", error);
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 3000);
     }
   };
 
@@ -99,9 +147,16 @@ const AttendanceList = () => {
     setFormModalOpen(true);
   };
 
-  
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
+      {/* Display alerts for error or success */}
+      {message.content && (
+        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
+          <Alert variant="filled" severity={message.type}>
+            {message.content}
+          </Alert>
+        </Stack>
+      )}
       {/* Attendance Form Modal */}
       <Modal
         open={formModalOpen}
@@ -179,13 +234,46 @@ const AttendanceList = () => {
               variant="outlined"
               color="error"
               onClick={handleDelete}
-              sx={{ marginRight: 2 }}
+              sx={{
+                padding: "5px 20px",
+                fontSize: "16px",
+                borderRadius: "30px",
+                marginRight: "10px",
+                "&:hover": {
+                  borderColor: "error.main",
+                  backgroundColor: "transparent",
+                  color: "#f44336",
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+              }}
             >
               Yes, Delete
             </Button>
             <Button
               variant="outlined"
               onClick={() => setDeleteModalOpen(false)}
+              sx={{
+                padding: "5px 20px",
+                fontSize: "16px",
+                borderRadius: "30px",
+                marginLeft: "10px",
+                "&:hover": {
+                  borderColor: "success.main",
+                  backgroundColor: "transparent",
+                  color: "#3f51b5",
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+              }}
             >
               No, Cancel
             </Button>
@@ -282,13 +370,40 @@ const AttendanceList = () => {
                   {record.first_name} {record.last_name}
                 </TableCell>
                 <TableCell>{record.date}</TableCell>
-                <TableCell>{record.status}</TableCell>
+                <TableCell
+                  sx={{
+                    color:
+                      record.status === "Present"
+                        ? "success.main"
+                        : record.status === "Absent"
+                        ? "error.main"
+                        : record.status === "Late"
+                        ? "warning.main"
+                        : "info.main",
+                        
+                  }}
+                >{record.status}</TableCell>
                 <TableCell>
                   <Button
                     onClick={() => handleEdit(record.attendance_id)}
                     variant="outlined"
                     startIcon={<Create />}
-                    disabled={new Date(record.date) < new Date(today)}
+                    sx={{
+                      padding: "5px 20px",
+                      fontSize: "12px",
+                      borderRadius: "30px",
+                      "&:hover": {
+                        borderColor: "success.main",
+                        backgroundColor: "transparent",
+                        color: "#3f51b5",
+                        transform: "scale(1.05)",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.3s ease",
+                      },
+                      "&:active": {
+                        transform: "scale(0.98)",
+                      },
+                    }}
                   >
                     Edit
                   </Button>
@@ -302,7 +417,22 @@ const AttendanceList = () => {
                     }}
                     color="error"
                     startIcon={<HighlightOff />}
-                    disabled={new Date(record.date) < new Date(today)}
+                    sx={{
+                      padding: "5px 20px",
+                      fontSize: "12px",
+                      borderRadius: "30px",
+                      "&:hover": {
+                        borderColor: "error.main",
+                        backgroundColor: "transparent",
+                        color: "#f44336",
+                        transform: "scale(1.05)",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.3s ease",
+                      },
+                      "&:active": {
+                        transform: "scale(0.98)",
+                      },
+                    }}
                   >
                     Delete
                   </Button>
@@ -311,7 +441,7 @@ const AttendanceList = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} align="center">
+              <TableCell colSpan={6} align="center" sx={{ fontWeight: "bold" }}>
                 No attendance records found.
               </TableCell>
             </TableRow>
@@ -329,7 +459,7 @@ const AttendanceList = () => {
           className="modal-box"
           sx={{
             width: "40%",
-            height: "280px",
+            height: "350px",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -346,6 +476,20 @@ const AttendanceList = () => {
           {/* Edit Attendance Modal */}
           {editRecord && (
             <form onSubmit={handleEditSubmit} className="space-y-4">
+              <TextField
+                fullWidth
+                label="Employee ID"
+                name="employee_id"
+                type="text"
+                variant="outlined"
+                value={editRecord.employee_id}
+                onChange={(e) =>
+                  setEditRecord({ ...editRecord, employee_id: e.target.value })
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
               <TextField
                 fullWidth
                 label="Date"
@@ -381,16 +525,48 @@ const AttendanceList = () => {
                   variant="outlined"
                   color="primary"
                   type="submit"
-                  style={{ marginRight: "8px" }}
-                  onAbort={handleEditSubmit}
+                  onClick={handleEditSubmit}
+                  sx={{
+                    padding: "5px 20px",
+                    fontSize: "16px",
+                    borderRadius: "30px",
+                    marginRight: "10px",
+                    "&:hover": {
+                      borderColor: "success.main",
+                      backgroundColor: "transparent",
+                      color: "#3f51b5",
+                      transform: "scale(1.05)",
+                      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                      transition: "all 0.3s ease",
+                    },
+                    "&:active": {
+                      transform: "scale(0.98)",
+                    },
+                  }}
                 >
-                  Save
+                  Save edit
                 </Button>
                 <Button
                   variant="outlined"
                   color="error"
                   onClick={() => setEditModalOpen(false)}
-                  className="ml-2"
+                  sx={{
+                    padding: "5px 20px",
+                    fontSize: "16px",
+                    borderRadius: "30px",
+                    marginLeft: "10px",
+                    "&:hover": {
+                      borderColor: "error.main",
+                      backgroundColor: "transparent",
+                      color: "#f44336",
+                      transform: "scale(1.05)",
+                      boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                      transition: "all 0.3s ease",
+                    },
+                    "&:active": {
+                      transform: "scale(0.98)",
+                    },
+                  }}
                 >
                   Cancel
                 </Button>

@@ -54,3 +54,21 @@ export const deleteEmployee = async (employeeId) => {
   }
 };
 
+export const checkEmployeeIdExists = async (employeeId) => {
+  try {
+    const response = await axios.get(`${API_URL}?employee_id=${employeeId}`);
+    return response.data.exists;
+  } catch (error) {
+    handleError(error, 'Error checking employee');
+  }
+}
+
+export const checkEmployeeEmailExists = async (email) => {
+  try {
+    const response = await axios.get(`${API_URL}/exists?email=${email}`);
+    return response.data.exists;
+  } catch (error) {
+    handleError(error, 'Error checking employee');
+  }
+}
+

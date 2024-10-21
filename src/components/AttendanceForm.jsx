@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextField, Button, MenuItem } from "@mui/material";
 import { recordAttendance } from "../services/attendanceService";
+import { getEmployees } from "../services/employeeService";
 import PropTypes from "prop-types";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { checkAttendanceExists } from "../services/attendanceService";
+import handleError from "../utils/handleError";
 
 const AttendanceForm = ({ fetchAttendance, closeModal }) => {
   const [message, setMessage] = useState({ type: "", content: "" });
+  const [todayDate, setTodayDate] = useState("");
   const [formData, setFormData] = useState({
     employee_id: "",
     date: "",
@@ -17,6 +21,30 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
     date: false,
     status: false,
   });
+  const [employeeIds, setEmployeeIds] = useState([]);
+
+  // Fetch employee IDs when the component mounts
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const employeeData = await getEmployees();
+        const emp_ids = [];
+        for (let i = 0; i < employeeData.length; i++) {
+          emp_ids.push(employeeData[i].employee_id);
+        }
+
+        setEmployeeIds(emp_ids);
+      } catch (error) {
+        setMessage({
+          type: "error",
+          content: "Failed to fetch employee IDs. Please try again.",
+        });
+        handleError(error);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,16 +52,23 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
     setErrors({ ...errors, [e.target.name]: false });
   };
 
-  
-  const date = new Date();
-  date.setDate(date.getDate() + 1); // Set to tomorrow
-  const todayDate = date.toISOString().split("T")[0];
+  useEffect(() => {
+    // Get the year, month, and day from the date object
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed, so add 1
+    const day = String(date.getDate()).padStart(2, "0"); // Pad single digit days with leading zero
 
+    // Format as YYYY-MM-DD
+    const today = `${year}-${month}-${day}`;
+    setTodayDate(today);
+  }, []);
 
   const validateForm = () => {
     const newErrors = {
       employee_id: formData.employee_id === "",
-      date: formData.date === "" || new Date(formData.date) > todayDate,
+      date:
+        formData.date === "" || new Date(formData.date) > new Date(todayDate),
       status: formData.status === "",
     };
 
@@ -49,11 +84,29 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
         type: "error",
         content: "Please fill in all fields correctly!",
       });
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 2000);
       return;
     }
 
     try {
+      // Check if attendance already exists
+      const attendanceExists = await checkAttendanceExists(
+        formData.employee_id,
+        formData.date
+      );
+
+      if (attendanceExists) {
+        setMessage({
+          type: "error",
+          content:
+            "Attendance has already been marked for this employee on this date.",
+        });
+        return;
+      }
       await recordAttendance(formData);
+      fetchAttendance();
       setMessage({ type: "success", content: "Attendance marked!" });
 
       // Clear form and navigate after success
@@ -61,12 +114,14 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
         setMessage({ type: "", content: "" });
         setFormData({
           employee_id: "",
+          first_name: "",
+          last_name: "",
           date: "",
           status: "",
         });
-        fetchAttendance(formData); // Refresh employee list
+
         closeModal(); // Close the modal after employee is created
-      }, 2000);
+      }, 3000);
     } catch (error) {
       // Handle any errors from the API
       setMessage({
@@ -81,7 +136,6 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
       }, 3000);
     }
   };
-  
 
   return (
     <>
@@ -98,6 +152,7 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
         {/* Employee ID */}
         <TextField
           fullWidth
+          select
           label="Employee ID"
           name="employee_id"
           variant="outlined"
@@ -105,7 +160,18 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
           onChange={handleChange}
           error={errors.employee_id} // Show error if field is invalid
           helperText={errors.employee_id ? "Employee ID is required!" : ""}
-        />
+        >
+          {/* Populate dropdown with employee IDs */}
+          {employeeIds.length > 0 ? (
+            employeeIds.map((id) => (
+              <MenuItem key={id} value={id}>
+                {id}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>No employees found</MenuItem>
+          )}
+        </TextField>
         {/* Date */}
         <TextField
           fullWidth
@@ -135,10 +201,31 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
           <MenuItem value="Present">Present</MenuItem>
           <MenuItem value="Absent">Absent</MenuItem>
           <MenuItem value="Late">Late (Half Day)</MenuItem>
+          <MenuItem value="On Leave">On Leave</MenuItem>
         </TextField>
         {/* Submit Button */}
-        <Button variant="contained" color="primary" type="submit">
-          Submit
+        <Button
+          variant="outlined"
+          color="primary"
+          type="submit"
+          sx={{
+            padding: "5px 20px",
+            fontSize: "16px",
+            borderRadius: "30px",
+            "&:hover": {
+              borderColor: "success.main",
+              backgroundColor: "transparent",
+              color: "#3f51b5",
+              transform: "scale(1.05)",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease",
+            },
+            "&:active": {
+              transform: "scale(0.98)",
+            },
+          }}
+        >
+          Mark Attendance
         </Button>
       </form>
     </>

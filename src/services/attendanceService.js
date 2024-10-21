@@ -35,12 +35,23 @@ export const deleteAttendance = async (attendanceId) => {
     handleError(error, `Error deleting attendance with ID ${attendanceId}`);
   }
 };
-// Edit attendance by ID
+
 export const editAttendance = async (attendanceId, attendanceData) => {
   try {
-    const response = await axios.put(`${API_URL}/attendance/${attendanceId}`, attendanceData);
+    const response = await axios.put(`${API_URL}/${attendanceId}`, attendanceData);
     return response.data;
   } catch (error) {
-    handleError(error, `Error editing attendance with ID ${attendanceId}`);
+    handleError(error, `Error editing attendance with ID: ${attendanceId}`);
+    throw new Error(error.response?.data?.message || 'Failed to edit attendance');
+  }
+};
+
+// Check if attendance already exists for the given employee and date
+export const checkAttendanceExists = async (employee_id, date) => {
+  try {
+    const response = await axios.get(`${API_URL}?employee_id=${employee_id}&date=${date}`);
+    return response.data.exists; // Return true if attendance exists, false otherwise
+  } catch (error) {
+    handleError(error, "Error checking attendance");
   }
 };

@@ -12,40 +12,53 @@ import {
   Box,
   TextField,
   InputAdornment,
+  Typography,
 } from "@mui/material";
 import { HighlightOff, Create, Close, Search, Add } from "@mui/icons-material";
 import {
   updateLeaveStatus,
+  getLeaves,
   deleteLeave,
-  editLeave,
 } from "../services/leaveService";
 import LeaveForm from "./LeaveForm";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 const LeaveList = () => {
   const [leaves, setLeaves] = useState([]);
   const [formModalOpen, setFormModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortedLeaves, setSortedLeaves] = useState([]);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+  const [message, setMessage] = useState({ type: "", content: "" });
+  const [editData, setEditData] = useState({
+    leave_id: "",
+    employee_id: "",
+    leave_type: "",
+    day_type: "",
+    start_date: "",
+    end_date: "",
+    reason: "",
+    status: "Pending",
+  });
+  const [reqType, setReqType] = useState("");
 
-    (async () => {
-    fetch('/dummyLeaves.json')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setLeaves(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem fetching the data:', error);
-      });
-  })();
+  const fetchLeaves = async () => {
+    try {
+      const response = await getLeaves();
+      setLeaves(response);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchLeaves();
+  }, []);
 
+  useEffect(() => {
     const sorted = [...leaves].sort(
       (a, b) => new Date(b.start_date) - new Date(a.start_date)
     );
@@ -68,43 +81,87 @@ const LeaveList = () => {
 
   const handleUpdateStatus = async (leaveId, status) => {
     try {
+      // Call the function to update leave status
       await updateLeaveStatus(leaveId, status);
-      alert("Leave status updated successfully!");
+      
+      // Update the local state with the new status
       setLeaves((prev) =>
         prev.map((leave) =>
           leave.leave_id === leaveId ? { ...leave, status } : leave
         )
       );
+      
+      // Conditionally display messages based on status
+      if (status == "Approved") {
+        setMessage({ type: "success", content: "Leave approved successfully" });
+      } else if (status == "Rejected") {
+        setMessage({ type: "error", content: "Leave rejected" });
+      }
+      
     } catch (error) {
-      alert("Error updating leave status", error);
+      setMessage({ type: "error",
+        content: "Error updating leave status" });
+      throw error;
+    } finally {
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 3000);
     }
-  };
+      
+    }
+  
+      
 
-  const handleDelete = async (leaveId) => {
+  const handleDelete = async () => {
     try {
-      await deleteLeave(leaveId);
-      setLeaves((prev) => prev.filter((leave) => leave.leave_id !== leaveId));
+      await deleteLeave(deleteRecord);
+      setLeaves((prev) =>
+        prev.filter((leave) => leave.leave_id !== deleteRecord)
+      );
+      setDeleteModalOpen(false);
+      setMessage({ type: "success", content: "Leave deleted successfully" });
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 3000);
     } catch (error) {
-      alert("Error deleting leave", error);
+      setMessage({ type: "error", content: "Error deleting leave" });
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+      }, 3000);
+      throw error;
     }
   };
 
   const handleEdit = async (leaveId) => {
-    try {
-      await editLeave(leaveId);
-      alert("Leave edited successfully!");
-      // You can add any editing logic here, such as opening a modal to edit
-    } catch (error) {
-      alert("Error editing leave", error);
+    const leave = leaves.find((leave) => leave.leave_id === leaveId);
+    if (leave) {
+      setEditData(leave);
+      setReqType("edit");
+      setFormModalOpen(true);
+    } else {
+      alert("Invalid leave record");
     }
   };
 
+  const handleDeleteModalOpen = (employeeId) => {
+    setDeleteRecord(employeeId);
+    setDeleteModalOpen(true);
+  };
+
   const handleFormModal = () => {
+    setReqType("create");
     setFormModalOpen(true);
   };
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
+      {message.content && (
+        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
+          <Alert variant="filled" severity={message.type}>
+            {message.content}
+          </Alert>
+        </Stack>
+      )}
       <Modal
         open={formModalOpen}
         onClose={() => setFormModalOpen(false)}
@@ -125,30 +182,112 @@ const LeaveList = () => {
           }}
         >
           <div>
-            <div className="absolute right-5 top-3">
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => setFormModalOpen(false)}
-                className="rounded-full"
-                sx={{
-                  minWidth: 0,
-                  padding: "4px",
-                  borderRadius: "50%",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                  transition: "box-shadow 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-                    transform: "scale(1.1)",
-                    transition: "all 0.3s ease",
-                  },
-                }}
-              >
-                <Close />
-              </Button>
-            </div>
-            <LeaveForm fetchLeaves={LeaveList} />
+            {reqType === "create" ? (
+              <div className="absolute right-5 top-3">
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => setFormModalOpen(false)}
+                  className="rounded-full"
+                  sx={{
+                    minWidth: 0,
+                    padding: "4px",
+                    borderRadius: "50%",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: "box-shadow 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                      transform: "scale(1.1)",
+                      transition: "all 0.3s ease",
+                    },
+                  }}
+                >
+                  <Close />
+                </Button>
+              </div>
+            ) : null}
+            <LeaveForm
+              fetchLeaves={fetchLeaves}
+              closeModal={() => setFormModalOpen(false)}
+              editData={editData}
+              reqType={reqType}
+            />
           </div>
+        </Box>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+      >
+        <Box
+          className="modal-box"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "rgb(243 244 246)",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <Typography id="delete-modal-title" variant="h6" component="h2">
+            Are you sure you want to delete this leave?
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDelete}
+              sx={{
+                padding: "5px 20px",
+                fontSize: "16px",
+                borderRadius: "30px",
+                marginRight: "10px",
+                "&:hover": {
+                  borderColor: "error.main",
+                  backgroundColor: "transparent",
+                  color: "#f44336",
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+              }}
+            >
+              Yes, Delete
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                padding: "5px 20px",
+                fontSize: "16px",
+                borderRadius: "30px",
+                marginLeft: "10px",
+                "&:hover": {
+                  borderColor: "success.main",
+                  backgroundColor: "transparent",
+                  color: "#3f51b5",
+                  transform: "scale(1.05)",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.3s ease",
+                },
+                "&:active": {
+                  transform: "scale(0.98)",
+                },
+              }}
+              onClick={() => setDeleteModalOpen(false)}
+            >
+              No, Cancel
+            </Button>
+          </Box>
         </Box>
       </Modal>
 
@@ -233,55 +372,109 @@ const LeaveList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredLeaves.map((leave) => (
-            <TableRow key={leave.leave_id}>
-              <TableCell sx={{ fontWeight: "bold" }}>
-                {leave.employee_id}
-              </TableCell>
-              <TableCell>
-                {leave.leave_type} - {leave.day_type}
-              </TableCell>
-              <TableCell>{leave.start_date}</TableCell>
-              <TableCell>{leave.end_date}</TableCell>
-              <TableCell>{leave.reason}</TableCell>
-              <TableCell>{leave.status}</TableCell>
-              <TableCell>
-                <Select
-                  value={leave.status}
-                  onChange={(e) =>
-                    handleUpdateStatus(leave.leave_id, e.target.value)
-                  }
-                  displayEmpty
-                  style={{ height: "40px" }}
-                  disabled={leave.status.toLowerCase() != "pending"}
-                >
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Approved">Approve</MenuItem>
-                  <MenuItem value="Rejected">Reject</MenuItem>
-                </Select>
-              </TableCell>
+          {filteredLeaves.length > 0 ? (
+            filteredLeaves.map((leave) => (
+              <TableRow key={leave.leave_id}>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  {leave.employee_id}
+                </TableCell>
+                <TableCell>
+                  {leave.leave_type} - {leave.day_type}
+                </TableCell>
+                <TableCell>{leave.start_date}</TableCell>
+                <TableCell>{leave.end_date}</TableCell>
+                <TableCell>{leave.reason}</TableCell>
+                <TableCell 
+                sx = {{
+                  color: leave.status === "Pending" ? "orange" : leave.status === "Approved" ? "green" : "red"
+                }}
+                >{leave.status}</TableCell>
+                <TableCell>
+                  <Select
+                  
+                    value={leave.status}
+                    onChange={(e) =>
+                      handleUpdateStatus(leave.leave_id, e.target.value)
+                    }
+                    displayEmpty
+                    style={{ height: "40px" }}
+                    disabled={leave.status.toLowerCase() != "pending"}
+                  >
+                    <MenuItem value="Pending">Pending</MenuItem>
+                    <MenuItem value="Approved">Approve</MenuItem>
+                    <MenuItem value="Rejected">Reject</MenuItem>
+                  </Select>
+                </TableCell>
 
-              <TableCell>
-                <Button
-                  color="primary"
-                  onClick={() => handleEdit(leave.leave_id)}
-                  disabled={leave.status.toLowerCase() != "pending"}
-                >
-                  <Create />
-                </Button>
-              </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<Create />}
+                    sx={{
+                      padding: "5px 20px",
+                      fontSize: "12px",
+                      borderRadius: "30px",
+                      marginLeft: "10px",
+                      "&:hover": {
+                        borderColor: "success.main",
+                        backgroundColor: "transparent",
+                        color: "#3f51b5",
+                        transform: "scale(1.05)",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.3s ease",
+                      },
+                      "&:active": {
+                        transform: "scale(0.98)",
+                      },
+                    }}
+                    onClick={() => handleEdit(leave.leave_id)}
+                    //disabled={leave.status.toLowerCase() != "pending"}
+                  >
+                    edit
+                  </Button>
+                </TableCell>
 
-              <TableCell>
-                <Button
-                  color="error"
-                  onClick={() => handleDelete(leave.leave_id)}
-                  disabled={leave.status.toLowerCase() != "pending"}
-                >
-                  <HighlightOff />
-                </Button>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<HighlightOff />}
+                    sx={{
+                      padding: "5px 20px",
+                      fontSize: "12px",
+                      borderRadius: "30px",
+                      marginLeft: "10px",
+
+                      "&:hover": {
+                        borderColor: "error.main",
+                        backgroundColor: "transparent",
+                        color: "#f44336",
+                        transform: "scale(1.05)",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.3s ease",
+                      },
+                      "&:active": {
+                        transform: "scale(0.98)",
+                      },
+                    }}
+                    onClick={() => {
+                      handleDeleteModalOpen(leave.leave_id);
+                    }}
+                    //disabled={leave.status.toLowerCase() != "pending"}
+                  >
+                    delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={8} align="center" sx={{ fontWeight: "bold" }}>
+                No leave records found.
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>

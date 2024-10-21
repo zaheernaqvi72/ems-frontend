@@ -11,76 +11,72 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { getEmployees } from "../services/employeeService.js";
+import { getAllAttendance } from "../services/attendanceService.js";
+import { getLeaves } from "../services/leaveService.js";
 
 const Dashboard = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [attendanceData, setAttendanceData] = useState([]);
   const [leaveData, setLeaveData] = useState([]);
-  const [trendsData, setTrendsData] = useState([]);
 
   useEffect(() => {
-    // Mock fetching data from backend or API
     fetchEmployeeData();
     fetchAttendanceData();
     fetchLeaveData();
-    fetchTrendsData();
   }, []);
 
-  const fetchEmployeeData = () => {
-    const data = [
-      { name: "Engineering", value: 400 },
-      { name: "Sales", value: 300 },
-      { name: "HR", value: 300 },
-      { name: "Finance", value: 200 },
-      { name: "IT", value: 400 },
-      { name: "Software", value: 300 },
-      { name: "AI", value: 300 },
-      { name: "ML", value: 200 },
-    ];
-    setEmployeeData(data);
+  const fetchEmployeeData = async () => {
+    try {
+      const response = await getEmployees();
+      setEmployeeData(response);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
   };
 
-  const fetchAttendanceData = () => {
-    const data = [
-      { date: "2024-07-01", present: 100, absent: 10 },
-      { date: "2024-07-02", present: 90, absent: 20 },
-      { date: "2024-07-03", present: 110, absent: 5 },
-      { date: "2024-07-04", present: 100, absent: 10 },
-      { date: "2024-07-05", present: 90, absent: 20 },
-      { date: "2024-07-06", present: 110, absent: 5 },
-    ];
-    setAttendanceData(data);
+  const fetchAttendanceData = async () => {
+    try {
+      const response = await getAllAttendance();
+      setAttendanceData(response);
+    } catch (error) {
+      console.error("Error fetching attendance:", error);
+    }
   };
 
-  const fetchLeaveData = () => {
-    const data = [
-      { name: "Approved", value: 240 },
-      { name: "Pending", value: 60 },
-      { name: "Rejected", value: 40 },
-    ];
-    setLeaveData(data);
+  const fetchLeaveData = async () => {
+    try {
+      const response = await getLeaves();
+      setLeaveData(response);
+    } catch (error) {
+      console.error("Error fetching leaves:", error);
+    }
   };
 
-  const fetchTrendsData = () => {
-    const data = [
-      { date: "2024-07-01", employees: 100, leaves: 10 },
-      { date: "2024-07-02", employees: 120, leaves: 15 },
-      { date: "2024-07-03", employees: 150, leaves: 20 },
-      { date: "2024-07-04", employees: 170, leaves: 25 },
-      { date: "2024-07-05", employees: 180, leaves: 10 },
-    ];
-    setTrendsData(data);
-  };
+  // Assuming attendanceData has present/absent status
+  const presentEmployees = attendanceData.filter(
+    (attendance) => attendance.status === "Present"
+  ).length;
+
+  const approvedLeaves = leaveData.filter(
+    (leave) => leave.status === "Approved"
+  ).length;
+
+  const pendingLeaves = leaveData.filter(
+    (leave) => leave.status === "Pending"
+  ).length;
+
+  const totalEmployees = employeeData.length;
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-8 bg-gray-100 bg-opacity-15 rounded-lg">
-      <h1 className=" text-3xl font-bold mb-6 text-center text-amber-600">
+      <h1 className="text-3xl font-bold mb-6 text-center text-amber-600">
         Employees Dashboard
       </h1>
 
       <div className="flex flex-wrap items-end space-x-5 space-y-5 mb-6 w-full">
-        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full ">
-          <CardContent className=" flex flex-col justify-between">
+        <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
+          <CardContent className="flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
@@ -89,13 +85,13 @@ const Dashboard = () => {
               Total Employees
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
-              1,500
+              {totalEmployees}
             </Typography>
           </CardContent>
         </Card>
 
         <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
-          <CardContent className=" flex flex-col justify-between">
+          <CardContent className="flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
@@ -104,13 +100,13 @@ const Dashboard = () => {
               Present Employees
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
-              240
+              {presentEmployees}
             </Typography>
           </CardContent>
         </Card>
 
         <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
-          <CardContent className=" flex flex-col justify-between">
+          <CardContent className="flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
@@ -119,13 +115,13 @@ const Dashboard = () => {
               Approved Leaves
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
-              60
+              {approvedLeaves}
             </Typography>
           </CardContent>
         </Card>
 
         <Card className="shadow-md flex-1 min-w-0 max-w-xs sm:max-w-sm md:max-w-md h-full">
-          <CardContent className=" flex flex-col justify-between">
+          <CardContent className="flex flex-col justify-between">
             <Typography
               variant="h6"
               component="div"
@@ -134,7 +130,7 @@ const Dashboard = () => {
               Pending Leaves
             </Typography>
             <Typography variant="h4" className="text-center font-bold">
-              60
+              {pendingLeaves}
             </Typography>
           </CardContent>
         </Card>

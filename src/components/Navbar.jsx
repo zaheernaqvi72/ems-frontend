@@ -56,7 +56,6 @@ const Navbar = () => {
 
   const settings = [
     { title: "Profile", path: "/profile" },
-    { title: "Settings", path: "setting" },
     { title: "Logout", path: "/logout" },
   ];
 
@@ -68,6 +67,7 @@ const Navbar = () => {
           key={item.title}
           component={Link}
           to={item.path}
+          
           selected={location.pathname === item.path}
           onClick={toggleDrawer(false)}
         >

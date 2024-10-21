@@ -189,10 +189,25 @@ const Register = () => {
 
         <Button
           fullWidth
-          variant="contained"
+          variant="outlined"
           color="primary"
           type="submit"
-          className="mt-4"
+          sx={{
+            padding: "5px 20px",
+            fontSize: "16px",
+            borderRadius: "30px",
+            "&:hover": {
+              borderColor: "success.main",
+              backgroundColor: "transparent",
+              color: "#3f51b5",
+              transform: "scale(1.05)",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease",
+            },
+            "&:active": {
+              transform: "scale(0.98)",
+            },
+          }}
           disabled={
             isSubmitting ||
             !formData.user_type ||

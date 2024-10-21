@@ -48,12 +48,27 @@ const Home = () => {
                 attendance, and more.
               </Typography>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 component={Link}
                 to="/dashboard"
-                className="transition duration-300 hover:bg-blue-700"
-                sx={{ marginTop: "1rem" }}
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  borderRadius: "30px",
+                  marginTop: "1rem",
+                  "&:hover": {
+                    borderColor: "success.main",
+                    backgroundColor: "transparent",
+                    color: "#3f51b5",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                }}
               >
                 Go to Dashboard
               </Button>
@@ -85,12 +100,28 @@ const Home = () => {
                 Add, view, and manage employee details and job roles.
               </Typography>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 component={Link}
                 to="/employees"
                 className="transition duration-300 hover:bg-green-700"
-                sx={{ marginTop: "1rem" }}
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  borderRadius: "30px",
+                  marginTop: "1rem",
+                  "&:hover": {
+                    borderColor: "success.main",
+                    backgroundColor: "transparent",
+                    color: "#3f51b5",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                }}
               >
                 Manage Employees
               </Button>
@@ -110,7 +141,7 @@ const Home = () => {
               <Typography
                 variant="h6"
                 component="div"
-                className="mb-2 text-center font-semibold text-gray-800"
+                
               >
                 Leave Management
               </Typography>
@@ -123,12 +154,27 @@ const Home = () => {
                 schedules.
               </Typography>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 component={Link}
                 to="/leaves"
-                className="transition duration-300 hover:bg-yellow-700"
-                sx={{ marginTop: "1rem" }}
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  borderRadius: "30px",
+                  marginTop: "1rem",
+                  "&:hover": {
+                    borderColor: "success.main",
+                    backgroundColor: "transparent",
+                    color: "#3f51b5",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                }}
               >
                 Manage Leaves
               </Button>
@@ -160,12 +206,27 @@ const Home = () => {
                 Monitor employee attendance and generate reports.
               </Typography>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 component={Link}
                 to="/attendance"
-                className="transition duration-300 hover:bg-red-700"
-                sx={{ marginTop: "1rem" }}
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  borderRadius: "30px",
+                  marginTop: "1rem",
+                  "&:hover": {
+                    borderColor: "success.main",
+                    backgroundColor: "transparent",
+                    color: "#3f51b5",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                }}
               >
                 Track Attendance
               </Button>
@@ -197,12 +258,27 @@ const Home = () => {
                 Employee performance evaluations.
               </Typography>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 component={Link}
                 to="/reviews"
-                className="transition duration-300 hover:bg-purple-700"
-                sx={{ marginTop: "1rem" }}
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  borderRadius: "30px",
+                  marginTop: "1rem",
+                  "&:hover": {
+                    borderColor: "success.main",
+                    backgroundColor: "transparent",
+                    color: "#3f51b5",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)",
+                  },
+                }}
               >
                 Review Performance
               </Button>
