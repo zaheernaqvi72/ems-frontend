@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
   Button,
   Select,
@@ -13,6 +12,11 @@ import {
   TextField,
   InputAdornment,
   Typography,
+  TableContainer,
+  Paper,
+  TablePagination,
+  TableFooter,
+  TableHead,
 } from "@mui/material";
 import { HighlightOff, Create, Close, Search, Add } from "@mui/icons-material";
 import {
@@ -23,6 +27,7 @@ import {
 import LeaveForm from "./LeaveForm";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import TablePaginationActions from "./Pagination";
 
 const LeaveList = () => {
   const [leaves, setLeaves] = useState([]);
@@ -44,6 +49,9 @@ const LeaveList = () => {
     status: "Pending",
   });
   const [reqType, setReqType] = useState("");
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const fetchLeaves = async () => {
     try {
@@ -83,34 +91,29 @@ const LeaveList = () => {
     try {
       // Call the function to update leave status
       await updateLeaveStatus(leaveId, status);
-      
+
       // Update the local state with the new status
       setLeaves((prev) =>
         prev.map((leave) =>
           leave.leave_id === leaveId ? { ...leave, status } : leave
         )
       );
-      
+
       // Conditionally display messages based on status
       if (status == "Approved") {
         setMessage({ type: "success", content: "Leave approved successfully" });
       } else if (status == "Rejected") {
         setMessage({ type: "error", content: "Leave rejected" });
       }
-      
     } catch (error) {
-      setMessage({ type: "error",
-        content: "Error updating leave status" });
+      setMessage({ type: "error", content: "Error updating leave status" });
       throw error;
     } finally {
       setTimeout(() => {
         setMessage({ type: "", content: "" });
       }, 3000);
     }
-      
-    }
-  
-      
+  };
 
   const handleDelete = async () => {
     try {
@@ -151,6 +154,20 @@ const LeaveList = () => {
   const handleFormModal = () => {
     setReqType("create");
     setFormModalOpen(true);
+  };
+
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredLeaves.length)
+      : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
@@ -357,126 +374,169 @@ const LeaveList = () => {
         </Button>
       </div>
       <hr />
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Leave - Day Type</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Start Date</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>End Date</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Reason</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredLeaves.length > 0 ? (
-            filteredLeaves.map((leave) => (
-              <TableRow key={leave.leave_id}>
-                <TableCell sx={{ fontWeight: "bold" }}>
-                  {leave.employee_id}
-                </TableCell>
-                <TableCell>
-                  {leave.leave_type} - {leave.day_type}
-                </TableCell>
-                <TableCell>{leave.start_date}</TableCell>
-                <TableCell>{leave.end_date}</TableCell>
-                <TableCell>{leave.reason}</TableCell>
-                <TableCell 
-                sx = {{
-                  color: leave.status === "Pending" ? "orange" : leave.status === "Approved" ? "green" : "red"
-                }}
-                >{leave.status}</TableCell>
-                <TableCell>
-                  <Select
-                  
-                    value={leave.status}
-                    onChange={(e) =>
-                      handleUpdateStatus(leave.leave_id, e.target.value)
-                    }
-                    displayEmpty
-                    style={{ height: "40px" }}
-                    disabled={leave.status.toLowerCase() != "pending"}
-                  >
-                    <MenuItem value="Pending">Pending</MenuItem>
-                    <MenuItem value="Approved">Approve</MenuItem>
-                    <MenuItem value="Rejected">Reject</MenuItem>
-                  </Select>
-                </TableCell>
 
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<Create />}
-                    sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      marginLeft: "10px",
-                      "&:hover": {
-                        borderColor: "success.main",
-                        backgroundColor: "transparent",
-                        color: "#3f51b5",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
-                    }}
-                    onClick={() => handleEdit(leave.leave_id)}
-                    //disabled={leave.status.toLowerCase() != "pending"}
-                  >
-                    edit
-                  </Button>
-                </TableCell>
-
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    startIcon={<HighlightOff />}
-                    sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      marginLeft: "10px",
-
-                      "&:hover": {
-                        borderColor: "error.main",
-                        backgroundColor: "transparent",
-                        color: "#f44336",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
-                    }}
-                    onClick={() => {
-                      handleDeleteModalOpen(leave.leave_id);
-                    }}
-                    //disabled={leave.status.toLowerCase() != "pending"}
-                  >
-                    delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "100%",
+          backgroundColor: "rgb(243 244 246)",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={8} align="center" sx={{ fontWeight: "bold" }}>
-                No leave records found.
+              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Leave - Day Type
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Start Date</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>End Date</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Reason</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          {filteredLeaves.length > 0 ? (
+            <TableBody>
+              {(rowsPerPage > 0
+                ? filteredLeaves.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filteredLeaves
+              ).map((leave) => (
+                <TableRow key={leave.leave_id}>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    {leave.employee_id}
+                  </TableCell>
+                  <TableCell>
+                    {leave.leave_type} - {leave.day_type}
+                  </TableCell>
+                  <TableCell>{leave.start_date}</TableCell>
+                  <TableCell>{leave.end_date}</TableCell>
+                  <TableCell>{leave.reason}</TableCell>
+                  <TableCell
+                    sx={{
+                      color:
+                        leave.status === "Pending"
+                          ? "orange"
+                          : leave.status === "Approved"
+                          ? "green"
+                          : "red",
+                    }}
+                  >
+                    {leave.status}
+                  </TableCell>
+                  <TableCell>
+                    <Select
+                      value={leave.status}
+                      onChange={(e) =>
+                        handleUpdateStatus(leave.leave_id, e.target.value)
+                      }
+                      displayEmpty
+                      style={{ height: "40px" }}
+                      disabled={leave.status.toLowerCase() !== "pending"}
+                    >
+                      <MenuItem value="Pending">Pending</MenuItem>
+                      <MenuItem value="Approved">Approve</MenuItem>
+                      <MenuItem value="Rejected">Reject</MenuItem>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<Create />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        marginLeft: "10px",
+                        "&:hover": {
+                          borderColor: "success.main",
+                          backgroundColor: "transparent",
+                          color: "#3f51b5",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                      onClick={() => handleEdit(leave.leave_id)}
+                    >
+                      edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<HighlightOff />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        marginLeft: "10px",
+                        "&:hover": {
+                          borderColor: "error.main",
+                          backgroundColor: "transparent",
+                          color: "#f44336",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                      onClick={() => {
+                        handleDeleteModalOpen(leave.leave_id);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={9} />
+              </TableRow>
+            </TableBody>
+          ) : (
+            <TableBody>
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  No leaves records found.
+                </Typography>
               </TableCell>
             </TableRow>
+          </TableBody>
           )}
-        </TableBody>
-      </Table>
+          <TableFooter>
+            <TableRow>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={9}
+                count={filteredLeaves.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              ePaginationActions={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

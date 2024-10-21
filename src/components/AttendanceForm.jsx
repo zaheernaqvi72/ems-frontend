@@ -106,19 +106,13 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
         return;
       }
       await recordAttendance(formData);
+      setFormData({ employee_id: "", date: "", status: "" });
       fetchAttendance();
       setMessage({ type: "success", content: "Attendance marked!" });
 
       // Clear form and navigate after success
       setTimeout(() => {
         setMessage({ type: "", content: "" });
-        setFormData({
-          employee_id: "",
-          first_name: "",
-          last_name: "",
-          date: "",
-          status: "",
-        });
 
         closeModal(); // Close the modal after employee is created
       }, 3000);

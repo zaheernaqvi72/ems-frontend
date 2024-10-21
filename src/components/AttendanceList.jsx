@@ -12,6 +12,10 @@ import {
   Box,
   InputAdornment,
   Typography,
+  TablePagination,
+  TableFooter,
+  TableContainer,
+  Paper,
 } from "@mui/material";
 import { HighlightOff, Create, Add, Search, Close } from "@mui/icons-material";
 import AttendanceForm from "./AttendanceForm"; // Import the AttendanceForm component
@@ -22,6 +26,9 @@ import {
 } from "../services/attendanceService";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import TablePaginationActions from "./Pagination";
+import handleError from "../utils/handleError";
+import { getEmployees } from "../services/employeeService";
 
 const AttendanceList = () => {
   const [attendance, setAttendance] = useState([]);
@@ -40,6 +47,11 @@ const AttendanceList = () => {
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [sortedAttendance, setSortedAttendance] = useState([]);
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [employeeIds, setEmployeeIds] = useState([]);
+
+
   const fetchAttendance = async () => {
     try {
       const response = await getAllAttendance();
@@ -54,6 +66,29 @@ const AttendanceList = () => {
       }, 3000);
     }
   };
+
+  // Fetch employee IDs when the component mounts
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const employeeData = await getEmployees();
+        const emp_ids = [];
+        for (let i = 0; i < employeeData.length; i++) {
+          emp_ids.push(employeeData[i].employee_id);
+        }
+
+        setEmployeeIds(emp_ids);
+      } catch (error) {
+        setMessage({
+          type: "error",
+          content: "Failed to fetch employee IDs. Please try again.",
+        });
+        handleError(error);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   useEffect(() => {
     fetchAttendance();
@@ -70,8 +105,8 @@ const AttendanceList = () => {
     const filteredData = sortedAttendance.filter(
       (record) =>
         record.employee_id.includes(searchQuery) ||
-        record.first_name.toLowerCase().includes(searchQuery) ||
-        record.last_name.toLowerCase().includes(searchQuery) ||
+        // record.first_name.toLowerCase().includes(searchQuery) ||
+        // record.last_name.toLowerCase().includes(searchQuery) ||
         record.date.includes(searchQuery) ||
         record.status.toLowerCase().includes(searchQuery)
     );
@@ -88,7 +123,6 @@ const AttendanceList = () => {
         // Clear form and navigate after success
         setTimeout(() => {
           setMessage({ type: "", content: "" });
-          
         }, 2000);
       } catch (error) {
         console.error("Error deleting attendance record:", error);
@@ -145,6 +179,20 @@ const AttendanceList = () => {
 
   const handleFormModal = () => {
     setFormModalOpen(true);
+  };
+
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredAttendance.length)
+      : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
@@ -349,105 +397,145 @@ const AttendanceList = () => {
       </div>
       <hr />
 
-      {/* Attendance Table */}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "100%",
+          backgroundColor: "rgb(243 244 246)",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
+            </TableRow>
+          </TableHead>
           {filteredAttendance.length > 0 ? (
-            filteredAttendance.map((record) => (
-              <TableRow key={record.attendance_id}>
-                <TableCell>{record.employee_id}</TableCell>
-                <TableCell>
-                  {record.first_name} {record.last_name}
-                </TableCell>
-                <TableCell>{record.date}</TableCell>
-                <TableCell
-                  sx={{
-                    color:
-                      record.status === "Present"
-                        ? "success.main"
-                        : record.status === "Absent"
-                        ? "error.main"
-                        : record.status === "Late"
-                        ? "warning.main"
-                        : "info.main",
-                        
-                  }}
-                >{record.status}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => handleEdit(record.attendance_id)}
-                    variant="outlined"
-                    startIcon={<Create />}
+            <TableBody>
+              {(rowsPerPage > 0
+                ? filteredAttendance.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filteredAttendance
+              ).map((record) => (
+                <TableRow key={record.attendance_id}>
+                  <TableCell>{record.employee_id}</TableCell>
+                  <TableCell>
+                    {} {}
+                  </TableCell>
+                  <TableCell>{record.date}</TableCell>
+                  <TableCell
                     sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      "&:hover": {
-                        borderColor: "success.main",
-                        backgroundColor: "transparent",
-                        color: "#3f51b5",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
+                      color:
+                        record.status === "Present"
+                          ? "success.main"
+                          : record.status === "Absent"
+                          ? "error.main"
+                          : record.status === "Late"
+                          ? "warning.main"
+                          : "info.main",
                     }}
                   >
-                    Edit
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setDeleteRecord(record);
-                      setDeleteModalOpen(true);
-                    }}
-                    color="error"
-                    startIcon={<HighlightOff />}
-                    sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      "&:hover": {
-                        borderColor: "error.main",
-                        backgroundColor: "transparent",
-                        color: "#f44336",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
-                    }}
-                  >
-                    Delete
-                  </Button>
+                    {record.status}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => handleEdit(record.attendance_id)}
+                      variant="outlined"
+                      startIcon={<Create />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "success.main",
+                          backgroundColor: "transparent",
+                          color: "#3f51b5",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteRecord(record);
+                        setDeleteModalOpen(true);
+                      }}
+                      color="error"
+                      startIcon={<HighlightOff />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "error.main",
+                          backgroundColor: "transparent",
+                          color: "#f44336",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    No attendance records found.
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={6} align="center" sx={{ fontWeight: "bold" }}>
-                No attendance records found.
-              </TableCell>
-            </TableRow>
+            </TableBody>
           )}
-        </TableBody>
-      </Table>
+          <TableFooter>
+            <TableRow>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={6}
+                count={filteredAttendance.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+
       {/* Edit Modal */}
       <Modal
         open={editModalOpen}
@@ -478,18 +566,29 @@ const AttendanceList = () => {
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <TextField
                 fullWidth
+                select
                 label="Employee ID"
                 name="employee_id"
-                type="text"
                 variant="outlined"
                 value={editRecord.employee_id}
-                onChange={(e) =>
-                  setEditRecord({ ...editRecord, employee_id: e.target.value })
-                }
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />
+                onChange={(e) =>
+                  setEditRecord({ ...editRecord, employee_id: e.target.value })
+                }
+              >
+                {/* Populate dropdown with employee IDs */}
+                {employeeIds.length > 0 ? (
+                  employeeIds.map((id) => (
+                    <MenuItem key={id} value={id}>
+                      {id}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem disabled>No employees found</MenuItem>
+                )}
+              </TextField>
               <TextField
                 fullWidth
                 label="Date"

@@ -151,6 +151,15 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
         }
 
         await applyLeave(formData);
+        setFormData({
+          employee_id: "",
+          leave_type: "",
+          day_type: "",
+          start_date: "",
+          end_date: "",
+          reason: "",
+          status: "Pending",
+        });
         setMessage({
           type: "success",
           content: "Leave applied successfully!",
@@ -365,7 +374,7 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
 LeaveForm.propTypes = {
   fetchLeaves: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  reqType: PropTypes.oneOf(["create", "edit"]).isRequired,
+  reqType: PropTypes.string.isRequired,
   editData: PropTypes.object,
 };
 

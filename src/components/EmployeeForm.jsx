@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 
 const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
   const [message, setMessage] = useState({ type: "", content: "" });
+  const [todayDate, setTodayDate] = useState("");
   const [formData, setFormData] = useState({
     employee_id: "",
     first_name: "",
@@ -20,6 +21,18 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
     join_date: "",
     salary: "",
   });
+
+  useEffect(() => {
+    // Get the year, month, and day from the date object
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed, so add 1
+    const day = String(date.getDate()).padStart(2, "0"); // Pad single digit days with leading zero
+
+    // Format as YYYY-MM-DD
+    const today = `${year}-${month}-${day}`;
+    setTodayDate(today);
+  }, []);
 
   // Prefill form data if in edit mode
   useEffect(() => {
@@ -90,6 +103,7 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
         }
         // API call to create the employee
         await createEmployee(formData);
+
         setMessage({
           type: "success",
           content: "Employee created successfully!",
@@ -101,24 +115,26 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
         }
         // API call to edit the employee
         await updateEmployee(formData.employee_id, formData);
+
         setMessage({
           type: "success",
           content: "Employee updated successfully!",
         });
       }
 
+      setFormData({
+        employee_id: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        job_role: "",
+        join_date: "",
+        salary: "",
+      });
+
       // Clear form and navigate after success
       setTimeout(() => {
         setMessage({ type: "", content: "" });
-        setFormData({
-          employee_id: "",
-          first_name: "",
-          last_name: "",
-          email: "",
-          job_role: "",
-          join_date: "",
-          salary: "",
-        });
         fetchEmployees(); // Refresh employee list
         closeModal(); // Close the modal after the employee is created or edited
       }, 2000);
@@ -205,6 +221,7 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
           InputLabelProps={{
             shrink: true,
           }}
+           inputProps={{ max: todayDate }}
         />
         <TextField
           fullWidth
@@ -271,10 +288,9 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
 // PropTypes validation
 EmployeeForm.propTypes = {
   fetchEmployees: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired, // New prop for closing modal
-  reqType: PropTypes.oneOf(["create", "edit"]).isRequired, // Prop to determine the form mode
-  handleEditSubmit: PropTypes.func, // Only required if reqType is 'edit'
-  editData: PropTypes.object, // Data passed for editing (if applicable)
+  closeModal: PropTypes.func.isRequired,
+  reqType: PropTypes.string.isRequired,
+  editData: PropTypes.object,
 };
 
 export default EmployeeForm;

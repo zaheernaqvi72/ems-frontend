@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import handleError from "../utils/handleError";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import { createReview, updateReview } from "../services/reviewService";
+import { createReview, updateReview, checkReviewExists } from "../services/reviewService";
 
 const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
   const [employeeIds, setEmployeeIds] = useState([]);
@@ -106,6 +106,18 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
     }
     try {
       if (reqType === "create") {
+        const reviewExists = await checkReviewExists(
+          formData.employee_id,
+          formData.review_date
+        );
+        if (reviewExists) {
+          showMessage(
+            "error",
+            "Review for this employee on this date already exists!"
+          );
+          
+        }
+
         await createReview(formData);
         fetchReviews();
         showMessage("success", "Review submitted successfully!");
@@ -123,6 +135,8 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
       setTimeout(closeModal, 3000);
     } catch (error) {
       showMessage("error", "Failed to submit review. Please try again.");
+      formData.employee_id = "";
+      formData.review_date = "";
       handleError(error);
     } finally {
       setErrors({
@@ -266,7 +280,7 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
 ReviewForm.propTypes = {
   fetchReviews: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  reqType: PropTypes.oneOf(["create", "edit"]).isRequired,
+  reqType: PropTypes.string.isRequired,
   editData: PropTypes.object,
 };
 

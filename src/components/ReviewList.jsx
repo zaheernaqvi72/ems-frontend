@@ -11,6 +11,10 @@ import {
   TextField,
   InputAdornment,
   Typography,
+  Paper,
+  TablePagination,
+  TableFooter,
+  TableContainer,
 } from "@mui/material";
 import {
   HighlightOff,
@@ -24,7 +28,7 @@ import ReviewForm from "./ReviewForm";
 import { getAllReviews, deleteReview } from "../services/reviewService";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-
+import TablePaginationActions from "./Pagination";
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState([]);
@@ -44,6 +48,8 @@ const ReviewList = () => {
   const [reqType, setReqType] = useState("");
   const [message, setMessage] = useState({ type: "", content: "" });
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const fetchReviews = async () => {
     try {
@@ -121,6 +127,20 @@ const ReviewList = () => {
     return "green";
   };
 
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredReviews.length)
+      : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
       {/* Display alerts for error or success */}
@@ -153,28 +173,29 @@ const ReviewList = () => {
         >
           <div>
             {reqType === "create" ? (
-            <div className="absolute right-5 top-3">
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => setFormModalOpen(false)}
-                className="rounded-full"
-                sx={{
-                  minWidth: 0,
-                  padding: "4px",
-                  borderRadius: "50%",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                  transition: "box-shadow 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-                    transform: "scale(1.1)",
-                    transition: "all 0.3s ease",
-                  },
-                }}
-              >
-                <Close />
-              </Button>
-            </div> ) : null }
+              <div className="absolute right-5 top-3">
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => setFormModalOpen(false)}
+                  className="rounded-full"
+                  sx={{
+                    minWidth: 0,
+                    padding: "4px",
+                    borderRadius: "50%",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                    transition: "box-shadow 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                      transform: "scale(1.1)",
+                      transition: "all 0.3s ease",
+                    },
+                  }}
+                >
+                  <Close />
+                </Button>
+              </div>
+            ) : null}
             <ReviewForm
               fetchReviews={fetchReviews}
               closeModal={() => setFormModalOpen(false)}
@@ -322,104 +343,141 @@ const ReviewList = () => {
         </Button>
       </div>
       <hr />
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "100%",
+          backgroundColor: "rgb(243 244 246)",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Update</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Delete</TableCell>
+            </TableRow>
+          </TableHead>
           {filteredReviews.length > 0 ? (
-            filteredReviews.map((review) => (
-              <TableRow key={review.review_id}>
-                <TableCell sx={{ fontWeight: "bold" }}>
-                  {review.employee_id}
-                </TableCell>
-                <TableCell>{review.review_date}</TableCell>
-                <TableCell>{review.comments}</TableCell>
-                <TableCell>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      style={{
-                        color:
-                          review.rating === 0 || i < review.rating
-                            ? getStarColor(review.rating)
-                            : "gray",
-                      }}
-                    />
+            <TableBody>
+              {(rowsPerPage > 0
+                ? filteredReviews.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filteredReviews).map((review) => (
+                    <TableRow key={review.review_id}>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        {review.employee_id}
+                      </TableCell>
+                      <TableCell>{review.review_date}</TableCell>
+                      <TableCell>{review.comments}</TableCell>
+                      <TableCell>
+                        {Array.from({ length: 5 }, (_, i) => (
+                          <Star
+                            key={i}
+                            style={{
+                              color:
+                                review.rating === 0 || i < review.rating
+                                  ? getStarColor(review.rating)
+                                  : "gray",
+                            }}
+                          />
+                        ))}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          startIcon={<Create />}
+                          sx={{
+                            padding: "5px 20px",
+                            fontSize: "12px",
+                            borderRadius: "30px",
+                            "&:hover": {
+                              borderColor: "success.main",
+                              backgroundColor: "transparent",
+                              color: "#3f51b5",
+                              transform: "scale(1.05)",
+                              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                              transition: "all 0.3s ease",
+                            },
+                            "&:active": {
+                              transform: "scale(0.98)",
+                            },
+                          }}
+                          onClick={() => handleEdit(review.review_id)}
+                        >
+                          edit
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          startIcon={<HighlightOff />}
+                          sx={{
+                            padding: "5px 20px",
+                            fontSize: "12px",
+                            borderRadius: "30px",
+                            "&:hover": {
+                              borderColor: "error.main",
+                              backgroundColor: "transparent",
+                              color: "#f44336",
+                              transform: "scale(1.05)",
+                              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                              transition: "all 0.3s ease",
+                            },
+                            "&:active": {
+                              transform: "scale(0.98)",
+                            },
+                          }}
+                          onClick={() => {
+                            handleDeleteModalOpen(review.review_id);
+                          }}
+                        >
+                          delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<Create />}
-                    sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      "&:hover": {
-                        borderColor: "success.main",
-                        backgroundColor: "transparent",
-                        color: "#3f51b5",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
-                    }}
-                    onClick={() => handleEdit(review.review_id)}
-                  >
-                    edit
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    startIcon={<HighlightOff />}
-                    sx={{
-                      padding: "5px 20px",
-                      fontSize: "12px",
-                      borderRadius: "30px",
-                      "&:hover": {
-                        borderColor: "error.main",
-                        backgroundColor: "transparent",
-                        color: "#f44336",
-                        transform: "scale(1.05)",
-                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                        transition: "all 0.3s ease",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
-                      },
-                    }}
-                    onClick={() => {
-                      handleDeleteModalOpen(review.review_id);
-                    }}
-                  >
-                    delete
-                  </Button>
-                </TableCell>
+              {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
               </TableRow>
-            ))
+              )}
+            </TableBody>
           ) : (
             <TableRow>
-              <TableCell colSpan={6} sx={{ fontWeight: "bold" }}>
-                No reviews found!
+              <TableCell colSpan={6} align="center">
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  No review records found.
+                </Typography>
               </TableCell>
             </TableRow>
           )}
-        </TableBody>
-      </Table>
+
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={6}
+                count={filteredReviews.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

@@ -80,3 +80,14 @@ export const deleteReview = async (reviewId) => {
     throw error;
   }
 };
+
+// check if review exists for the given employee and date
+export const checkReviewExists = async (employee_id, review_date) => {
+  try {
+    const response = await axios.get(`${API_URL}?employee_id=${employee_id}&review_date=${review_date}`);
+    return response.data.exists; // Return true if review exists, false otherwise
+  } catch (error) {
+    console.error("Error checking review", error);
+    throw error;
+  }
+};

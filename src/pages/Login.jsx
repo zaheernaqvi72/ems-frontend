@@ -41,9 +41,10 @@ const Login = () => {
       const token = await login(formData);
       localStorage.setItem("token", token);
       setMessage({ type: "success", content: "Login successful!" });
+      setFormData({ user_type: "", username: "", email: "", password: "" });
       setTimeout(() => {
         setMessage({ type: "", content: "" });
-        navigate("/"); // Redirect to home page after login
+        navigate("/");
       }, 2000);
     } catch (error) {
       console.error("Login failed:", error);
@@ -51,6 +52,7 @@ const Login = () => {
         type: "error",
         content: "Login failed! Check your credentials or user type.",
       });
+      setFormData({ ...formData, password: "" });
       // Optionally clear the message after a certain time
       setTimeout(() => {
         setMessage({ type: "", content: "" });

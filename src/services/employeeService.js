@@ -65,7 +65,7 @@ export const checkEmployeeIdExists = async (employeeId) => {
 
 export const checkEmployeeEmailExists = async (email) => {
   try {
-    const response = await axios.get(`${API_URL}/exists?email=${email}`);
+    const response = await axios.get(`${API_URL}/exist?email=${email}`);
     return response.data.exists;
   } catch (error) {
     handleError(error, 'Error checking employee');
