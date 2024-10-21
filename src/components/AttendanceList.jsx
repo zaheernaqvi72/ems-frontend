@@ -511,7 +511,7 @@ const AttendanceList = () => {
           ) : (
             <TableBody>
               <TableRow>
-                <TableCell colSpan={6} align="center">
+                <TableCell colSpan={9} align="center">
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     No attendance records found.
                   </Typography>
