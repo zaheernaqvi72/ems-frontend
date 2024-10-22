@@ -42,14 +42,15 @@ const Navbar = () => {
     const checkLoginStatus = () => {
       const token = localStorage.getItem("token");
       if (token) {
-        setIsLoggedIn(true); // User is logged in
+        setIsLoggedIn(true);
       } else {
-        setIsLoggedIn(false); // User is not logged in
+        
+        setIsLoggedIn(false);
+
       }
     };
 
     checkLoginStatus(); // Check on component mount
-
     // Add event listener to detect changes in localStorage
     window.addEventListener("storage", checkLoginStatus);
 
@@ -90,10 +91,11 @@ const Navbar = () => {
   ];
 
   const handleLogout = () => {
-    logout(); // Perform logout operation
-    setIsLoggedIn(false); // Update the login state
-    setLogoutModalOpen(false); // Close the modal
-
+    logout();
+    setIsLoggedIn(false); 
+    setLogoutModalOpen(false);
+    
+    // Redirect to the login page
     window.location.href = "/login";
   };
 

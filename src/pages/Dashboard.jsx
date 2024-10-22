@@ -70,23 +70,56 @@ const Dashboard = () => {
   const totalEmployees = employeeData.length;
 
   // Prepare data for employee distribution chart
-  const employeeDistributionData = employeeData.map(emp => ({
-    name: emp.department, // Assuming department or role
-    value: 1 
-  }));
+  // Object to store job roles and their counts
+  const jobRoleCount = {};
 
-  console.log(employeeData);
+  // Loop through employees and count job roles
+  employeeData.forEach((employee) => {
+    const jobRole = employee.job_role;
+
+    // If the job role exists, increment the count, otherwise set it to 1
+    jobRoleCount[jobRole] = (jobRoleCount[jobRole] || 0) + 1;
+  });
+
+  // Convert the object to an array of objects
+  const jobRoleCountArray = Object.keys(jobRoleCount).map((key) => ({
+    name: key,
+    value: jobRoleCount[key],
+  }));
 
   // Prepare data for leave applications chart
   const leaveDistributionData = [
     { name: "Approved", value: approvedLeaves },
     { name: "Pending", value: pendingLeaves },
-    { name: "Rejected", value: leaveData.filter(leave => leave.status === "Rejected").length },
+    {
+      name: "Rejected",
+      value: leaveData.filter((leave) => leave.status === "Rejected").length,
+    },
   ];
+
+  // Prepare data for attendance chart
+  const attendanceMap = {};
+
+  // Loop through attendance data and count present/absent
+  attendanceData.forEach((attendance) => {
+    const date = attendance.date;
+    const status = attendance.status;
+
+    // If the date exists, increment the count, otherwise set it to 1
+    attendanceMap[date] = attendanceMap[date] || {
+      date,
+      Present: 0,
+      Absent: 0,
+    };
+    attendanceMap[date][status] += 1;
+  });
+
+  // Convert the object to an array of objects
+  const attendanceMapArray = Object.values(attendanceMap);
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-8 bg-gray-100 bg-opacity-15 rounded-lg">
-      <h1 className="text-3xl font-bold mb-6 text-center text-amber-600">
+      <h1 className="text-4xl font-bold mb-6 text-center text-amber-600">
         Employees Dashboard
       </h1>
 
@@ -152,31 +185,31 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex flex-row w-full flex-wrap gap-6">
         {/* Employee Distribution */}
-        <Card className="shadow-md">
+        <Card className="shadow-md w-full">
           <CardContent>
             <Typography
-              variant="h5"
+              variant="h4"
               component="div"
               className="text-center mb-4"
             >
               Employee Distribution
             </Typography>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart
-                padding={{ top: 5, right: "20px", left: 50, bottom: 5 }}
-              >
+            <ResponsiveContainer width="100%" height={500}>
+              <PieChart>
                 <Pie
-                  data={employeeDistributionData}
+                  data={jobRoleCountArray}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={150}
                   fill="#8884d8"
                   dataKey="value"
-                  label
+                  label={({ name, value }) => `${name} (${value})`}
+                  isAnimationActive={true}
+                  animationDuration={1500}
                 >
-                  {employeeDistributionData.map((entry, index) => (
+                  {jobRoleCountArray.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={
@@ -185,56 +218,66 @@ const Dashboard = () => {
                     />
                   ))}
                 </Pie>
-                <Tooltip />
-                <Legend />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "#f5f5f5", border: "none" }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Attendance Chart */}
-        <Card className="shadow-md">
+        <Card className="shadow-md w-full">
           <CardContent>
             <Typography
-              variant="h5"
+              variant="h4"
               component="div"
               className="text-center mb-4"
             >
               Attendance Chart
             </Typography>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={attendanceData}>
+            <ResponsiveContainer width="100%" height={500}>
+              <BarChart
+                data={attendanceMapArray}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="present" fill="#82ca9d" />
-                <Bar dataKey="absent" fill="#ff4d4d" />
+                <Bar
+                  dataKey="Present"
+                  fill="#82ca9d"
+                  animationDuration={1500}
+                />
+                <Bar dataKey="Absent" fill="#ff4d4d" animationDuration={1500} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Leave Applications */}
-        <Card className="shadow-md w-auto">
+        <Card className="shadow-md w-full">
           <CardContent>
             <Typography
-              variant="h5"
+              variant="h4"
               component="div"
               className="text-center mb-4"
             >
               Leave Applications
             </Typography>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={500}>
               <PieChart>
                 <Pie
                   data={leaveDistributionData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={150}
                   fill="#8884d8"
                   dataKey="value"
-                  label
+                  label={({ name, value }) => `${name} (${value})`}
+                  isAnimationActive={true}
+                  animationDuration={1500}
                 >
                   {leaveDistributionData.map((entry, index) => (
                     <Cell
@@ -243,7 +286,9 @@ const Dashboard = () => {
                     />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "#f5f5f5", border: "none" }}
+                />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>

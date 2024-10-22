@@ -443,6 +443,7 @@ const AttendanceList = () => {
                   <TableCell>
                     {record.first_name} {record.last_name}
                   </TableCell>
+                  <TableCell>{record.date}</TableCell>
                   <TableCell
                     sx={{
                       color:

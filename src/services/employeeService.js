@@ -55,6 +55,7 @@ export const getEmployee = async (employeeId) => {
 // Update Employee
 export const updateEmployee = async (employeeId, employeeData) => {
   try {
+    // Check if loggedin user is the owner of the employee
     const response = await axios.put(`${API_URL}/${employeeId}`, employeeData, {
       headers: getAuthHeaders(),
     });

@@ -302,7 +302,7 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           }}
           error={errors.date}
           helperText={errors.date ? "Please select today or a past date!" : ""}
-          inputProps={{ min: todayDate }}
+          inputProps={{ min: formData.start_date ? formData.start_date : todayDate }}
         />
         <TextField
           fullWidth
