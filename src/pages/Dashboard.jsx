@@ -10,6 +10,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 import { getEmployees } from "../services/employeeService.js";
 import { getAllAttendance } from "../services/attendanceService.js";
@@ -67,6 +68,21 @@ const Dashboard = () => {
   ).length;
 
   const totalEmployees = employeeData.length;
+
+  // Prepare data for employee distribution chart
+  const employeeDistributionData = employeeData.map(emp => ({
+    name: emp.department, // Assuming department or role
+    value: 1 
+  }));
+
+  console.log(employeeData);
+
+  // Prepare data for leave applications chart
+  const leaveDistributionData = [
+    { name: "Approved", value: approvedLeaves },
+    { name: "Pending", value: pendingLeaves },
+    { name: "Rejected", value: leaveData.filter(leave => leave.status === "Rejected").length },
+  ];
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-8 bg-gray-100 bg-opacity-15 rounded-lg">
@@ -147,27 +163,32 @@ const Dashboard = () => {
             >
               Employee Distribution
             </Typography>
-            <PieChart width={400} height={300}>
-              <Pie
-                data={employeeData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart
+                padding={{ top: 5, right: "20px", left: 50, bottom: 5 }}
               >
-                {employeeData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][index % 4]
-                    }
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+                <Pie
+                  data={employeeDistributionData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label
+                >
+                  {employeeDistributionData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][index % 4]
+                      }
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
@@ -181,19 +202,21 @@ const Dashboard = () => {
             >
               Attendance Chart
             </Typography>
-            <BarChart width={500} height={300} data={attendanceData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="present" fill="#82ca9d" />
-              <Bar dataKey="absent" fill="#ff4d4d" />
-            </BarChart>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={attendanceData}>
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="present" fill="#82ca9d" />
+                <Bar dataKey="absent" fill="#ff4d4d" />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Leave Applications */}
-        <Card className="shadow-md">
+        <Card className="shadow-md w-auto">
           <CardContent>
             <Typography
               variant="h5"
@@ -202,25 +225,28 @@ const Dashboard = () => {
             >
               Leave Applications
             </Typography>
-            <PieChart width={300} height={300}>
-              <Pie
-                data={leaveData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label
-              >
-                {leaveData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={["#28a745", "#ffc107", "#dc3545"][index % 3]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={leaveDistributionData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label
+                >
+                  {leaveDistributionData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={["#28a745", "#ffc107", "#dc3545"][index % 3]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>

@@ -511,18 +511,18 @@ const LeaveList = () => {
             </TableBody>
           ) : (
             <TableBody>
-            <TableRow>
-              <TableCell colSpan={9} align="center">
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  No leaves records found.
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              <TableRow>
+                <TableCell colSpan={9} align="center">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    No leave records found.
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           )}
           <TableFooter>
             <TableRow>
-            <TablePagination
+              <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={9}
                 count={filteredLeaves.length}
@@ -531,7 +531,7 @@ const LeaveList = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
-              ePaginationActions={TablePaginationActions}
+                paginationactions={TablePaginationActions}
               />
             </TableRow>
           </TableFooter>

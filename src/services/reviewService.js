@@ -1,46 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:3000/api/reviews';
+const API_URL = "http://localhost:3000/api/reviews";
 
-// const getAuthHeaders = () => {
-//   return { Authorization: `Bearer ${localStorage.getItem('token')}` };
-// };
+// Helper function to get token from localStorage
+const getAuthHeaders = () => {
+  return { Authorization: `Bearer ${localStorage.getItem("token")}` };
+};
 
-// // Create a new review (POST)
-// export const createReview = (reviewData) => {
-//   return axios.post(API_URL, reviewData, {
-//     headers: getAuthHeaders(),
-//   });
-// };
-
-// // Get reviews by Employee ID (GET)
-// export const getReviewsByEmployeeId = (employeeId) => {
-//   return axios
-//     .get(`${API_URL}/employee/${employeeId}`, {
-//       headers: getAuthHeaders(),
-//     })
-//     .then((response) => response.data);
-// };
-
-// // Update a review by Review ID (PUT)
-// export const updateReview = (reviewId, updatedData) => {
-//   return axios.put(`${API_URL}/${reviewId}`, updatedData, {
-//     headers: getAuthHeaders(),
-//   });
-// };
-
-// // Delete a review by Review ID (DELETE)
-// export const deleteReview = (reviewId) => {
-//   return axios.delete(`${API_URL}/${reviewId}`, {
-//     headers: getAuthHeaders(),
-//   });
-// };
-
-
-// Create a new review
+// Create a new review (POST)
 export const createReview = async (reviewData) => {
   try {
-    const response = await axios.post(API_URL, reviewData);
+    const response = await axios.post(API_URL, reviewData, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating review", error);
@@ -48,21 +20,25 @@ export const createReview = async (reviewData) => {
   }
 };
 
-// Get all reviews
+// Get all reviews (GET)
 export const getAllReviews = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(API_URL, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   } catch (error) {
-    console.error("Error fetching all reviews", error);
+    console.error("Error fetching reviews", error);
     throw error;
   }
 };
 
-// update a review
+// Update a review by Review ID (PUT)
 export const updateReview = async (reviewId, reviewData) => {
   try {
-    const response = await axios.put(`${API_URL}/${reviewId}`, reviewData);
+    const response = await axios.put(`${API_URL}/${reviewId}`, reviewData, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   } catch (error) {
     console.error("Error updating review", error);
@@ -70,10 +46,12 @@ export const updateReview = async (reviewId, reviewData) => {
   }
 };
 
-// Delete a review
+// Delete a review by Review ID (DELETE)
 export const deleteReview = async (reviewId) => {
   try {
-    const response = await axios.delete(`${API_URL}/${reviewId}`);
+    const response = await axios.delete(`${API_URL}/${reviewId}`, {
+      headers: getAuthHeaders(),
+    });
     return response.data;
   } catch (error) {
     console.error("Error deleting review", error);
@@ -81,10 +59,15 @@ export const deleteReview = async (reviewId) => {
   }
 };
 
-// check if review exists for the given employee and date
+// Check if a review exists for the given employee and date (GET)
 export const checkReviewExists = async (employee_id, review_date) => {
   try {
-    const response = await axios.get(`${API_URL}?employee_id=${employee_id}&review_date=${review_date}`);
+    const response = await axios.get(
+      `${API_URL}?employee_id=${employee_id}&review_date=${review_date}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    );
     return response.data.exists; // Return true if review exists, false otherwise
   } catch (error) {
     console.error("Error checking review", error);

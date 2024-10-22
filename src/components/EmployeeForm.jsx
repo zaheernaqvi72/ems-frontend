@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  createEmployee,
-  updateEmployee,
-  checkEmployeeIdExists,
-} from "../services/employeeService";
+import { createEmployee, updateEmployee } from "../services/employeeService";
 import { TextField, Button } from "@mui/material";
 import PropTypes from "prop-types";
 import Alert from "@mui/material/Alert";
@@ -93,14 +89,7 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
 
     try {
       if (reqType === "create") {
-        // Check if employee ID already exists
-        const idExists = await checkEmployeeIdExists(formData.employee_id);
-        if (idExists) {
-          setMessage({
-            type: "error",
-            content: "Employee ID already exists. Please use a different one.",
-          });
-        }
+        
         // API call to create the employee
         await createEmployee(formData);
 
@@ -221,7 +210,7 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
           InputLabelProps={{
             shrink: true,
           }}
-           inputProps={{ max: todayDate }}
+          inputProps={{ max: todayDate }}
         />
         <TextField
           fullWidth

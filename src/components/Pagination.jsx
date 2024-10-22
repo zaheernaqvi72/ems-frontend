@@ -66,9 +66,6 @@ TablePaginationActions.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  slice: PropTypes.func.isRequired,
-  handleChangePage: PropTypes.func.isRequired,
-  handleChangeRowsPerPage: PropTypes.func.isRequired,
 };
 
 export default TablePaginationActions;

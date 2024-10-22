@@ -7,4 +7,10 @@ export default defineConfig({
     '/api': 'http://localhost:3000',
   },
   plugins: [react()],
+  build: {
+    chunkSizeWarningLimit: 1600
+},
+optimizeDeps: {
+  include: ['@mui/material', '@mui/system'],
+},
 })

@@ -51,10 +51,18 @@ const AttendanceList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [employeeIds, setEmployeeIds] = useState([]);
 
-
   const fetchAttendance = async () => {
     try {
       const response = await getAllAttendance();
+
+      for (let i = 0; i < response.length; i++) {
+        response[i].first_name = response[i].employee.first_name;
+        response[i].last_name = response[i].employee.last_name;
+
+        // drop the employee object
+        delete response[i].employee;
+      }
+
       setAttendance(response);
     } catch (error) {
       setMessage({
@@ -83,6 +91,10 @@ const AttendanceList = () => {
           type: "error",
           content: "Failed to fetch employee IDs. Please try again.",
         });
+
+        setTimeout(() => {
+          setMessage({ type: "", content: "" });
+        }, 3000);
         handleError(error);
       }
     };
@@ -105,8 +117,8 @@ const AttendanceList = () => {
     const filteredData = sortedAttendance.filter(
       (record) =>
         record.employee_id.includes(searchQuery) ||
-        // record.first_name.toLowerCase().includes(searchQuery) ||
-        // record.last_name.toLowerCase().includes(searchQuery) ||
+        record.first_name.toLowerCase().includes(searchQuery) ||
+        record.last_name.toLowerCase().includes(searchQuery) ||
         record.date.includes(searchQuery) ||
         record.status.toLowerCase().includes(searchQuery)
     );
@@ -429,9 +441,8 @@ const AttendanceList = () => {
                 <TableRow key={record.attendance_id}>
                   <TableCell>{record.employee_id}</TableCell>
                   <TableCell>
-                    {} {}
+                    {record.first_name} {record.last_name}
                   </TableCell>
-                  <TableCell>{record.date}</TableCell>
                   <TableCell
                     sx={{
                       color:
@@ -521,7 +532,7 @@ const AttendanceList = () => {
           )}
           <TableFooter>
             <TableRow>
-            <TablePagination
+              <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={6}
                 count={filteredAttendance.length}

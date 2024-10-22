@@ -453,6 +453,7 @@ const ReviewList = () => {
               )}
             </TableBody>
           ) : (
+            <TableBody>
             <TableRow>
               <TableCell colSpan={6} align="center">
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -460,6 +461,7 @@ const ReviewList = () => {
                 </Typography>
               </TableCell>
             </TableRow>
+          </TableBody>
           )}
 
           <TableFooter>

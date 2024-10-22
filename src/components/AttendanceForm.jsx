@@ -39,6 +39,10 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
           type: "error",
           content: "Failed to fetch employee IDs. Please try again.",
         });
+
+        setTimeout(() => {
+          setMessage({ type: "", content: "" });
+        }, 3000);
         handleError(error);
       }
     };

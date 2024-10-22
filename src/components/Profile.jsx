@@ -8,7 +8,6 @@ import {
   IconButton,
   Container,
   Grid,
-  Divider,
   InputLabel,
   FormControl,
   Select,
@@ -109,6 +108,7 @@ const ProfilePage = () => {
         <Typography variant="h4" align="center" gutterBottom>
           Profile Page
         </Typography>
+        
 
         {/* Avatar with option to change */}
         <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
