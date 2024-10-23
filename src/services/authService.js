@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/user';
+const API_URL = ' https://3127-2405-204-1380-91bf-d176-2261-f27f-6c05.ngrok-free.app/user';
 
 // Login function
 export const  login = async (credentials) => {
