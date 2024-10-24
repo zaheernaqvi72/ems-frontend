@@ -9,8 +9,7 @@ import PropTypes from "prop-types";
 import { getEmployees } from "../services/employeeService";
 import { useEffect } from "react";
 import handleError from "../utils/handleError";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
+import SnackbarComp from "./Snackbar";
 
 const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
   const [formData, setFormData] = useState({
@@ -213,13 +212,12 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
       <h2 className="text-3xl font-bold mb-4 text-center">
         {reqType === "create" ? "Apply Leave" : "Edit Leave"}
       </h2>
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+        position={{ vertical: "top", horizontal: "center" }}
+        message={message}
+        />
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <TextField
@@ -302,7 +300,9 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           }}
           error={errors.date}
           helperText={errors.date ? "Please select today or a past date!" : ""}
-          inputProps={{ min: formData.start_date ? formData.start_date : todayDate }}
+          inputProps={{
+            min: formData.start_date ? formData.start_date : todayDate,
+          }}
         />
         <TextField
           fullWidth

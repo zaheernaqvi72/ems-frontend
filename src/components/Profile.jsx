@@ -21,6 +21,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
+import { getUserProfile, updateUserProfile, changePassword, deleteUserProfile } from "../services/authService";
+
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
@@ -40,14 +42,16 @@ const ProfilePage = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
 
-  // Fetch user data (Simulating API call)
+
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/profile"); // Replace with actual API endpoint
-        const data = await response.json();
+        const data = await getUserProfile();
+        
         setUserData(data);
+        console.log(data);
+        
       } catch (error) {
         console.error(error);
         setSnackbar({ open: true, message: "Failed to fetch user data.", severity: "error" });

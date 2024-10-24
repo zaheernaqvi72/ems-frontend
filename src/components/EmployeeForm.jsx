@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { createEmployee, updateEmployee } from "../services/employeeService";
 import { TextField, Button } from "@mui/material";
 import PropTypes from "prop-types";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
+import SnackbarComp from "./Snackbar";
 
 const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
   const [message, setMessage] = useState({ type: "", content: "" });
@@ -126,7 +125,7 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
         setMessage({ type: "", content: "" });
         fetchEmployees(); // Refresh employee list
         closeModal(); // Close the modal after the employee is created or edited
-      }, 2000);
+      }, 3000);
     } catch (error) {
       // Handle any errors from the API
       setMessage({
@@ -148,13 +147,12 @@ const EmployeeForm = ({ fetchEmployees, closeModal, reqType, editData }) => {
         {reqType === "create" ? "Create an Employee" : "Edit Employee"}
       </h2>
 
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+        message={message}
+        position={{ vertical: "top", horizontal: "center" }}
+        />
       )}
 
       {/* Employee Form */}

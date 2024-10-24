@@ -1,7 +1,7 @@
 import axios from "axios";
 import handleError from "../utils/handleError.js";
 
-const API_URL = " https://3127-2405-204-1380-91bf-d176-2261-f27f-6c05.ngrok-free.app/api/attendance";
+const API_URL = "http://localhost:3000/api/attendance";
 
 // Helper function to get the token (assuming you store it in localStorage)
 const getToken = () => {

@@ -25,9 +25,8 @@ import {
   deleteLeave,
 } from "../services/leaveService";
 import LeaveForm from "./LeaveForm";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import TablePaginationActions from "./Pagination";
+import SnackbarComp from "./Snackbar";
 
 const LeaveList = () => {
   const [leaves, setLeaves] = useState([]);
@@ -106,7 +105,10 @@ const LeaveList = () => {
         setMessage({ type: "error", content: "Leave rejected" });
       }
     } catch (error) {
-      setMessage({ type: "error", content: "Error updating leave status" });
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to update status",
+      });
       throw error;
     } finally {
       setTimeout(() => {
@@ -127,7 +129,11 @@ const LeaveList = () => {
         setMessage({ type: "", content: "" });
       }, 3000);
     } catch (error) {
-      setMessage({ type: "error", content: "Error deleting leave" });
+      setDeleteModalOpen(false);
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to delete leave",
+      });
       setTimeout(() => {
         setMessage({ type: "", content: "" });
       }, 3000);
@@ -172,13 +178,7 @@ const LeaveList = () => {
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
-      {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
-      )}
+      
       <Modal
         open={formModalOpen}
         onClose={() => setFormModalOpen(false)}
@@ -310,6 +310,12 @@ const LeaveList = () => {
 
       <h2 className="text-3xl font-bold m-3 text-center">Leave Applications</h2>
       <hr />
+      {/* Display success/error message */}
+      {message.content && (
+        <SnackbarComp
+        message={message}
+        />
+      )}
       <div className="flex justify-between items-center m-3">
         <TextField
           variant="outlined"
@@ -531,7 +537,6 @@ const LeaveList = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}
-                paginationactions={TablePaginationActions}
               />
             </TableRow>
           </TableFooter>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = ' https://3127-2405-204-1380-91bf-d176-2261-f27f-6c05.ngrok-free.app/user';
+const API_URL = 'http://localhost:3000/user';
 
 // Login function
 export const  login = async (credentials) => {
@@ -67,7 +67,7 @@ export const refreshToken = async () => {
 };
 
 // Update User function
-export const updateUser = async (id, userData) => {
+export const updateUserProfile = async (id, userData) => {
   return axios
     .put(`${API_URL}/update/${id}`, userData, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -80,7 +80,7 @@ export const updateUser = async (id, userData) => {
 };
 
 // Delete User function
-export const deleteUser = async (id) => {
+export const deleteUserProfile = async (id) => {
   return axios
     .delete(`${API_URL}/delete/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -101,6 +101,40 @@ export const checkLoggedInUser = async () => {
     .then((response) => response.data) // Process the response data if needed
     .catch((error) => {
       console.error('Check logged in user error:', error); // Log the error
+      throw error; // Propagate the error for further handling
+    });
+};
+
+// get current user
+export const getUserProfile = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('Token not found'); // Token is missing
+    throw new Error('Authentication token is missing');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Get current user error:', error); // Log the error
+    throw error; // Propagate the error for further handling
+  }
+};
+
+
+// change password
+export const changePassword = async (passwordData) => {
+  return axios
+    .put(`${API_URL}/change-password`, passwordData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+    .then((response) => response.data) // Process the response data if needed
+    .catch((error) => {
+      console.error('Change password error:', error); // Log the error
       throw error; // Propagate the error for further handling
     });
 };

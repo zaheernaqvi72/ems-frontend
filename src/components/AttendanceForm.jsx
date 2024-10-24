@@ -3,10 +3,9 @@ import { TextField, Button, MenuItem } from "@mui/material";
 import { recordAttendance } from "../services/attendanceService";
 import { getEmployees } from "../services/employeeService";
 import PropTypes from "prop-types";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import { checkAttendanceExists } from "../services/attendanceService";
 import handleError from "../utils/handleError";
+import SnackbarComp from "./Snackbar";
 
 const AttendanceForm = ({ fetchAttendance, closeModal }) => {
   const [message, setMessage] = useState({ type: "", content: "" });
@@ -138,14 +137,14 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
   return (
     <>
       <h2 className="text-3xl font-bold mb-4 text-center">Apply Attendance</h2>
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+        position={{ vertical: "top", horizontal: "center" }}
+        message={message}
+        />
       )}
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Employee ID */}
         <TextField

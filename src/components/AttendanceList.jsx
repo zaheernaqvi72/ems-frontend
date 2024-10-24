@@ -24,11 +24,10 @@ import {
   editAttendance,
   getAllAttendance,
 } from "../services/attendanceService";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import TablePaginationActions from "./Pagination";
 import handleError from "../utils/handleError";
 import { getEmployees } from "../services/employeeService";
+import SnackbarComp from "./Snackbar"
 
 const AttendanceList = () => {
   const [attendance, setAttendance] = useState([]);
@@ -137,7 +136,16 @@ const AttendanceList = () => {
           setMessage({ type: "", content: "" });
         }, 2000);
       } catch (error) {
+        setDeleteModalOpen(false);
+        setMessage({
+          type: "error",
+          content:
+            error.response?.data?.message || "Failed to delete attendance record.",
+        });
         console.error("Error deleting attendance record:", error);
+        setTimeout(() => {
+          setMessage({ type: "", content: "" });
+        }, 3000);
       }
     }
   };
@@ -178,6 +186,7 @@ const AttendanceList = () => {
         // Refresh the attendance data
       }, 3000);
     } catch (error) {
+      setEditModalOpen(false);
       setMessage({
         type: "error",
         content: error.response?.data?.message || "Failed to edit attendance.",
@@ -209,13 +218,11 @@ const AttendanceList = () => {
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+        message={message}
+        />
       )}
       {/* Attendance Form Modal */}
       <Modal

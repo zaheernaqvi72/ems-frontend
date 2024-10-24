@@ -18,6 +18,8 @@ import {
   Modal,
   Avatar,
   Typography as MuiTypography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useTheme } from "@mui/material/styles";
@@ -28,6 +30,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
+
 const Navbar = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,6 +39,19 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true); // Simulating an error for not being logged in
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   // Check if user is logged in
   useEffect(() => {
@@ -44,9 +60,7 @@ const Navbar = () => {
       if (token) {
         setIsLoggedIn(true);
       } else {
-        
         setIsLoggedIn(false);
-
       }
     };
 
@@ -92,12 +106,52 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
     setLogoutModalOpen(false);
-    
+
+    // remove the token from localStorage
+    localStorage.removeItem("token");
     // Redirect to the login page
     window.location.href = "/login";
   };
+
+  // Logout automatically after 2 minutes of inactivity
+  const logoutAfterInactivity = () => {
+    const inactivityTime = 120000;
+    let time;
+
+    const resetTimer = () => {
+      clearTimeout(time);
+      time = setTimeout(() => {
+        handleLogout();
+      }, inactivityTime);
+    };
+
+    const events = [
+      "load",
+      "mousemove",
+      "mousedown",
+      "click",
+      "scroll",
+      "keypress",
+      "keyup",
+      "touchstart",
+      "touchmove",
+      "touchend",
+      "touchcancel",
+      "pointerdown",
+    ];
+
+    events.forEach((event) => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    resetTimer();
+  };
+
+  useEffect(() => {
+    logoutAfterInactivity();
+  }, []);
 
   const drawerList = (
     <List>
@@ -108,7 +162,7 @@ const Navbar = () => {
           component={Link}
           to={item.path}
           selected={location.pathname === item.path}
-          onClick={toggleDrawer(false)}
+          onClick={(!isLoggedIn && item.title !== "Home" ? handleClick : null) && toggleDrawer(false)}
         >
           <ListItemText primary={item.title} />
         </ListItem>
@@ -117,8 +171,7 @@ const Navbar = () => {
       {/* Mobile Avatar and User Menu */}
       <ListItem>
         <Box sx={{ display: "flex", justifyContent: "start", width: "100%" }}>
-          <Tooltip title={isLoggedIn ? "Open settings" : "Login / Register"}>     
-          
+          <Tooltip title={isLoggedIn ? "Open settings" : "Login / Register"}>
             <IconButton onClick={handleMenuClick} sx={{ p: 0 }}>
               {isLoggedIn ? (
                 <Avatar alt="User" src="image.jpg" />
@@ -172,6 +225,19 @@ const Navbar = () => {
 
   return (
     <AppBar position="sticky">
+      
+      <div>
+        <Snackbar
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }} // Top-center position
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            You are not logged in! Please login to access this page.
+          </Alert>
+        </Snackbar>
+      </div>
+
       <Toolbar className="flex justify-between">
         {/* Left Logo */}
         <Typography
@@ -210,6 +276,7 @@ const Navbar = () => {
                 color="inherit"
                 component={Link}
                 to={item.path}
+                onClick={!isLoggedIn && item.title !== "Home" ? handleClick : null}
                 sx={{
                   mx: 1,
                   textDecoration: "none",
@@ -347,5 +414,6 @@ const Navbar = () => {
     </AppBar>
   );
 };
+
 
 export default Navbar;

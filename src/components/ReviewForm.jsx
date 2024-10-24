@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { TextField, Button, MenuItem } from "@mui/material";
+import { TextField, Button, MenuItem, Rating } from "@mui/material";
 import PropTypes from "prop-types";
 import { getEmployees } from "../services/employeeService";
 import { useEffect } from "react";
 import handleError from "../utils/handleError";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
-import { createReview, updateReview, checkReviewExists } from "../services/reviewService";
+import {
+  createReview,
+  updateReview,
+  checkReviewExists,
+} from "../services/reviewService";
+import SnackbarComp from "./Snackbar";
 
 const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
   const [employeeIds, setEmployeeIds] = useState([]);
@@ -24,6 +27,7 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
     comments: "",
     rating: "",
   });
+  const [rating, setRating] = useState(formData.rating || 0);
 
   // Prefill form data if in edit mode
   useEffect(() => {
@@ -115,7 +119,6 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
             "error",
             "Review for this employee on this date already exists!"
           );
-          
         }
 
         await createReview(formData);
@@ -134,7 +137,10 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
       });
       setTimeout(closeModal, 3000);
     } catch (error) {
-      showMessage("error", "Failed to submit review. Please try again.");
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to submit review",
+      });
       formData.employee_id = "";
       formData.review_date = "";
       handleError(error);
@@ -148,18 +154,29 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
     }
   };
 
+  const handleRatingChange = (newValue) => {
+    setRating(newValue);
+    handleChange({ target: { name: "rating", value: newValue } }); // Update the form data
+  };
+
+  const getStarColor = (rating) => {
+    if (rating === 0) return "red";
+    if (rating <= 2) return "red";
+    if (rating <= 4) return "gold";
+    return "green";
+  };
+
   return (
     <>
       <h2 className="text-3xl font-bold mb-4 text-center">
         {reqType === "create" ? "Submit a Review" : "Edit Review"}
       </h2>
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+          message={message}
+          position={{ vertical: "top", horizontal: "center" }}
+        />
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <TextField
@@ -209,18 +226,22 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
           error={errors.comments} // Show error if field is invalid
           helperText={errors.comments ? "Comments are required!" : ""}
         />
-        <TextField
-          fullWidth
-          label="Rating (0-5)"
+        <div className="flex justify-center m-lg-auto">
+        <Rating
+        label="Rating"
           name="rating"
-          variant="outlined"
-          type="number"
-          value={formData.rating}
-          onChange={handleChange}
-          inputProps={{ min: 0, max: 5 }}
-          error={errors.rating} // Show error if field is invalid
-          helperText={errors.rating ? "Rating is required!" : ""}
+          value={rating}
+          onChange={(event, newValue) => handleRatingChange(newValue) && getStarColor(rating)}
+          max={5}
+          style={{ fontSize: "45px", color: getStarColor(rating) }}
+          
         />
+        {errors.rating && (
+          <div style={{ color: "red", marginTop: "10px" }}>
+            Rating is required!
+          </div>
+        )}
+        </div>
 
         <Button
           variant="outlined"
@@ -231,6 +252,7 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
             fontSize: "16px",
             borderRadius: "30px",
             marginRight: "10px",
+            
             "&:hover": {
               borderColor: "success.main",
               backgroundColor: "transparent",

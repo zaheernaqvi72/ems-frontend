@@ -26,9 +26,8 @@ import {
 } from "@mui/icons-material";
 import ReviewForm from "./ReviewForm";
 import { getAllReviews, deleteReview } from "../services/reviewService";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import TablePaginationActions from "./Pagination";
+import SnackbarComp from "./Snackbar";
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState([]);
@@ -107,7 +106,11 @@ const ReviewList = () => {
         setMessage({ type: "", content: "" });
       }, 3000);
     } catch (error) {
-      setMessage({ type: "error", content: "Error deleting review" });
+      setDeleteModalOpen(false);
+      setMessage({
+        type: "error",
+        content: error.response?.data?.message || "Failed to delete review",
+      });
       setTimeout(() => {
         setMessage({ type: "", content: "" });
       }, 3000);
@@ -143,13 +146,12 @@ const ReviewList = () => {
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
-      {/* Display alerts for error or success */}
+      {/* Display success/error message */}
       {message.content && (
-        <Stack sx={{ width: "100%", mt: 2, mb: 2 }} spacing={2}>
-          <Alert variant="filled" severity={message.type}>
-            {message.content}
-          </Alert>
-        </Stack>
+        <SnackbarComp
+        message={message}
+        position={{ vertical: "top", horizontal: "center" }}
+        />
       )}
       <h2 className="text-3xl font-bold m-3 text-center">Reviews</h2>
       <Modal

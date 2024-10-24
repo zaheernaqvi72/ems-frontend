@@ -12,8 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { AccountCircle, Visibility, VisibilityOff } from "@mui/icons-material";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
+import SnackbarComp from "../components/Snackbar";
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,13 +74,12 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
-        {message.content && (
-          <Stack sx={{ width: "100%" }} spacing={2}>
-            <Alert variant="filled" severity={message.type}>
-              {message.content}
-            </Alert>
-          </Stack>
-        )}
+        {/* Display success/error message */}
+      {message.content && (
+        <SnackbarComp
+        message={message}
+        />
+      )}
         <h2 className="text-2xl font-bold text-center mb-4">
           Login <AccountCircle className="mr-2 text-blue-500" />
         </h2>

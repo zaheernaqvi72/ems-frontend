@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import { PersonAdd, Visibility, VisibilityOff } from "@mui/icons-material";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
+import PasswordChecklist from "react-password-checklist";
+import SnackbarComp from "../components/Snackbar";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -35,12 +35,47 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Validate password constraints
+  const validatePassword = (password) => {
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+    const hasCapital = /[A-Z]/.test(password);
+    const hasMinLength = password.length >= 5;
+
+    return {
+      minLength: hasMinLength,
+      specialChar: hasSpecialChar,
+      number: hasNumber,
+      capital: hasCapital,
+    };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setMessage({ type: "", content: "" }); // Clear previous messages
 
     try {
+      if (
+        !validatePassword(formData.password).minLength ||
+        !validatePassword(formData.password).specialChar ||
+        !validatePassword(formData.password).number ||
+        !validatePassword(formData.password).capital
+      ) {
+        setMessage({
+          type: "error",
+          content:
+            "Password must contain at least 5 characters, a number, a special character, and a capital letter.",
+        });
+        setIsSubmitting(false);
+
+        setTimeout(() => {
+          setMessage({ type: "", content: "" });
+          setFormData({ ...formData, password: "" });
+        }, 2000);
+        return;
+      }
+
       await register(formData);
       setMessage({ type: "success", content: "Registration successful!" });
 
@@ -50,7 +85,9 @@ const Register = () => {
       }, 2000);
     } catch (error) {
       // Assuming `error.response.data.message` holds the message from API
-      const errorMessage = error.response ? error.response.data.message : error.message;
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
 
       if (errorMessage.includes("username already exists")) {
         setMessage({
@@ -84,18 +121,13 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center flex-row">
+    <div className="w-full flex justify-center items-center flex-row">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
+        className="max-w-xl w-full bg-gray-100 p-6 rounded-md shadow-md space-y-4"
       >
-        {message.content && (
-          <Stack sx={{ width: "100%", mt: 2 }} spacing={2}>
-            <Alert variant="filled" severity={message.type}>
-              {message.content}
-            </Alert>
-          </Stack>
-        )}
+        {/* Display success/error message */}
+        {message.content && <SnackbarComp message={message} />}
         <h2 className="text-2xl font-bold text-center mb-4">
           Register <PersonAdd className="mr-2 text-green-500" />
         </h2>
@@ -116,30 +148,33 @@ const Register = () => {
           <MenuItem value="Employee">Employee</MenuItem>
         </TextField>
 
-        <TextField
-          fullWidth
-          name="first_name"
-          label="First Name"
-          variant="outlined"
-          value={formData.first_name}
-          onChange={handleChange}
-          required
-          className="mb-4"
-        />
+        <div className="flex justify-between mb-4">
+          
+          <TextField
+            name="first_name"
+            label="First Name"
+            variant="outlined"
+            value={formData.first_name}
+            onChange={handleChange}
+            required
+            className="mb-4"
+            style={{ width: "48%" }}
+          />
+          <TextField
+            name="last_name"
+            label="Last Name"
+            variant="outlined"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+            className="mb-4"
+            style={{ width: "48%" }} 
+          />
+        </div>
 
+        <div className="flex justify-between mb-4">
         <TextField
-          fullWidth
-          name="last_name"
-          label="Last Name"
-          variant="outlined"
-          value={formData.last_name}
-          onChange={handleChange}
-          required
-          className="mb-4"
-        />
-
-        <TextField
-          fullWidth
+          
           name="username"
           label="Username"
           variant="outlined"
@@ -147,10 +182,11 @@ const Register = () => {
           onChange={handleChange}
           required
           className="mb-4"
+          style={{ width: "48%" }}
         />
 
         <TextField
-          fullWidth
+      
           type="email"
           name="email"
           label="Email"
@@ -159,7 +195,9 @@ const Register = () => {
           onChange={handleChange}
           required
           className="mb-4"
+          style={{ width: "48%" }}
         />
+        </div>
 
         <FormControl fullWidth variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">
@@ -186,6 +224,16 @@ const Register = () => {
             label="Password"
           />
         </FormControl>
+
+        <PasswordChecklist
+          rules={["minLength", "specialChar", "number", "capital"]}
+          minLength={5}
+          value={formData.password}
+          onChange={(isValid) => {
+            console.log("Password is valid:", isValid);
+          }}
+          style={{ fontSize: '12px' }}
+        />
 
         <Button
           fullWidth
