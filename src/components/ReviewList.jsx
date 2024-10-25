@@ -70,7 +70,7 @@ const ReviewList = () => {
   useEffect(() => {
     const filteredData = sortedReviews.filter(
       (record) =>
-        record.employee_id.toString().includes(searchQuery) ||
+        record.employee_id.toLowerCase().includes(searchQuery) ||
         record.review_date.includes(searchQuery) ||
         record.comments.toLowerCase().includes(searchQuery) ||
         record.rating.toString().includes(searchQuery)
@@ -357,7 +357,7 @@ const ReviewList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>

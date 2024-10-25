@@ -75,9 +75,9 @@ const LeaveList = () => {
   useEffect(() => {
     const filteredData = sortedLeaves.filter(
       (record) =>
-        record.leave_type.includes(searchQuery) ||
+        record.leave_type.toLowerCase().includes(searchQuery) ||
         record.day_type.toLowerCase().includes(searchQuery) ||
-        record.employee_id.includes(searchQuery) ||
+        record.employee_id.toLowerCase().includes(searchQuery) ||
         record.start_date.includes(searchQuery) ||
         record.end_date.includes(searchQuery) ||
         record.reason.toLowerCase().includes(searchQuery) ||

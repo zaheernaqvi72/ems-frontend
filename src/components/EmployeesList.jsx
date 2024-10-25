@@ -70,7 +70,7 @@ const EmployeeList = () => {
   useEffect(() => {
     const filteredData = sortedEmployees.filter(
       (record) =>
-        record.employee_id.includes(searchQuery) ||
+        record.employee_id.toLowerCase().includes(searchQuery) ||
         record.first_name.toLowerCase().includes(searchQuery) ||
         record.last_name.toLowerCase().includes(searchQuery) ||
         record.email.toLowerCase().includes(searchQuery) ||

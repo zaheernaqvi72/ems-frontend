@@ -39,7 +39,7 @@ const SnackbarComp = ({ message, position }) => {
           <SlideTransition {...props} position={position} />
         )}
         autoHideDuration={6000}
-        sx={{ maxWidth: "800px", width: "80%" }}
+        sx={{ maxWidth: "500px", width: "80%" }}
       >
         <Alert
           onClose={handleClose}
