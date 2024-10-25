@@ -131,7 +131,7 @@ const ProfilePage = () => {
     <div className="w-3/6 h-4/5 m-auto p-4 bg-gray-100 shadow-md rounded-md">
       <Container maxWidth="md">
         <Typography variant="h4" align="center" gutterBottom>
-          Profile Page
+          Profile
         </Typography>
 
         {loading ? (
@@ -155,7 +155,7 @@ const ProfilePage = () => {
             </Box>
 
             {/* User Details Display */}
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2} mb={3}>
+            <Box display="flex" flexDirection="column" gap={2} mb={3}>
               <Grow in={true} timeout={1000}>
                 <Typography variant="body1" sx={{ fontWeight: "bold", color: "#333" }}>
                   First Name: <span style={{ color: "#555" }}>{userData.first_name}</span>

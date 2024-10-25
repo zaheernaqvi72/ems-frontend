@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1600
 },
-optimizeDeps: {
-  include: ['@mui/material', '@mui/system'],
-},
+// optimizeDeps: {
+//   include: ['@mui/material', '@mui/system'],
+// },
 })

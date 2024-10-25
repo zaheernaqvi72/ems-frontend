@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TextField, Button, MenuItem } from "@mui/material";
+import { TextField, Button, Autocomplete } from "@mui/material";
 import { recordAttendance } from "../services/attendanceService";
 import { getEmployees } from "../services/employeeService";
 import PropTypes from "prop-types";
@@ -108,6 +108,37 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
         });
         return;
       }
+
+      // Get current date and record date
+      const currentDate = new Date().toISOString().split("T")[0];
+      const attendanceDate = formData.date.split("T")[0];
+
+      // Create timestamp for attendance creation and check time (10 AM)
+      const createdAt = new Date(); // Assuming attendance is marked now
+      const tenAM = new Date();
+      tenAM.setHours(10, 0, 0, 0);
+
+      // Set initial status
+      let status = formData.status;
+
+      // Update status based on time and attendance date
+      if (attendanceDate !== currentDate) {
+        // Mark as Absent if attendance is not marked for today
+        status = "Absent";
+      } else if (
+        createdAt > tenAM &&
+        status !== "Late" &&
+        status !== "On Leave" &&
+        status !== "Absent"
+      ) {
+        // Mark as Late if attendance is after 10 AM and was initially marked as Present
+        status = "Late";
+      }
+
+      // Update formData with new status
+      formData.status = status;
+
+      // Record the attendance
       await recordAttendance(formData);
       setFormData({ employee_id: "", date: "", status: "" });
       fetchAttendance();
@@ -116,8 +147,7 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
       // Clear form and navigate after success
       setTimeout(() => {
         setMessage({ type: "", content: "" });
-
-        closeModal(); // Close the modal after employee is created
+        closeModal(); // Close the modal after attendance is marked
       }, 3000);
     } catch (error) {
       // Handle any errors from the API
@@ -140,36 +170,35 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
       {/* Display success/error message */}
       {message.content && (
         <SnackbarComp
-        position={{ vertical: "top", horizontal: "center" }}
-        message={message}
+          position={{ vertical: "top", horizontal: "center" }}
+          message={message}
         />
       )}
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Employee ID */}
-        <TextField
-          fullWidth
-          select
-          label="Employee ID"
-          name="employee_id"
-          variant="outlined"
+
+      <form onSubmit={handleSubmit} className="space-y-4 w-full">
+        <Autocomplete
+          options={employeeIds}
+          getOptionLabel={(option) => option.toString()}
           value={formData.employee_id}
-          onChange={handleChange}
-          error={errors.employee_id} // Show error if field is invalid
-          helperText={errors.employee_id ? "Employee ID is required!" : ""}
-        >
-          {/* Populate dropdown with employee IDs */}
-          {employeeIds.length > 0 ? (
-            employeeIds.map((id) => (
-              <MenuItem key={id} value={id}>
-                {id}
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem disabled>No employees found</MenuItem>
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "employee_id", value: newValue } })
+          
+          }
+          isOptionEqualToValue={(option, value) => option === value || value === null}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Employee ID"
+              variant="outlined"
+              error={errors.employee_id} // Show error if field is invalid
+              helperText={errors.employee_id ? "Employee ID is required!" : ""}
+            />
           )}
-        </TextField>
-        {/* Date */}
+          sx={{ width: "100%" }}
+          placeholder="Combo box"
+        />
+
         <TextField
           fullWidth
           label="Date"
@@ -184,22 +213,29 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
           inputProps={{ max: todayDate }} // Restrict date to today or before
         />
         {/* Status */}
-        <TextField
-          fullWidth
-          select
-          label="Status"
-          name="status"
-          variant="outlined"
+        
+
+          <Autocomplete
+          options = {["Present", "Absent", "Late", "On Leave"]}
+          getOptionLabel={(option) => option.toString()}
           value={formData.status}
-          onChange={handleChange}
-          error={errors.status} // Show error if field is invalid
-          helperText={errors.status ? "Status is required!" : ""}
-        >
-          <MenuItem value="Present">Present</MenuItem>
-          <MenuItem value="Absent">Absent</MenuItem>
-          <MenuItem value="Late">Late (Half Day)</MenuItem>
-          <MenuItem value="On Leave">On Leave</MenuItem>
-        </TextField>
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "status", value: newValue } })
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Status"
+              variant="outlined"
+              error={errors.status} // Show error if field is invalid
+              helperText={errors.status ? "Status is required!" : ""}
+            />
+          )}
+          sx={{ width: "100%" }}
+          placeholder="Combo box"
+        />
+
         {/* Submit Button */}
         <Button
           variant="outlined"

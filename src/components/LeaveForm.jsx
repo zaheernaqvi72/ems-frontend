@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, MenuItem } from "@mui/material";
+import { TextField, Button, Autocomplete } from "@mui/material";
 import {
   applyLeave,
   updateLeave,
@@ -215,63 +215,77 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
       {/* Display success/error message */}
       {message.content && (
         <SnackbarComp
-        position={{ vertical: "top", horizontal: "center" }}
-        message={message}
+          position={{ vertical: "top", horizontal: "center" }}
+          message={message}
         />
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <TextField
-          fullWidth
-          select
-          label="Employee ID"
-          name="employee_id"
-          variant="outlined"
+        <Autocomplete
+          options={employeeIds}
+          getOptionLabel={(option) => option.toString()}
           value={formData.employee_id}
-          onChange={handleChange}
-          error={error.employee_id} // Show error if field is invalid
-          helperText={errors.employee_id ? "Employee ID is required!" : ""}
-        >
-          {/* Populate dropdown with employee IDs */}
-          {employeeIds.length > 0 ? (
-            employeeIds.map((id) => (
-              <MenuItem key={id} value={id}>
-                {id}
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem disabled>No employee id found</MenuItem>
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "employee_id", value: newValue } })
+          }
+          isOptionEqualToValue={(option, value) => option === value || value === null}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Employee ID"
+              variant="outlined"
+              error={errors.employee_id} // Show error if field is invalid
+              helperText={errors.employee_id ? "Employee ID is required!" : ""}
+            />
           )}
-        </TextField>
-        <TextField
-          fullWidth
-          select
-          label="Leave Type"
-          name="leave_type"
-          variant="outlined"
+          sx={{ width: "100%" }}
+          placeholder="Combo box"
+        />
+        <Autocomplete
+          options={[
+            "Casual Leave",
+            "Sick Leave",
+            "Earned Leave",
+            "Leave Without Pay",
+          ]}
+          getOptionLabel={(option) => option}
           value={formData.leave_type}
-          onChange={handleChange}
-          error={errors.leave_type} // Show error if field is invalid
-          helperText={errors.leave_type ? "Leave type is required!" : ""}
-        >
-          <MenuItem value="Earned leave">Earned leave</MenuItem>
-          <MenuItem value="Casual leave">Casual leave</MenuItem>
-          <MenuItem value="Sick leave">Sick leave</MenuItem>
-          <MenuItem value="Leave without pay">Leave without pay</MenuItem>
-        </TextField>
-        <TextField
-          fullWidth
-          select
-          label="Day Type"
-          name="day_type"
-          variant="outlined"
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "leave_type", value: newValue } })
+          }
+          isOptionEqualToValue={(option, value) => option === value || value === null}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Leave Type"
+              variant="outlined"
+              error={errors.leave_type} // Show error if field is invalid
+              helperText={errors.leave_type ? "Leave type is required!" : ""}
+            />
+          )}
+          sx={{ width: "100%" }}
+        />
+        <Autocomplete
+          options={["Full Day", "Half Day"]}
+          getOptionLabel={(option) => option}
           value={formData.day_type}
-          onChange={handleChange}
-          error={errors.day_type} // Show error if field is invalid
-          helperText={errors.day_type ? "Day type is required!" : ""}
-        >
-          <MenuItem value="Full Day">Full Day</MenuItem>
-          <MenuItem value="Half Day">Half Day</MenuItem>
-        </TextField>
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "day_type", value: newValue } })
+          }
+          isOptionEqualToValue={(option, value) => option === value || value === null}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Day Type"
+              variant="outlined"
+              error={errors.day_type} // Show error if field is invalid
+              helperText={errors.day_type ? "Day type is required!" : ""}
+            />
+          )}
+          sx={{ width: "100%" }}
+        />
         <TextField
           fullWidth
           label="Start Date"

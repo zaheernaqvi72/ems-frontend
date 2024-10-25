@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, MenuItem, Rating } from "@mui/material";
+import { TextField, Button, Autocomplete, Rating } from "@mui/material";
 import PropTypes from "prop-types";
 import { getEmployees } from "../services/employeeService";
 import { useEffect } from "react";
@@ -179,28 +179,27 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
         />
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <TextField
-          fullWidth
-          select
-          label="Employee ID"
-          name="employee_id"
-          variant="outlined"
+        <Autocomplete
+          options={employeeIds || null}
+          getOptionLabel={(option) => option.toString()}
           value={formData.employee_id}
-          onChange={handleChange}
-          error={errors.employee_id} // Show error if field is invalid
-          helperText={errors.employee_id ? "Employee ID is required!" : ""}
-        >
-          {/* Populate dropdown with employee IDs */}
-          {employeeIds.length > 0 ? (
-            employeeIds.map((id) => (
-              <MenuItem key={id} value={id}>
-                {id}
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem disabled>No employee id found</MenuItem>
+          onChange={(event, newValue) =>
+            handleChange({ target: { name: "employee_id", value: newValue } })
+          }
+          isOptionEqualToValue={(option, value) => option == value || value == null}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              label="Employee ID"
+              variant="outlined"
+              error={errors.employee_id} // Show error if field is invalid
+              helperText={errors.employee_id ? "Employee ID is required!" : ""}
+            />
           )}
-        </TextField>
+          sx={{ width: "100%" }}
+          placeholder="Combo box"
+        />
         <TextField
           fullWidth
           label="Review Date"
@@ -227,20 +226,21 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
           helperText={errors.comments ? "Comments are required!" : ""}
         />
         <div className="flex justify-center m-lg-auto">
-        <Rating
-        label="Rating"
-          name="rating"
-          value={rating}
-          onChange={(event, newValue) => handleRatingChange(newValue) && getStarColor(rating)}
-          max={5}
-          style={{ fontSize: "45px", color: getStarColor(rating) }}
-          
-        />
-        {errors.rating && (
-          <div style={{ color: "red", marginTop: "10px" }}>
-            Rating is required!
-          </div>
-        )}
+          <Rating
+            label="Rating"
+            name="rating"
+            value={rating}
+            onChange={(event, newValue) =>
+              handleRatingChange(newValue) && getStarColor(rating)
+            }
+            max={5}
+            style={{ fontSize: "45px", color: getStarColor(rating) }}
+          />
+          {errors.rating && (
+            <div style={{ color: "red", marginTop: "10px" }}>
+              Rating is required!
+            </div>
+          )}
         </div>
 
         <Button
@@ -252,7 +252,7 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
             fontSize: "16px",
             borderRadius: "30px",
             marginRight: "10px",
-            
+
             "&:hover": {
               borderColor: "success.main",
               backgroundColor: "transparent",

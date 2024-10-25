@@ -239,6 +239,7 @@ const AttendanceList = () => {
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
+            width: "40%",
           }}
         >
           <div className="absolute right-5 top-3">
@@ -435,129 +436,105 @@ const AttendanceList = () => {
             </TableRow>
           </TableHead>
           {filteredAttendance.length > 0 ? (
-           <TableBody>
-           {(
-             rowsPerPage > 0
-               ? filteredAttendance.slice(
-                   page * rowsPerPage,
-                   page * rowsPerPage + rowsPerPage
-                 )
-               : filteredAttendance
-           ).map((record) => {
-             // Get the current date and time
-             const currentDate = new Date().toISOString().split('T')[0];
-             const attendanceDate = record.date.split('T')[0];
-             
-             const createdAt = new Date(record.createdAt);
-             const tenAM = new Date(createdAt);
-             tenAM.setHours(10, 0, 0, 0);
+            <TableBody>
+              {(rowsPerPage > 0
+                ? filteredAttendance.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filteredAttendance
+              ).map((record) => (
+                <TableRow key={record.attendance_id}>
+                  <TableCell>{record.employee_id}</TableCell>
+                  <TableCell>
+                    {record.first_name} {record.last_name}
+                  </TableCell>
+                  <TableCell>{record.date}</TableCell>
+                  <TableCell>
+                    {new Date(record.createdAt).toLocaleTimeString("en-IN", {
+                      timeZone: "Asia/Kolkata",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </TableCell>
 
-         
-             
-             let status = record.status;
-         
-             if (attendanceDate !== currentDate) {
-               // Mark as Absent if attendance is not marked for today
-               status = "Absent";
-             } else if (createdAt > tenAM && status != "Late" && status != "On Leave" && status != "Absent") {
-               // Mark as Late if attendance is after 10 AM and was initially marked as Present
-               status = "Late";
-             }
-         
-             return (
-               <TableRow key={record.attendance_id}>
-                 <TableCell>{record.employee_id}</TableCell>
-                 <TableCell>
-                   {record.first_name} {record.last_name}
-                 </TableCell>
-                 <TableCell>{record.date}</TableCell>
-                 <TableCell>
-                   {createdAt.toLocaleTimeString("en-IN", {
-                     timeZone: "Asia/Kolkata",
-                     hour: "2-digit",
-                     minute: "2-digit",
-                     second: "2-digit",
-                   })}
-                 </TableCell>
-         
-                 <TableCell
-                   sx={{
-                     color:
-                       status === "Present"
-                         ? "success.main"
-                         : status === "Absent"
-                         ? "error.main"
-                         : status === "Late"
-                         ? "warning.main"
-                         : "info.main",
-                   }}
-                 >
-                   {status}
-                 </TableCell>
-                 <TableCell>
-                   <Button
-                     onClick={() => handleEdit(record.attendance_id)}
-                     variant="outlined"
-                     startIcon={<Create />}
-                     sx={{
-                       padding: "5px 20px",
-                       fontSize: "12px",
-                       borderRadius: "30px",
-                       "&:hover": {
-                         borderColor: "success.main",
-                         backgroundColor: "transparent",
-                         color: "#3f51b5",
-                         transform: "scale(1.05)",
-                         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                         transition: "all 0.3s ease",
-                       },
-                       "&:active": {
-                         transform: "scale(0.98)",
-                       },
-                     }}
-                   >
-                     Edit
-                   </Button>
-                 </TableCell>
-                 <TableCell>
-                   <Button
-                     variant="outlined"
-                     onClick={() => {
-                       setDeleteRecord(record);
-                       setDeleteModalOpen(true);
-                     }}
-                     color="error"
-                     startIcon={<HighlightOff />}
-                     sx={{
-                       padding: "5px 20px",
-                       fontSize: "12px",
-                       borderRadius: "30px",
-                       "&:hover": {
-                         borderColor: "error.main",
-                         backgroundColor: "transparent",
-                         color: "#f44336",
-                         transform: "scale(1.05)",
-                         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                         transition: "all 0.3s ease",
-                       },
-                       "&:active": {
-                         transform: "scale(0.98)",
-                       },
-                     }}
-                   >
-                     Delete
-                   </Button>
-                 </TableCell>
-               </TableRow>
-             );
-           })}
-           {emptyRows > 0 && (
-             <TableRow style={{ height: 53 * emptyRows }}>
-               <TableCell colSpan={6} />
-             </TableRow>
-           )}
-         </TableBody>
-         
+                  <TableCell
+                    sx={{
+                      color:
+                        record.status === "Present"
+                          ? "success.main"
+                          : record.status === "Absent"
+                          ? "error.main"
+                          : record.status === "Late"
+                          ? "warning.main"
+                          : "info.main",
+                    }}
+                  >
+                    {record.status}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => handleEdit(record.attendance_id)}
+                      variant="outlined"
+                      startIcon={<Create />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "success.main",
+                          backgroundColor: "transparent",
+                          color: "#3f51b5",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setDeleteRecord(record);
+                        setDeleteModalOpen(true);
+                      }}
+                      color="error"
+                      startIcon={<HighlightOff />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "error.main",
+                          backgroundColor: "transparent",
+                          color: "#f44336",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
           ) : (
             <TableBody>
               <TableRow>
