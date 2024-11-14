@@ -8,7 +8,7 @@ const SnackbarComp = ({ message, position }) => {
 
   // Automatically open Snackbar when there's an error
   useEffect(() => {
-    if (message?.content) {
+    if (message) {
       setOpen(true);
     }
   }, [message]);

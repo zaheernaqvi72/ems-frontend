@@ -91,13 +91,6 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
     return !Object.values(newErrors).includes(true); // Return false if any error exists
   };
 
-  const showMessage = (type, content) => {
-    setMessage({ type, content });
-    setTimeout(() => {
-      setMessage({ type: "", content: "" });
-    }, 3000);
-  };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -105,7 +98,10 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      showMessage("error", "Please fill in all fields correctly!");
+      setMessage({
+        type: "error",
+        content: "Please fill in all fields correctly!",
+      });
       return;
     }
     try {
@@ -115,27 +111,45 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
           formData.review_date
         );
         if (reviewExists) {
-          showMessage(
-            "error",
-            "Review for this employee on this date already exists!"
-          );
+          setMessage({
+            type: "error",
+            content: "Review for this employee on this date already exists!",
+          });
         }
 
         await createReview(formData);
+        setMessage({
+          type: "success",
+          content: "Review submitted successfully",
+        });
+        setFormData({
+          employee_id: "",
+          review_date: "",
+          comments: "",
+          rating: "",
+        });
+        
         fetchReviews();
-        showMessage("success", "Review submitted successfully!");
+        setTimeout(() => {
+          closeModal();
+          setMessage({ type: "", content: "" });
+        }, 3000);
       } else if (reqType === "edit") {
         await updateReview(editData.review_id, formData);
+
+        setMessage({ type: "success", content: "Review updated successfully" });
+        setFormData({
+          employee_id: "",
+          review_date: "",
+          comments: "",
+          rating: "",
+        });
         fetchReviews();
-        showMessage("success", "Review updated successfully!");
+        setTimeout(() => {
+          closeModal();
+          setMessage({ type: "", content: "" });
+        }, 3000);
       }
-      setFormData({
-        employee_id: "",
-        review_date: "",
-        comments: "",
-        rating: "",
-      });
-      setTimeout(closeModal, 3000);
     } catch (error) {
       setMessage({
         type: "error",
@@ -171,22 +185,26 @@ const ReviewForm = ({ fetchReviews, closeModal, reqType, editData }) => {
       <h2 className="text-3xl font-bold mb-4 text-center">
         {reqType === "create" ? "Submit a Review" : "Edit Review"}
       </h2>
+
       {/* Display success/error message */}
       {message.content && (
         <SnackbarComp
-          message={message}
           position={{ vertical: "top", horizontal: "center" }}
+          message={message}
         />
       )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Autocomplete
-          options={employeeIds || null}
+          options={employeeIds}
           getOptionLabel={(option) => option.toString()}
           value={formData.employee_id}
           onChange={(event, newValue) =>
             handleChange({ target: { name: "employee_id", value: newValue } })
           }
-          isOptionEqualToValue={(option, value) => option == value || value == null}
+          isOptionEqualToValue={(option, value) =>
+            option == value || value == null
+          }
           renderInput={(params) => (
             <TextField
               {...params}

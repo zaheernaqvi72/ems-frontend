@@ -150,6 +150,10 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
         }
 
         await applyLeave(formData);
+        setMessage({
+          type: "success",
+          content: "Leave applied successfully!",
+        });
         setFormData({
           employee_id: "",
           leave_type: "",
@@ -159,10 +163,13 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           reason: "",
           status: "Pending",
         });
-        setMessage({
-          type: "success",
-          content: "Leave applied successfully!",
-        });
+        
+        // Clear form and navigate after success
+      setTimeout(() => {
+        setMessage({ type: "", content: "" });
+
+        closeModal();
+      }, 3000);
       } else if (reqType === "edit") {
         if (!editData || !editData.leave_id) {
           setMessage({ type: "error", content: "Invalid leave record." });
@@ -172,24 +179,25 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
         await updateLeave(formData.leave_id, formData);
         setMessage({
           type: "success",
-          content: "Employee updated successfully!",
+          content: "Leave updated successfully!",
         });
       }
 
       fetchLeaves();
+      setFormData({
+        employee_id: "",
+        leave_type: "",
+        day_type: "",
+        start_date: "",
+        end_date: "",
+        reason: "",
+        status: "Pending",
+      });
 
       // Clear form and navigate after success
       setTimeout(() => {
         setMessage({ type: "", content: "" });
-        setFormData({
-          employee_id: "",
-          leave_type: "",
-          day_type: "",
-          start_date: "",
-          end_date: "",
-          reason: "",
-          status: "Pending",
-        });
+
         closeModal();
       }, 3000);
     } catch (error) {
@@ -227,7 +235,9 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           onChange={(event, newValue) =>
             handleChange({ target: { name: "employee_id", value: newValue } })
           }
-          isOptionEqualToValue={(option, value) => option === value || value === null}
+          isOptionEqualToValue={(option, value) =>
+            option === value || value === null
+          }
           renderInput={(params) => (
             <TextField
               {...params}
@@ -253,7 +263,9 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           onChange={(event, newValue) =>
             handleChange({ target: { name: "leave_type", value: newValue } })
           }
-          isOptionEqualToValue={(option, value) => option === value || value === null}
+          isOptionEqualToValue={(option, value) =>
+            option === value || value === null
+          }
           renderInput={(params) => (
             <TextField
               {...params}
@@ -273,7 +285,9 @@ const LeaveForm = ({ fetchLeaves, closeModal, reqType, editData }) => {
           onChange={(event, newValue) =>
             handleChange({ target: { name: "day_type", value: newValue } })
           }
-          isOptionEqualToValue={(option, value) => option === value || value === null}
+          isOptionEqualToValue={(option, value) =>
+            option === value || value === null
+          }
           renderInput={(params) => (
             <TextField
               {...params}

@@ -28,6 +28,7 @@ import ReviewForm from "./ReviewForm";
 import { getAllReviews, deleteReview } from "../services/reviewService";
 import TablePaginationActions from "./Pagination";
 import SnackbarComp from "./Snackbar";
+import DownloadCSV from "./DownloadCSV";
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState([]);
@@ -97,11 +98,12 @@ const ReviewList = () => {
   const handleDelete = async () => {
     try {
       await deleteReview(deleteReviewData);
+      setMessage({ type: "success", content: "Review deleted successfully" });
       setReviews((prev) =>
         prev.filter((review) => review.review_id !== deleteReviewData)
       );
       setDeleteModalOpen(false);
-      setMessage({ type: "success", content: "Review deleted successfully" });
+      
       setTimeout(() => {
         setMessage({ type: "", content: "" });
       }, 3000);
@@ -146,14 +148,19 @@ const ReviewList = () => {
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
-      {/* Display success/error message */}
-      {message.content && (
-        <SnackbarComp
-        message={message}
-        position={{ vertical: "top", horizontal: "center" }}
+      <div className="flex items-center justify-between m-5">
+        <h2 className="text-3xl font-bold text-center flex-1">
+          Reviews
+        </h2>
+        <DownloadCSV
+          data={filteredReviews}
+          filename="reviews.csv"
+          className="ml-auto"
         />
-      )}
-      <h2 className="text-3xl font-bold m-3 text-center">Reviews</h2>
+      </div>
+      {/* Display success/error message */}
+      {message.content && <SnackbarComp message={message} />}
+
       <Modal
         open={formModalOpen}
         onClose={() => setFormModalOpen(false)}
@@ -171,6 +178,7 @@ const ReviewList = () => {
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
+            width: "40%",
           }}
         >
           <div>
@@ -282,6 +290,7 @@ const ReviewList = () => {
         </Box>
       </Modal>
       <hr />
+
       <div className="flex justify-between items-center m-3">
         <TextField
           variant="outlined"
@@ -357,7 +366,7 @@ const ReviewList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Emp ID</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Review Date</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Rating</TableCell>
@@ -372,98 +381,99 @@ const ReviewList = () => {
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage
                   )
-                : filteredReviews).map((review) => (
-                    <TableRow key={review.review_id}>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        {review.employee_id}
-                      </TableCell>
-                      <TableCell>{review.review_date}</TableCell>
-                      <TableCell>{review.comments}</TableCell>
-                      <TableCell>
-                        {Array.from({ length: 5 }, (_, i) => (
-                          <Star
-                            key={i}
-                            style={{
-                              color:
-                                review.rating === 0 || i < review.rating
-                                  ? getStarColor(review.rating)
-                                  : "gray",
-                            }}
-                          />
-                        ))}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          startIcon={<Create />}
-                          sx={{
-                            padding: "5px 20px",
-                            fontSize: "12px",
-                            borderRadius: "30px",
-                            "&:hover": {
-                              borderColor: "success.main",
-                              backgroundColor: "transparent",
-                              color: "#3f51b5",
-                              transform: "scale(1.05)",
-                              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                              transition: "all 0.3s ease",
-                            },
-                            "&:active": {
-                              transform: "scale(0.98)",
-                            },
-                          }}
-                          onClick={() => handleEdit(review.review_id)}
-                        >
-                          edit
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          startIcon={<HighlightOff />}
-                          sx={{
-                            padding: "5px 20px",
-                            fontSize: "12px",
-                            borderRadius: "30px",
-                            "&:hover": {
-                              borderColor: "error.main",
-                              backgroundColor: "transparent",
-                              color: "#f44336",
-                              transform: "scale(1.05)",
-                              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                              transition: "all 0.3s ease",
-                            },
-                            "&:active": {
-                              transform: "scale(0.98)",
-                            },
-                          }}
-                          onClick={() => {
-                            handleDeleteModalOpen(review.review_id);
-                          }}
-                        >
-                          delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                : filteredReviews
+              ).map((review) => (
+                <TableRow key={review.review_id}>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    {review.employee_id}
+                  </TableCell>
+                  <TableCell>{review.review_date}</TableCell>
+                  <TableCell>{review.comments}</TableCell>
+                  <TableCell>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star
+                        key={i}
+                        style={{
+                          color:
+                            review.rating === 0 || i < review.rating
+                              ? getStarColor(review.rating)
+                              : "gray",
+                        }}
+                      />
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<Create />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "success.main",
+                          backgroundColor: "transparent",
+                          color: "#3f51b5",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                      onClick={() => handleEdit(review.review_id)}
+                    >
+                      edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<HighlightOff />}
+                      sx={{
+                        padding: "5px 20px",
+                        fontSize: "12px",
+                        borderRadius: "30px",
+                        "&:hover": {
+                          borderColor: "error.main",
+                          backgroundColor: "transparent",
+                          color: "#f44336",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.3s ease",
+                        },
+                        "&:active": {
+                          transform: "scale(0.98)",
+                        },
+                      }}
+                      onClick={() => {
+                        handleDeleteModalOpen(review.review_id);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
               {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
               )}
             </TableBody>
           ) : (
             <TableBody>
-            <TableRow>
-              <TableCell colSpan={6} align="center">
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  No review records found.
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    No review records found.
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           )}
 
           <TableFooter>

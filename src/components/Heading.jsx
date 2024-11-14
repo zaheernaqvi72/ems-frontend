@@ -5,12 +5,12 @@ const Heading = () => {
     <TypeAnimation
       sequence={[
         "Welcome to Employee Management System",
-        2000,
+        3000,
         "Manage Employees Efficiently With Our Comprehensive System",
-        2000,
+        3000,
       ]}
       wrapper="span"
-      speed={15}
+      speed={60}
       style={{ fontSize: "1em", display: "inline-block" }}
       repeat={Infinity}
     />

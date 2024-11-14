@@ -30,7 +30,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
-
 const Navbar = () => {
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -124,6 +123,8 @@ const Navbar = () => {
       clearTimeout(time);
       time = setTimeout(() => {
         handleLogout();
+
+        setIsLoggedIn(false);
       }, inactivityTime);
     };
 
@@ -150,7 +151,9 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    logoutAfterInactivity();
+    if (isLoggedIn) {
+      logoutAfterInactivity();
+    }
   }, []);
 
   const drawerList = (
@@ -162,7 +165,10 @@ const Navbar = () => {
           component={Link}
           to={item.path}
           selected={location.pathname === item.path}
-          onClick={(!isLoggedIn && item.title !== "Home" ? handleClick : null) && toggleDrawer(false)}
+          onClick={
+            (!isLoggedIn && item.title !== "Home" ? handleClick : null) &&
+            toggleDrawer(false)
+          }
         >
           <ListItemText primary={item.title} />
         </ListItem>
@@ -225,7 +231,6 @@ const Navbar = () => {
 
   return (
     <AppBar position="sticky">
-      
       <div>
         <Snackbar
           open={open}
@@ -276,7 +281,9 @@ const Navbar = () => {
                 color="inherit"
                 component={Link}
                 to={item.path}
-                onClick={!isLoggedIn && item.title !== "Home" ? handleClick : null}
+                onClick={
+                  !isLoggedIn && item.title !== "Home" ? handleClick : null
+                }
                 sx={{
                   mx: 1,
                   textDecoration: "none",
@@ -298,7 +305,7 @@ const Navbar = () => {
             <Tooltip title={isLoggedIn ? "Open settings" : "Login / Register"}>
               <IconButton onClick={handleMenuClick} sx={{ p: 0 }}>
                 {isLoggedIn ? (
-                  <Avatar alt="User" src="image.jpg" />
+                  <Avatar alt="User" src="image.png" />
                 ) : (
                   <AccountCircleOutlinedIcon />
                 )}
@@ -414,6 +421,5 @@ const Navbar = () => {
     </AppBar>
   );
 };
-
 
 export default Navbar;

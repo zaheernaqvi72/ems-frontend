@@ -28,6 +28,7 @@ import TablePaginationActions from "./Pagination";
 import handleError from "../utils/handleError";
 import { getEmployees } from "../services/employeeService";
 import SnackbarComp from "./Snackbar";
+import DownloadCSV from "./DownloadCSV";
 
 const AttendanceList = () => {
   const [attendance, setAttendance] = useState([]);
@@ -346,7 +347,17 @@ const AttendanceList = () => {
         </Box>
       </Modal>
 
-      <h2 className="text-3xl font-bold m-3 text-center">Attendance List</h2>
+      <div className="flex items-center justify-between m-5">
+        <h2 className="text-3xl font-bold text-center flex-1">
+          Attendance List
+        </h2>
+        <DownloadCSV
+          data={filteredAttendance}
+          filename="attendance.csv"
+          className="ml-auto"
+        />
+      </div>
+
       <hr />
       <div className="flex justify-between items-center m-3">
         {/* Search Bar */}
@@ -426,7 +437,7 @@ const AttendanceList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Emp ID</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Log Time</TableCell>
@@ -550,7 +561,7 @@ const AttendanceList = () => {
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={6}
+                colSpan={7}
                 count={filteredAttendance.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

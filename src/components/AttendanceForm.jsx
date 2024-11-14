@@ -166,7 +166,7 @@ const AttendanceForm = ({ fetchAttendance, closeModal }) => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold mb-4 text-center">Apply Attendance</h2>
+      <h2 className="text-3xl font-bold mb-4 text-center">Mark Attendance</h2>
       {/* Display success/error message */}
       {message.content && (
         <SnackbarComp

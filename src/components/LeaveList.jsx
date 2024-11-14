@@ -27,6 +27,7 @@ import {
 import LeaveForm from "./LeaveForm";
 import TablePaginationActions from "./Pagination";
 import SnackbarComp from "./Snackbar";
+import DownloadCSV from "./DownloadCSV";
 
 const LeaveList = () => {
   const [leaves, setLeaves] = useState([]);
@@ -102,7 +103,7 @@ const LeaveList = () => {
       if (status == "Approved") {
         setMessage({ type: "success", content: "Leave approved successfully" });
       } else if (status == "Rejected") {
-        setMessage({ type: "error", content: "Leave rejected" });
+        setMessage({ type: "success", content: "Leave rejected" });
       }
     } catch (error) {
       setMessage({
@@ -178,7 +179,8 @@ const LeaveList = () => {
 
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
-      
+      {/* Display success/error message */}
+      {message.content && <SnackbarComp message={message} />}
       <Modal
         open={formModalOpen}
         onClose={() => setFormModalOpen(false)}
@@ -196,6 +198,7 @@ const LeaveList = () => {
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
+            width: "50%",
           }}
         >
           <div>
@@ -307,15 +310,18 @@ const LeaveList = () => {
           </Box>
         </Box>
       </Modal>
-
-      <h2 className="text-3xl font-bold m-3 text-center">Leave Applications</h2>
-      <hr />
-      {/* Display success/error message */}
-      {message.content && (
-        <SnackbarComp
-        message={message}
+      <div className="flex items-center justify-between m-5">
+        <h2 className="text-3xl font-bold text-center flex-1">
+          Leave Applications
+        </h2>
+        <DownloadCSV
+          data={filteredLeaves}
+          filename="leaves.csv"
+          className="ml-auto"
         />
-      )}
+      </div>
+      <hr />
+
       <div className="flex justify-between items-center m-3">
         <TextField
           variant="outlined"
@@ -393,7 +399,7 @@ const LeaveList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Emp ID</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Leave - Day Type
               </TableCell>

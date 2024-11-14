@@ -25,8 +25,7 @@
     "react-password-checklist": "^1.8.1",
     "react-router-dom": "^6.27.0",
     "react-type-animation": "^3.2.0",
-    "recharts": "^2.12.7",
-    "rsuite": "^5.73.1"
+    "recharts": "^2.12.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

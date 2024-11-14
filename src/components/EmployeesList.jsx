@@ -21,6 +21,7 @@ import { HighlightOff, Create, Add, Search, Close } from "@mui/icons-material";
 import EmployeeForm from "./EmployeeForm";
 import TablePaginationActions from "./Pagination";
 import SnackbarComp from "./Snackbar";
+import DownloadCSV from "./DownloadCSV";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -146,15 +147,18 @@ const EmployeeList = () => {
   return (
     <div className="max-w-6xl m-auto p-4 bg-gray-100 shadow-md rounded-md">
       {/* Display success/error message */}
-      {message.content && (
-        <SnackbarComp
-        message={message}
+      {message.content && <SnackbarComp message={message} />}
+
+      <div className="flex items-center justify-between m-5">
+        <h2 className="text-3xl font-bold text-center flex-1">
+          Employee List
+        </h2>
+        <DownloadCSV
+          data={filteredEmployee}
+          filename="employees.csv"
+          className="ml-auto"
         />
-      )}
-
-      {/* Employee List Table */}
-      <h2 className="text-3xl font-bold m-3 text-center">Employees List</h2>
-
+      </div>
       {/* Delete Confirmation Modal */}
       <Modal
         open={deleteModalOpen}
@@ -364,7 +368,7 @@ const EmployeeList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>ID No</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Emp ID</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Job Role</TableCell>
@@ -455,18 +459,18 @@ const EmployeeList = () => {
             </TableBody>
           ) : (
             <TableBody>
-            <TableRow>
-              <TableCell colSpan={8} align="center">
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  No employee records found.
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              <TableRow>
+                <TableCell colSpan={8} align="center">
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    No employee records found.
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           )}
           <TableFooter>
             <TableRow>
-            <TablePagination
+              <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={8}
                 count={filteredEmployee.length}

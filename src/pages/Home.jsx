@@ -17,8 +17,7 @@ const Home = () => {
         <Heading />
       </h1>
       <p className="text-lg text-center mb-6 text-slate-100">
-        Manage your employees efficiently with our comprehensive system. From
-        tracking attendance to managing performance reviews, our system is
+        From tracking attendance to managing performance reviews, our system is
         designed to streamline your HR processes.
       </p>
 
@@ -97,7 +96,7 @@ const Home = () => {
                 color="text.secondary"
                 className="text-center mb-4"
               >
-                Add, view, and manage employee details and job roles.
+                Add, view, and manage employee details, job roles and generate reports.
               </Typography>
               <Button
                 variant="outlined"
