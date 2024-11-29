@@ -17,7 +17,7 @@ const Home = () => {
         <Heading />
       </h1>
       <p className="text-lg text-center mb-6 text-slate-100">
-        From tracking attendance to managing performance reviews, our system is
+        From tracking attendance, leaves to managing performance reviews, our system is
         designed to streamline your HR processes.
       </p>
 

@@ -296,6 +296,7 @@ const ReviewList = () => {
           variant="outlined"
           color="primary"
           value={searchQuery}
+          autoComplete="off"
           onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
           placeholder="Search by employee-id, review date, comments, or rating"
           sx={{

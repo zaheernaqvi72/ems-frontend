@@ -296,6 +296,7 @@ const EmployeeList = () => {
           variant="outlined"
           color="primary"
           value={searchQuery}
+          autoComplete="off"
           onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
           placeholder="Search by employee-id, name, email, job role, salary, or hire date"
           sx={{

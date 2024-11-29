@@ -154,7 +154,7 @@ const Navbar = () => {
     if (isLoggedIn) {
       logoutAfterInactivity();
     }
-  }, []);
+  });
 
   const drawerList = (
     <List>
