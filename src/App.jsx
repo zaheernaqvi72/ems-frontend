@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -17,6 +13,7 @@ import "@fontsource/roboto"; // MUI font
 import theme from "./theme";
 import ProfilePage from "./components/Profile";
 import PrivateRoute from "./components/PrivateRouter";
+import AIContentGenerator from "./components/generativeModel";
 
 // Import the particles.js code
 import { useEffect, useState } from "react";
@@ -252,7 +249,10 @@ function App() {
               <Route
                 path="/login"
                 element={
-                  <Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />
+                  <Login
+                    setIsLoggedIn={setIsLoggedIn}
+                    isLoggedIn={isLoggedIn}
+                  />
                 }
               />
 
@@ -261,8 +261,16 @@ function App() {
                 element={<Register setIsLoggedIn={setIsLoggedIn} />}
               />
 
+              <Route
+                path="/genAI"
+                element={
+                    <AIContentGenerator />
+                  
+                }
+              />
             </Routes>
           </div>
+          
         </Router>
       </div>
     </ThemeProvider>
