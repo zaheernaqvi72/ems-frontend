@@ -7,11 +7,10 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function AIContentGenerator() {
-  const [chatHistory, setChatHistory] = useState([]); // Store multiple prompts and responses
+  const [chatHistory, setChatHistory] = useState([]); 
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Function to handle content generation
   const handleGenerateContent = async (e) => {
     if (e.key === "Enter" && prompt.trim() !== "") {
       try {
@@ -21,8 +20,7 @@ function AIContentGenerator() {
           prompt: prompt.trim(),
           response: response.generatedContent,
         };
-        console.log("Generated content:", newEntry);
-        setChatHistory((prev) => [...prev, newEntry]); // Add new prompt and response to history
+        setChatHistory((prev) => [...prev, newEntry]); 
         setPrompt("");
       } catch (error) {
         console.error("Error generating content:", error);
@@ -37,7 +35,7 @@ function AIContentGenerator() {
     }
   };
 
-  // Render Markdown with syntax highlighting
+
   const renderMarkdown = (text) =>
     marked(text, {
       breaks: true,
@@ -111,14 +109,13 @@ function AIContentGenerator() {
           value={prompt}
           autoComplete="off"
           onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={handleGenerateContent} // Handle Enter key to generate content
+          onKeyDown={handleGenerateContent}
           placeholder={loading ? "Generating..." : "Write a prompt to generate content..."}
           disabled={loading}
           sx={{
             width: "30%",
-            padding: "5px",
             fontSize: "16px",
-            borderRadius: "20px",
+            borderRadius: "25px",
             transition: "width 1s ease, box-shadow 0.3s ease",
             backgroundColor: "#333",
             "& input": {

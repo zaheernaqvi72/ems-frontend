@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/api/generate';
 
-// Helper function to get the token (assuming you store it in localStorage)
 const getToken = () => {
     return localStorage.getItem("token");
   };
