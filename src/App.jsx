@@ -14,6 +14,7 @@ import theme from "./theme";
 import ProfilePage from "./components/Profile";
 import PrivateRoute from "./components/PrivateRouter";
 import AIContentGenerator from "./components/generativeModel";
+import Gemini from "./components/Gemini";
 
 // Import the particles.js code
 import { useEffect, useState } from "react";
@@ -268,11 +269,16 @@ function App() {
                   
                 }
               />
+              
             </Routes>
+            <Gemini />
           </div>
           
+          
         </Router>
+        
       </div>
+  
     </ThemeProvider>
   );
 }

@@ -21,13 +21,14 @@ function AIContentGenerator() {
           prompt: prompt.trim(),
           response: response.generatedContent,
         };
+        console.log("Generated content:", newEntry);
         setChatHistory((prev) => [...prev, newEntry]); // Add new prompt and response to history
         setPrompt("");
       } catch (error) {
         console.error("Error generating content:", error);
         const errorEntry = {
           prompt: prompt.trim(),
-          response: "Error generating content. Check console for details.",
+          response: error.response?.data?.message || "Failed to generate content",
         };
         setChatHistory((prev) => [...prev, errorEntry]);
       } finally {
