@@ -54,13 +54,14 @@ const Navbar = () => {
 
   // Check if user is logged in
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
+    setIsLoggedIn(true);
+    // const checkLoginStatus = () => {
+    //   const token = localStorage.getItem("token");
+    //   if (token) {
+    //     setIsLoggedIn(true);
+    //   } else {
+    //     setIsLoggedIn(false);
+    //   }
     };
 
     checkLoginStatus(); // Check on component mount
