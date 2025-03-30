@@ -163,13 +163,14 @@ function App() {
 
   // Check if user is logged in
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        setIsLoggedIn(true); // User is logged in
-      } else {
-        setIsLoggedIn(false); // User is not logged in
-      }
+    setIsLoggedIn(true);
+    // const checkLoginStatus = () => {
+    //   const token = localStorage.getItem("token");
+    //   if (token) {
+    //     setIsLoggedIn(true); // User is logged in
+    //   } else {
+    //     setIsLoggedIn(false); // User is not logged in
+    //   }
     };
 
     checkLoginStatus(); // Check on component mount
