@@ -35,7 +35,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // State for login status
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(false);
@@ -53,25 +53,25 @@ const Navbar = () => {
   };
 
   // Check if user is logged in
-  useEffect(() => {
-    setIsLoggedIn(true);
-    // const checkLoginStatus = () => {
-    //   const token = localStorage.getItem("token");
-    //   if (token) {
-    //     setIsLoggedIn(true);
-    //   } else {
-    //     setIsLoggedIn(false);
-    //   }
-    };
+  // useEffect(() => {
+    
+  //   const checkLoginStatus = () => {
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       setIsLoggedIn(true);
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //   };
 
-    checkLoginStatus(); // Check on component mount
-    // Add event listener to detect changes in localStorage
-    window.addEventListener("storage", checkLoginStatus);
+  //   checkLoginStatus(); // Check on component mount
+  //   // Add event listener to detect changes in localStorage
+  //   window.addEventListener("storage", checkLoginStatus);
 
-    return () => {
-      window.removeEventListener("storage", checkLoginStatus);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("storage", checkLoginStatus);
+  //   };
+  // }, []);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
