@@ -156,32 +156,31 @@ const configs = {
 
 // App Component
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   useEffect(() => {
     loadParticles(configs); // Load particles on component mount
   }, []);
 
   // Check if user is logged in
-  useEffect(() => {
-    setIsLoggedIn(true);
-    // const checkLoginStatus = () => {
-    //   const token = localStorage.getItem("token");
-    //   if (token) {
-    //     setIsLoggedIn(true); // User is logged in
-    //   } else {
-    //     setIsLoggedIn(false); // User is not logged in
-    //   }
-    };
+  // useEffect(() => {
+  //   const checkLoginStatus = () => {
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       setIsLoggedIn(true); // User is logged in
+  //     } else {
+  //       setIsLoggedIn(false); // User is not logged in
+  //     }
+  //   };
 
-    checkLoginStatus(); // Check on component mount
+  //   checkLoginStatus(); // Check on component mount
 
-    // Add event listener to detect changes in localStorage
-    window.addEventListener("storage", checkLoginStatus);
+  //   // Add event listener to detect changes in localStorage
+  //   window.addEventListener("storage", checkLoginStatus);
 
-    return () => {
-      window.removeEventListener("storage", checkLoginStatus);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("storage", checkLoginStatus);
+  //   };
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
